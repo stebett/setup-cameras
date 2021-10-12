@@ -1,3 +1,10 @@
+"""
+Manage video acquisition, requiring config path as input
+
+Allows to specify the output directory, timeout_delay and expected frames
+
+Author: Stefano Bettani, October 2021, refractoring Romain Fayat's and Sala's code
+"""
 import TIS
 import cv2
 import json
@@ -6,30 +13,62 @@ import time
 import logging
 import numpy as np
 
-class Configs:
-    def __init__(self, path):
-        self.path = path
-        self.configs = {}
-        self.read_configs()
-
-    def read_configs(self):
-        with open(self.path) as json_file:
-            self.configs = json.load(json_file)
-            json_file.close()
-
-
-
 class Camera(TIS.TIS):
-    def __init__(self, configs, timeout_delay=1, expected_frames=0, path_to_output='.'):
+    """The object managing the camera.
+
+    :param config_path: path of configuration file
+    :param timeout_delay: interval in triggering after which a new chunk is started
+    :param expected_frames: expected number of frames per chunk, 0 means no expectation
+    :param path_to_output: directory where videos and logs should be saved
+    """
+    def __init__(self, config_path, timeout_delay=2, expected_frames=0, path_to_output='.'):
         super().__init__()
-        self.configs = configs
+        self.config_path = config_path
         self.timeout_delay = timeout_delay
         self.expected_frames = expected_frames
         self.path_to_output = path_to_output
+        self.configs = None
         self.pipeline = None
         self.queue = None
 
+
+    def initialize(self):
+        """Initialize the camera"""
+        self.read_configs()
+        self.open_device()
+        self.create_callback()
+        self.apply_properties()
+
+    def start_capture(self):
+        """Start capturing videos"""
+        self.Start_pipeline()
+        try: 
+            self.queue.loop()
+        except KeyboardInterrupt:
+            print("Stopped manually by user")
+        finally:
+            self.stop_capture()
+            self.queue.videos[-1].release()
+
+    def stop_capture(self):
+        """Stop capturing videos"""
+        self.Stop_pipeline()
+
+    def create_callback(self):
+        """Create queue object and set it as callback"""
+        self.queue = Queue(self.configs, 
+                           self.timeout_delay,
+                           self.expected_frames,
+                           self.path_to_output)
+        self.Set_Image_Callback(self.queue.add_frame)
+
+    def apply_properties(self):
+        """Apply properties to camera"""
+        for p in self.configs['properties']:
+            self.Set_Property(p['property'], p['value'])
+
     def open_device(self):
+        """Access the camera"""
         self.openDevice(self.configs['serial'],
                         self.configs['width'],
                         self.configs['height'],
@@ -37,44 +76,40 @@ class Camera(TIS.TIS):
                         TIS.SinkFormats.fromString(self.configs['serial']),
                         False)
 
-
-    def apply_properties(self):
-        for p in self.configs['properties']:
-            self.Set_Property(p['property'], p['value'])
-
-
-    def create_callback(self):
-        self.queue = Queue(self.configs, self.path_to_output, self.timeout_delay, self.expected_frames)
-        self.Set_Image_Callback(self.queue.add_frame) # may throw error
-
-    def start_capture(self):
-        self.open_device()
-        self.create_callback()
-        self.Start_pipeline()
-        self.apply_properties()
-        # self.queue.loop()
-        # self.pipeline.set_state(Gst.State.PLAYING) # TODO?
-
-    def stop_capture(self):
-        self.Stop_pipeline()
+    def read_configs(self):
+        """Read the configuration file"""
+        with open(self.config_path) as json_file:
+            self.configs = json.load(json_file)
+            json_file.close()
 
 
 class Queue:
-    def __init__(self, configs, path_to_output, timeout_delay, expected_frames):
+    """An object that saves frames to memory and writes them to disk as soon as possible
+
+    :param config_path: path of configuration file
+    :param timeout_delay: interval in triggering after which a new chunk is started
+    :param expected_frames: expected number of frames per chunk, 0 means no expectation
+    :param path_to_output: directory where videos and logs should be saved
+    
+    """
+    def __init__(self, configs, timeout_delay, expected_frames, path_to_output):
         self.configs = configs
-        self.path_to_output = path_to_output
         self.timeout_delay = timeout_delay
         self.expected_frames = expected_frames
-        self.frames = deque()
-        self.timestamps = list() #TODO: write them 
-        self.counter = 0
+        self.path_to_output = path_to_output
+
         self.videos = []
+        self.frames = deque()
+        self.timestamps = {}
+        
         self.time_of_last_frame = time.time() - self.timeout_delay
-        logging.basicConfig(filename=path_to_output + '/run.log', level=logging.DEBUG)
+        self.counter = 0
+
+        logging.basicConfig(filename=path_to_output + '/run.log', level=logging.ERROR)
 
     def loop(self):
-        # while True:
-        for _ in range(50):
+        """Writes frames to disk whenever available"""
+        while True:
             logging.info("Checking for frames")
 
             if time.time() - self.time_of_last_frame > self.timeout_delay:
@@ -92,23 +127,26 @@ class Queue:
                 
 
     def add_frame(self, camera):
+        """Add frame to queue and couples them to the timestamp"""
         self.frames.append(camera.Get_image())
-        self.timestamps.append(time.time())
+        self.timestamps[self.counter] = time.time()
         logging.info("Adding frame")
         self.counter += 1
 
     def new_video(self):
+        """Create new video object"""
         name = self.new_video_name()
         if len(self.videos) > 0:
             self.videos[-1].release
+            logging.info("Releasing old video")
 
-        # TODO: fix framerate
         self.videos.append(cv2.VideoWriter(name, 
                                            cv2.VideoWriter_fourcc(*'XVID'),
-                                           30,
+                                           self.configs["fps"],
                                            (self.configs["width"], self.configs["height"])))
 
     def new_video_name(self):
+        """Create new video name based on number of first frame"""
         expected_frames = self.expected_frames*len(self.videos)
 
         if (self.expected_frames > 0) & (self.counter != expected_frames):
@@ -122,14 +160,7 @@ class Queue:
 
 
 if __name__ == "__main__":
-    a = Configs("configs.json")
-    b = Camera(a.configs)
-    b.start_capture()
-    try: 
-        b.queue.loop()
-    except KeyboardInterrupt:
-        print("Stopped by god")
-    finally:
-        b.stop_capture()
-        b.queue.videos[-1].release()
+    c = Camera("configs.json")
+    c.initialize()
+    c.start_capture()
 
