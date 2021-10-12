@@ -13,6 +13,6 @@ If you have problems with the `gi` (PyGObject) package, you may have to link it 
 
 ### Usage
 
-`$ python camera.py -p path/to/params.json path/to/camera/dir`
+`$ python record.py -p path/to/params.json -o path/to/camera/dir`
 
 You can activate the trigger mode from the `params.json`.

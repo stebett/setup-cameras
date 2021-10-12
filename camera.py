@@ -176,12 +176,3 @@ class Queue:
     def save_timestamps(self):
         with open(f'{self.video_name}.pickle', 'wb') as handle:
             pickle.dump(self.timestamps, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-
-
-
-if __name__ == "__main__":
-    c = Camera("configs.json", expected_frames=10, path_to_output="videos")
-    c.initialize()
-    c.start_capture()
-
