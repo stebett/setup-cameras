@@ -1,3 +1,6 @@
 data/
 examples/
 __pycache__
+*.avi
+*.log
+*.pickle
