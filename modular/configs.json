@@ -1,7 +1,7 @@
 {
 	"serial": "49020439",
 	"format" : "video/x-raw",
-	"pixelformat" : "GRAY8",
+	"pixelformat" : "BGRx",
 	"width" : 1440,
 	"height" : 1080,
 	"framerate":"30/1",
