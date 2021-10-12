@@ -8,10 +8,11 @@ Author: Stefano Bettani, October 2021, refractoring Romain Fayat's and Sala's co
 import TIS
 import cv2
 import json
-from collections import deque
 import time
+import pickle
 import logging
 import numpy as np
+from collections import deque
 
 
 class Camera(TIS.TIS):
@@ -46,12 +47,13 @@ class Camera(TIS.TIS):
         logging.info("Pipeline starting")
         self.Start_pipeline()
         try: 
-            self.queue.main()
+            self.queue.loop()
         except KeyboardInterrupt:
             logging.error("Stopped manually by user")
         finally:
             self.stop_capture()
             self.queue.videos[-1].release()
+            self.queue.save_timestamps()
 
     def stop_capture(self):
         """Stop capturing videos"""
@@ -112,17 +114,19 @@ class Queue:
         # logging.basicConfig(filename=path_to_output + '/run.log', level=logging.ERROR)
         logging.basicConfig(level=logging.INFO)
 
-    def main(self):
+    def loop(self):
+        """Manages creation and realease of videos"""
         while True:
             self.new_video()
-            logging.info(f"New video: {self.video_name}")
+            logging.info(f"New video: {self.video_name}.avi")
             self.time_of_last_frame = time.time() 
             self.listen()
             self.videos[-1].release()
+            self.save_timestamps()
             self.go = True
 
     def listen(self):
-        """Writes frames to disk whenever available"""
+        """Writes frames from queue to disk. It interrupts when timeout_delay is exceeded"""
         while self.go | (len(self.frames) > 0):
             if time.time() - self.time_of_last_frame > self.timeout_delay:
                 logging.info("Timeout delay exceeded")
@@ -151,7 +155,7 @@ class Queue:
         if len(self.videos) > 0:
             logging.info("Releasing old video")
 
-        self.videos.append(cv2.VideoWriter(self.video_name, 
+        self.videos.append(cv2.VideoWriter(self.video_name + ".avi", 
                                            cv2.VideoWriter_fourcc(*'XVID'),
                                            self.configs["fps"],
                                            (self.configs["width"], self.configs["height"])))
@@ -167,7 +171,13 @@ class Queue:
 [!] Expected number of frames: {expected_frames_adjusted}""")
             self.counter = expected_frames_adjusted
 
-        self.video_name = f"{self.path_to_output}/{self.counter - len(self.frames) + 1 :06d}.avi"
+        self.video_name = f"{self.path_to_output}/{self.counter - len(self.frames) + 1 :06d}"
+
+    def save_timestamps(self):
+        with open(f'{self.video_name}.pickle', 'wb') as handle:
+            pickle.dump(self.timestamps, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+
 
 
 if __name__ == "__main__":
