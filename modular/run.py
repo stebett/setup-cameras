@@ -18,38 +18,6 @@ class Configs:
             json_file.close()
 
 
-a = Configs("configs.json")
-b = Camera(a.configs)
-b.start_capture()
-time.sleep(3)
-b.stop_capture()
-b.queue.loop()
-b.queue.videos[-1].release()
-
-frames = []
-for f in b.queue.frames:
-    frames.append(f[:, :, 1])
-
-import numpy as np
-import cv2
-v = cv2.VideoWriter('output2.avi', cv2.VideoWriter_fourcc(*'XVID'), 30, (1440, 1080), False)
-for f in frames:
-    v.write(f)
-v.release()
-
-data = np.random.randint(0, 256, (1440, 1080), dtype='uint8')
-data2 = b.queue.frames[1]
-
-import numpy as np
-import cv2
-size = 1440, 1080
-duration = 2
-fps = 25
-out = cv2.VideoWriter('output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), fps, (1080, 1440), False)
-for _ in range(fps * duration):
-    data = np.random.randint(0, 256, size, dtype='uint8')
-    out.write(data)
-out.release()
 
 class Camera(TIS.TIS):
     def __init__(self, configs, timeout_delay=1, expected_frames=0, path_to_output='.'):
@@ -107,28 +75,26 @@ class Queue:
     def loop(self):
         # while True:
         for _ in range(50):
-            print("Checking for frames")
-            print(len(self.frames))
+            logging.info("Checking for frames")
 
             if time.time() - self.time_of_last_frame > self.timeout_delay:
                 self.new_video()
-                print("New video")
+                logging.info("New video")
 
             if len(self.frames) > 0:
-                frame = self.frames.popleft()[:, :, 1]
-                # frame = np.random.randint(0, 256, (1440, 1080), dtype='uint8')
+                frame = self.frames.popleft()[:, :, 0:3]
                 self.videos[-1].write(frame)
                 self.time_of_last_frame = time.time()
-                print("Frame sent to video")
+                logging.info("Frame sent to video")
             else:
                 time.sleep(1e-6)
-                print("Sleeping")
+                logging.info("Sleeping")
                 
 
     def add_frame(self, camera):
         self.frames.append(camera.Get_image())
         self.timestamps.append(time.time())
-        print("Adding frame")
+        logging.info("Adding frame")
         self.counter += 1
 
     def new_video(self):
@@ -137,8 +103,10 @@ class Queue:
             self.videos[-1].release
 
         # TODO: fix framerate
-        # self.videos.append(Video(name, 30, self.configs["width"], self.configs["height"]))
-        self.videos.append(cv2.VideoWriter(name, cv2.VideoWriter_fourcc(*'mp4v'), 30, (self.configs["width"], self.configs["height"]), False))
+        self.videos.append(cv2.VideoWriter(name, 
+                                           cv2.VideoWriter_fourcc(*'XVID'),
+                                           30,
+                                           (self.configs["width"], self.configs["height"])))
 
     def new_video_name(self):
         expected_frames = self.expected_frames*len(self.videos)
@@ -150,11 +118,18 @@ class Queue:
 [!] Expected number of frames: {expected_frames}""")
             self.frames = self.expected_frames
 
-        return f"{self.path_to_output}/{self.counter + 1 :06d}.avi"
+        return f"{self.path_to_output}/{self.counter - len(self.frames) + 1 :06d}.avi"
 
-        
-class Video(cv2.VideoWriter):
-    def __init__(self, path_to_video, fps, width, height, fourcc_str="mp4v"):
-        self.fourcc = cv2.VideoWriter_fourcc(*fourcc_str)
-        self.path_to_video = path_to_video
-        super().__init__(self.path_to_video, self.fourcc, fps, (height, width), False)
+
+if __name__ == "__main__":
+    a = Configs("configs.json")
+    b = Camera(a.configs)
+    b.start_capture()
+    try: 
+        b.queue.loop()
+    except KeyboardInterrupt:
+        print("Stopped by god")
+    finally:
+        b.stop_capture()
+        b.queue.videos[-1].release()
+

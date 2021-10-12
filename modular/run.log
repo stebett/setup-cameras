@@ -586,3 +586,770 @@ DEBUG:matplotlib.font_manager:findfont: score(<Font 'DejaVu Sans' (DejaVuSans-Ob
 DEBUG:matplotlib.font_manager:findfont: score(<Font 'Loma' (Loma-BoldOblique.ttf) oblique normal 700 normal>) = 11.335
 DEBUG:matplotlib.font_manager:findfont: score(<Font 'Liberation Mono' (LiberationMono-Regular.ttf) normal normal 400 normal>) = 10.05
 DEBUG:matplotlib.font_manager:findfont: Matching sans\-serif:style=normal:variant=normal:weight=normal:stretch=normal:size=10.0 to DejaVu Sans ('/home/bettani/.virtualenvs/tiscamera/lib/python3.6/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSans.ttf') with score of 0.050000.
+INFO:root:Adding frame
+INFO:root:Checking for frames
+INFO:root:New video
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Checking for frames
+INFO:root:New video
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Adding frame
+INFO:root:Checking for frames
+INFO:root:New video
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Checking for frames
+INFO:root:New video
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Adding frame
+INFO:root:Frame sent to video
+INFO:root:Checking for frames
+INFO:root:Adding frame
+INFO:root:Frame sent to video
