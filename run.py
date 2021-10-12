@@ -13,6 +13,7 @@ import time
 import logging
 import numpy as np
 
+
 class Camera(TIS.TIS):
     """The object managing the camera.
 
@@ -38,14 +39,16 @@ class Camera(TIS.TIS):
         self.open_device()
         self.create_callback()
         self.apply_properties()
+        logging.info("Succesfully initialized")
 
     def start_capture(self):
         """Start capturing videos"""
+        logging.info("Pipeline starting")
         self.Start_pipeline()
         try: 
-            self.queue.loop()
+            self.queue.main()
         except KeyboardInterrupt:
-            print("Stopped manually by user")
+            logging.error("Stopped manually by user")
         finally:
             self.stop_capture()
             self.queue.videos[-1].release()
@@ -99,22 +102,31 @@ class Queue:
         self.path_to_output = path_to_output
 
         self.videos = []
+        self.video_name = ""
         self.frames = deque()
         self.timestamps = {}
         
-        self.time_of_last_frame = time.time() - self.timeout_delay
         self.counter = 0
 
-        logging.basicConfig(filename=path_to_output + '/run.log', level=logging.ERROR)
+        self.go = True
+        # logging.basicConfig(filename=path_to_output + '/run.log', level=logging.ERROR)
+        logging.basicConfig(level=logging.INFO)
 
-    def loop(self):
-        """Writes frames to disk whenever available"""
+    def main(self):
         while True:
-            logging.info("Checking for frames")
+            self.new_video()
+            logging.info(f"New video: {self.video_name}")
+            self.time_of_last_frame = time.time() 
+            self.listen()
+            self.videos[-1].release()
+            self.go = True
 
+    def listen(self):
+        """Writes frames to disk whenever available"""
+        while self.go | (len(self.frames) > 0):
             if time.time() - self.time_of_last_frame > self.timeout_delay:
-                self.new_video()
-                logging.info("New video")
+                logging.info("Timeout delay exceeded")
+                self.go = False
 
             if len(self.frames) > 0:
                 frame = self.frames.popleft()[:, :, 0:3]
@@ -123,7 +135,7 @@ class Queue:
                 logging.info("Frame sent to video")
             else:
                 time.sleep(1e-6)
-                logging.info("Sleeping")
+                logging.debug("Sleeping")
                 
 
     def add_frame(self, camera):
@@ -135,32 +147,31 @@ class Queue:
 
     def new_video(self):
         """Create new video object"""
-        name = self.new_video_name()
+        self.new_video_name()
         if len(self.videos) > 0:
-            self.videos[-1].release
             logging.info("Releasing old video")
 
-        self.videos.append(cv2.VideoWriter(name, 
+        self.videos.append(cv2.VideoWriter(self.video_name, 
                                            cv2.VideoWriter_fourcc(*'XVID'),
                                            self.configs["fps"],
                                            (self.configs["width"], self.configs["height"])))
 
     def new_video_name(self):
         """Create new video name based on number of first frame"""
-        expected_frames = self.expected_frames*len(self.videos)
+        expected_frames_adjusted = self.expected_frames * len(self.videos)
 
-        if (self.expected_frames > 0) & (self.counter != expected_frames):
+        if (self.expected_frames > 0) & (self.counter != expected_frames_adjusted):
             logging.warning(f"""
-[!] Video:                     {self.videos[-1].path_to_video}
+[!] Video:                     {self.video_name}
 [!] Number of frames:          {self.counter}
-[!] Expected number of frames: {expected_frames}""")
-            self.frames = self.expected_frames
+[!] Expected number of frames: {expected_frames_adjusted}""")
+            self.counter = expected_frames_adjusted
 
-        return f"{self.path_to_output}/{self.counter - len(self.frames) + 1 :06d}.avi"
+        self.video_name = f"{self.path_to_output}/{self.counter - len(self.frames) + 1 :06d}.avi"
 
 
 if __name__ == "__main__":
-    c = Camera("configs.json")
+    c = Camera("configs.json", expected_frames=10, path_to_output="videos")
     c.initialize()
     c.start_capture()
 
