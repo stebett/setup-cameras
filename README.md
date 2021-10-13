@@ -16,3 +16,10 @@ If you have problems with the **gi** (PyGObject) package, you may have to link i
 `$ python record.py -p path/to/params.json -o path/to/camera/dir`
 
 You can activate the trigger mode from the **params.json**.
+
+
+### TODO
+
+- [] First frame is 0
+- [] Wait at the beginning
+- [] autocheck for framedrop

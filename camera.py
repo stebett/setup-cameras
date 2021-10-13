@@ -44,6 +44,8 @@ class Camera(TIS.TIS):
 
     def start_capture(self):
         """Start capturing videos"""
+        logging.info("Press enter to start pipeline")
+        key = input()
         logging.info("Pipeline starting")
         self.Start_pipeline()
         try: 
@@ -146,7 +148,7 @@ class Queue:
         """Add frame to queue and couples them to the timestamp"""
         self.frames.append(camera.Get_image())
         self.timestamps[self.counter] = time.time()
-        logging.info("Adding frame")
+        logging.info("Adding frame to the queue")
         self.counter += 1
 
     def new_video(self):
@@ -171,8 +173,9 @@ class Queue:
 [!] Expected number of frames: {expected_frames_adjusted}""")
             self.counter = expected_frames_adjusted
 
-        self.video_name = f"{self.path_to_output}/{self.counter - len(self.frames) + 1 :06d}"
+        self.video_name = f"{self.path_to_output}/{self.counter - len(self.frames) :06d}"
 
     def save_timestamps(self):
         with open(f'{self.video_name}.pickle', 'wb') as handle:
             pickle.dump(self.timestamps, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        self.timestamps = {}
