@@ -12,6 +12,8 @@ import time
 import pickle
 import logging
 import numpy as np
+
+from gi.repository import Gst
 from collections import deque
 
 
@@ -44,10 +46,13 @@ class Camera(TIS.TIS):
 
     def start_capture(self):
         """Start capturing videos"""
-        logging.info("Press enter to start pipeline")
-        key = input()
-        logging.info("Pipeline starting")
-        self.Start_pipeline()
+        self._setcaps()
+        self.pipeline.set_state(Gst.State.PLAYING)
+        error = self.pipeline.get_state(5000000000) 
+        print(error)
+        # if error[1] != Gst.State.PLAYING:
+        logging.info("Waiting first frame")
+        self.queue.wait_first()
         try: 
             self.queue.loop()
         except KeyboardInterrupt:
@@ -112,7 +117,7 @@ class Queue:
         
         self.counter = 0
 
-        self.go = True
+        self.go = False
         # logging.basicConfig(filename=path_to_output + '/run.log', level=logging.ERROR)
         logging.basicConfig(level=logging.INFO)
 
@@ -126,6 +131,13 @@ class Queue:
             self.videos[-1].release()
             self.save_timestamps()
             self.go = True
+
+    def wait_first(self):
+        while not self.go:
+            if len(self.frames) > 0:
+                self.go = True
+            else:
+                time.sleep(0.2)
 
     def listen(self):
         """Writes frames from queue to disk. It interrupts when timeout_delay is exceeded"""
@@ -173,7 +185,8 @@ class Queue:
 [!] Expected number of frames: {expected_frames_adjusted}""")
             self.counter = expected_frames_adjusted
 
-        self.video_name = f"{self.path_to_output}/{self.counter - len(self.frames) :06d}"
+        # self.video_name = f"{self.path_to_output}/{self.counter - len(self.frames) :06d}"
+        self.video_name = f"{self.path_to_output}/{self.counter :06d}"
 
     def save_timestamps(self):
         with open(f'{self.video_name}.pickle', 'wb') as handle:

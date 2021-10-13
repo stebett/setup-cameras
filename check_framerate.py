@@ -40,7 +40,7 @@ if __name__ == "__main__":
     video_path = "/home/bettani/setup-cameras/videos/camera1/"
     paths = sorted(glob.glob(video_path + '*.pickle'))
 
-    expectation = 10
+    expectation = 50
 
     frames = []
     deltas = []

@@ -14,7 +14,7 @@ args = parser.parse_args()
 config_path = str(args.config_path)
 path_video_folder = str(Path(args.path_video_folder).absolute())
 
-c = Camera(config_path, expected_frames=10, timeout_delay=4, path_to_output=path_video_folder)
+c = Camera(config_path, expected_frames=50, timeout_delay=.5, path_to_output=path_video_folder)
 c.initialize()
 c.start_capture()
 
