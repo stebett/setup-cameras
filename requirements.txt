@@ -1,5 +1,7 @@
 numpy==1.19.4
 opencv-python==4.5.3.56
+gobject
+PyGObject
 PyQt5
 matplotlib
 vext
