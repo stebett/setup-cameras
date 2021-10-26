@@ -143,8 +143,8 @@ class Queue:
         """Writes frames from queue to disk. It interrupts when timeout_delay is exceeded"""
         while self.go | (len(self.frames) > 0):
             if time.time() - self.time_of_last_frame > self.timeout_delay:
-                logging.info("Timeout delay exceeded")
                 self.go = False
+                logging.info("Timeout delay exceeded")
 
             if len(self.frames) > 0:
                 frame = self.frames.popleft()[:, :, 0:3]
