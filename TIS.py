@@ -1,20 +1,15 @@
-import time
 from collections import namedtuple
 
 import gi
 import re
 import numpy
 from enum import Enum
-gi.require_version("Gst", "1.0")
-gi.require_version("Tcam", "0.1")
-
 from gi.repository import GLib, GObject, Gst, Tcam
 
 
 
-
-DeviceInfo = namedtuple("DeviceInfo", "status name identifier connection_type")
-CameraProperty = namedtuple("CameraProperty", "status value min max default step type flags category group")
+gi.require_version("Gst", "1.0")
+gi.require_version("Tcam", "0.1")
 
 class SinkFormats(Enum):
     GRAY8 = 0
@@ -40,6 +35,9 @@ class SinkFormats(Enum):
             return SinkFormats.GRAY8
       
         return SinkFormats.BGRA
+
+DeviceInfo = namedtuple("DeviceInfo", "status name identifier connection_type")
+CameraProperty = namedtuple("CameraProperty", "status value min max default step type flags category group")
 
 
 
@@ -79,34 +77,35 @@ class TIS:
         self.framerate = framerate
         self.sinkformat = sinkformat
         self.livedisplay = showvideo
-        self._createPipeline()
-        self.source.set_property("serial", self.serialnumber)
 
-    def _createPipeline(self):
+    def createPipeline(self, video_path=None):
         p = 'tcambin name=source ! capsfilter name=caps'
-        if self.livedisplay is True:
-            p += " ! tee name=t"
-            p += " t. ! queue ! videoconvert ! ximagesink"
-            p += " t. ! queue ! appsink name=sink"
-        else:
-            p += ' ! appsink name=sink'
+        p += " ! tee name=t"
+        p += " t. ! queue ! appsink name=sink"
 
+        if video_path is not None:
+            p += " t. ! queue ! videoconvert ! avimux ! filesink name=fsink"
         print(p)
+
         try:
             self.pipeline = Gst.parse_launch(p)
         except GLib.Error as error:
             print("Error creating pipeline: {0}".format(error))
             raise
 
-        # Quere the source module.
-        self.source = self.pipeline.get_by_name("source")
+        if video_path is not None:
+            print(video_path)
+            self.filesink = self.pipeline.get_by_name("fsink")
+            self.filesink.set_property("location", video_path)
 
-        # Query a pointer to the appsink, so we can assign the callback function.
+        self.source = self.pipeline.get_by_name("source")
         self.appsink = self.pipeline.get_by_name("sink")
         self.appsink.set_property("max-buffers",5)
         self.appsink.set_property("drop",1)
         self.appsink.set_property("emit-signals",1)
         self.appsink.connect('new-sample', self.on_new_buffer)
+        self.source.set_property("serial", self.serialnumber)
+        self.setcaps()
 
 
     def on_new_buffer(self, appsink):
@@ -129,7 +128,7 @@ class TIS:
     def showLive( self, show: bool):
         self.livedisplay = show
 
-    def _setcaps(self):
+    def setcaps(self):
         """ 
         Set pixel and sink format and frame rate
         """
@@ -143,7 +142,7 @@ class TIS:
         capsfilter = self.pipeline.get_by_name("caps")
         capsfilter.set_property("caps", caps)
 
-    def Start_pipeline(self):
+    def startPipeline(self):
         """
         Start the pipeline, so the video runs
         """
@@ -229,23 +228,23 @@ class TIS:
     def Get_image(self):
         return self.img_mat
 
-    def Stop_pipeline(self):
+    def stopPipeline(self):
         self.pipeline.set_state(Gst.State.PAUSED)
         self.pipeline.set_state(Gst.State.READY)
         self.pipeline.set_state(Gst.State.NULL)
 
-    def List_Properties(self):
+    def listProperties(self):
         for name in self.source.get_tcam_property_names():
             print( name )
 
-    def Get_Property(self, PropertyName):
+    def getProperty(self, PropertyName):
         try:
             return CameraProperty(*self.source.get_tcam_property(PropertyName))
         except Exception as error:
             print("Error get Property {0}: {1}",PropertyName, format(error))
             raise
 
-    def Set_Property(self, PropertyName, value):
+    def setProperty(self, PropertyName, value):
         try:
 
             property = self.source.get_tcam_property(PropertyName)
@@ -451,3 +450,5 @@ class FmtDesc:
                                                                          resolution.split('x')[0],
                                                                          resolution.split('x')[1],
                                                                          fps)
+
+
