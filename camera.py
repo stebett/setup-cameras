@@ -40,7 +40,7 @@ class Camera(TIS.TIS):
     def initialize(self):
         """Initialize the camera"""
         self.read_configs()
-        self.create_queue()
+        self.create_callback()
         self.open_device()
         logging.info("Succesfully initialized")
 
@@ -54,16 +54,13 @@ class Camera(TIS.TIS):
             self.stopPipeline()
             self.queue.save_timestamps()
 
-    def create_queue(self):
-        """Create queue object"""
+    def create_callback(self):
         self.queue = Queue(self,
                            self.configs, 
                            self.timeout_delay,
                            self.expected_frames,
                            self.path_to_output)
-
-    def create_callback(self):
-        self.Set_Image_Callback(self.queue.add_frame, self.queue.video_name)
+        self.Set_Image_Callback(self.queue.add_frame)
 
     def apply_properties(self):
         """Apply properties to camera"""
@@ -104,8 +101,6 @@ class Queue:
         while True:
             self.new_video()
             logging.info(f"New video: {self.video_name}")
-
-            self.camera.create_callback()
 
             self.camera.createPipeline(video_path=self.video_name)
             logging.info("Created new pipeline")

@@ -64,10 +64,10 @@ class TIS:
         :return: none
         '''
         self.serialnumber = self.configs['serial']
-        self.height = self.configs['width']
-        self.width = self.configs['height']
+        self.height = self.configs['height']
+        self.width = self.configs['width']
         self.framerate = self.configs['framerate']
-        self.sinkformat = SinkFormats.GRAY8
+        self.sinkformat = SinkFormats.BGRA
 
     def createPipeline(self, video_path=None):
         p = 'tcambin name=source ! capsfilter name=caps'
