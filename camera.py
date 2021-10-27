@@ -139,6 +139,7 @@ class Queue:
             # logging.info("Pipeline started without error")
 
             self.time_of_last_frame = time.time() 
+            self.go = True
             self.listen()
             self.camera.stopPipeline()
             logging.info(f"Old pipeline stopped")

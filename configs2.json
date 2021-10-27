@@ -2,7 +2,6 @@
 	"serial": "49020441",
 	"format" : "video/x-raw",
 	"pixelformat" : "BGRx",
-	"fps": 10,
 	"width" : 1440,
 	"height" : 1080,
 	"framerate":"30/1",
