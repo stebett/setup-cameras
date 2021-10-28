@@ -11,7 +11,7 @@
 		{"property": "Exposure Auto", "value":true},
 		{"property": "Gain Auto",     "value":false},
 		{"property": "Gain",          "value":0},
-		{"property": "Trigger Mode",  "value":false}
+		{"property": "Trigger Mode",  "value":true}
 
 	]
 }        

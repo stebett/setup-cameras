@@ -128,8 +128,6 @@ class Queue:
                 self.go = False
 
             else:
-                self.time_of_last_frame = time.time()
-                logging.info("Sleeping")
                 logging.info(f"Buffers in queue: {self.camera.gstqueue.get_property('current-level-buffers')}")
                 logging.info(f"Time in queue: {self.camera.gstqueue.get_property('current-level-time')}")
                 logging.info(f"Bytes in queue: {self.camera.gstqueue.get_property('current-level-bytes')}")
@@ -138,7 +136,9 @@ class Queue:
 
     def add_frame(self, camera):
         """Add frame to queue and couples them to the timestamp"""
-        self.timestamps[self.counter] = time.time()
+        t = time.time()
+        self.timestamps[self.counter] = t
+        self.time_of_last_frame = t
         self.counter += 1
         logging.info("Adding frame to the queue")
 

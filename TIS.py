@@ -94,13 +94,13 @@ class TIS:
         self.source.set_property("serial", self.serialnumber)
         self.gstqueue = self.pipeline.get_by_name("queue")
         self.gstqueue.set_property("max-size-buffers", 0)
-        self.gstqueue.set_property("max-size-time", 2e9)
+        self.gstqueue.set_property("max-size-time", int(2e9))
         self.gstqueue.set_property("max-size-bytes", 0)
         self.setcaps()
 
 
     def on_new_buffer(self, appsink):
-        self.sample = appsink.get_property('last-sample')
+        # self.sample = appsink.get_property('last-sample')
         self.ImageCallback(self, *self.ImageCallbackData);
         return False
 
