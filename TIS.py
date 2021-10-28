@@ -5,11 +5,8 @@ gi.require_version("Gst", "1.0")
 gi.require_version("Tcam", "0.1")
 
 from enum import Enum
-from collections import namedtuple
 from gi.repository import GLib, GObject, Gst, Tcam
 
-DeviceInfo = namedtuple("DeviceInfo", "status name identifier connection_type")
-CameraProperty = namedtuple("CameraProperty", "status value min max default step type flags category group")
 
 class SinkFormats(Enum):
     GRAY8 = 0
@@ -75,7 +72,7 @@ class TIS:
         p += " t. ! queue ! appsink name=sink"
 
         if video_path is not None:
-            p += " t. ! queue ! videoconvert ! avimux ! filesink name=fsink"
+            p += " t. ! queue name=queue ! videoconvert ! avimux ! filesink name=fsink"
         logging.debug(f"Gst pipeline: {p}")
 
         try:
@@ -95,6 +92,10 @@ class TIS:
         self.appsink.set_property("emit-signals",1)
         self.appsink.connect('new-sample', self.on_new_buffer)
         self.source.set_property("serial", self.serialnumber)
+        self.gstqueue = self.pipeline.get_by_name("queue")
+        self.gstqueue.set_property("max-size-buffers", 0)
+        self.gstqueue.set_property("max-size-time", 2e9)
+        self.gstqueue.set_property("max-size-bytes", 0)
         self.setcaps()
 
 

@@ -103,9 +103,8 @@ class Queue:
             logging.info(f"New video: {self.video_name}")
 
             self.camera.createPipeline(video_path=self.video_name)
-            logging.info("Created new pipeline")
-
             self.camera.apply_properties()
+            logging.info("Created new pipeline")
 
             self.camera.pipeline.set_state(Gst.State.PLAYING)
             logging.info("Started pipeline")
@@ -131,6 +130,9 @@ class Queue:
             else:
                 self.time_of_last_frame = time.time()
                 logging.info("Sleeping")
+                logging.info(f"Buffers in queue: {self.camera.gstqueue.get_property('current-level-buffers')}")
+                logging.info(f"Time in queue: {self.camera.gstqueue.get_property('current-level-time')}")
+                logging.info(f"Bytes in queue: {self.camera.gstqueue.get_property('current-level-bytes')}")
                 time.sleep(1)
                 
 

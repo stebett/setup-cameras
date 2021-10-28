@@ -4,7 +4,7 @@
 	"pixelformat" : "BGRx",
 	"width" : 1440,
 	"height" : 1080,
-	"framerate":"30/1",
+	"framerate":"15/1",
 	"properties":
 	[
 		{"property": "Brightness",    "value":20},
