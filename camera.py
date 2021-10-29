@@ -139,13 +139,13 @@ class Queue:
     def test(self):
         self.fill_c_array()
         while True:
-            self.apply_c_array()
             self.camera.createPipeline()
+            self.apply_c_array()
             self.camera.pipeline.set_state(Gst.State.PLAYING)
-            os.clear()
+            os.system("clear")
             self.modify_conf()
+            self.camera.stopPipeline()
 
-        self.camera.stopPipeline()
 
     def fill_c_array(self):
         self.c_array = []
@@ -163,14 +163,14 @@ class Queue:
             self.c_array.append([k, v, " "])
 
     def apply_c_array(self):
-        for x in self.c_array:
+        for x in self.c_array[:len(self.properties)]:
             self.camera.setProperty(x[0], x[1])
         
     def modify_conf(self):
         for i, x in enumerate(self.c_array):
             print(f'[{i}]{x[2]}{x[0]}: {x[1]}')
 
-        n = input("Property number: ")
+        n = int(input("Property number: "))
         v = input("Property value: ")
         p = self.c_array[n][0]
         if n >= len(self.properties) + len(self.c_copy):
