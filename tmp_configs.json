@@ -8,7 +8,7 @@
         "Exposure Auto Reference": 128,
         "Exposure Auto Upper Limit": 33333,
         "Exposure Auto Upper Limit Auto": true,
-        "Exposure Time (us)": 333,
+        "Exposure Time (us)": 200000,
         "GPIn": 0,
         "GPOut": 0,
         "Gain": 0,
@@ -31,7 +31,7 @@
         "Trigger Delay (us)": 31,
         "Trigger Exposure Mode": "Frame Start",
         "Trigger Global Reset Release": false,
-        "Trigger Mode": true,
+        "Trigger Mode": false,
         "Trigger Polarity": "Rising Edge"
     },
     "serial": "49020439",
@@ -42,8 +42,8 @@
     "height": 1080,
     "framerate": "2500000/10593",
     "pwm": {
-        "frequency": 5,
-        "chunk_size": 20,
+        "frequency": 15,
+        "chunk_size": 50,
         "chunk_pause": 3000
     }
 }

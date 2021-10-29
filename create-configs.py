@@ -35,3 +35,35 @@ c["pwm"] = pwm
 
 with open(filename, "w") as f:
     c = json.dump(c, f, indent=4)
+
+c_copy = c.copy()
+properties = c_copy.pop("properties")
+pwm = c_copy.pop("pwm")
+
+configs = []
+for k, v in properties.items():
+    configs.append([k, v, " "])
+
+for k, v in c_copy.items():
+    configs.append([k, v, " "])
+
+for k, v in pwm.items():
+    configs.append([k, v, " "])
+
+for i, x in enumerate(configs):
+    print(f'[{i}]{x[2]}{x[0]}: {x[1]}')
+
+n = input("Property number: ")
+v = input("Property value: ")
+p = configs[n][0]
+if n >= len(properties) + len(c_copy):
+    pwm[p] = v
+elif n >= len(properties):
+    c_copy[p] = v
+else:
+    properties[p] = v
+
+configs[n][1] = v
+configs[n][2] = "[x] "
+
+self.setProperty(p, v)

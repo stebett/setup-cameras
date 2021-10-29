@@ -6,6 +6,7 @@ Allows to specify the output directory, timeout_delay and expected frames
 Author: Stefano Bettani, October 2021, refractoring Romain Fayat's and Sala's code
 """
 import gi
+import os
 import TIS
 import json
 import time
@@ -23,7 +24,7 @@ class Camera(TIS.TIS):
     :param expected_frames: expected number of frames per chunk, 0 means no expectation
     :param path_to_output: directory where videos and logs should be saved
     """
-    def __init__(self, config_path, timeout_delay=2, expected_frames=0, path_to_output='videos'):
+    def __init__(self, config_path, timeout_delay=2, expected_frames=0, path_to_output='videos', test_mode=False):
         super().__init__()
         self.config_path = config_path
         self.timeout_delay = timeout_delay
@@ -32,9 +33,14 @@ class Camera(TIS.TIS):
         self.configs = None
         self.pipeline = None
         self.queue = None
-
+        self.test_mode = test_mode
+        self.livedisplay = True if test_mode else False
+        
         # logging.basicConfig(filename=path_to_output + '/run.log', level=logging.INFO)
-        logging.basicConfig(level=logging.INFO)
+        if test_mode:
+            logging.basicConfig(level=logging.WARNING) 
+        else:
+            logging.basicConfig(level=logging.INFO) 
 
 
     def initialize(self):
@@ -48,7 +54,10 @@ class Camera(TIS.TIS):
     def capture(self):
         """Start capturing videos"""
         try: 
-            self.queue.loop()
+            if self.test_mode:
+                self.queue.test()
+            else:
+                self.queue.loop()
         except KeyboardInterrupt:
             logging.error("Stopped manually by user")
         finally:
@@ -105,6 +114,7 @@ class Queue:
 
     def loop(self):
         """Manages creation and realease of videos"""
+        self.livedisplay = False
         while True:
             self.new_video()
             logging.info(f"New video: {self.video_name}")
@@ -125,6 +135,55 @@ class Queue:
 
             self.save_timestamps()
             logging.info("Timestamps saved")
+
+    def test(self):
+        self.fill_c_array()
+        while True:
+            self.apply_c_array()
+            self.camera.createPipeline()
+            self.camera.pipeline.set_state(Gst.State.PLAYING)
+            os.clear()
+            self.modify_conf()
+
+        self.camera.stopPipeline()
+
+    def fill_c_array(self):
+        self.c_array = []
+        self.c_copy = self.configs.copy()
+        self.properties = self.c_copy.pop("properties")
+        self.pwm = self.c_copy.pop("pwm")
+
+        for k, v in self.properties.items():
+            self.c_array.append([k, v, " "])
+
+        for k, v in self.c_copy.items():
+            self.c_array.append([k, v, " "])
+
+        for k, v in self.pwm.items():
+            self.c_array.append([k, v, " "])
+
+    def apply_c_array(self):
+        for x in self.c_array:
+            self.camera.setProperty(x[0], x[1])
+        
+    def modify_conf(self):
+        for i, x in enumerate(self.c_array):
+            print(f'[{i}]{x[2]}{x[0]}: {x[1]}')
+
+        n = input("Property number: ")
+        v = input("Property value: ")
+        p = self.c_array[n][0]
+        if n >= len(self.properties) + len(self.c_copy):
+            self.pwm[p] = v
+        elif n >= len(self.properties):
+            self.c_copy[p] = v
+        else:
+            self.properties[p] = v
+
+        self.c_array[n][1] = v
+        self.c_array[n][2] = "[x] "
+
+
 
     def check_delay(self):
         """Writes frames from queue to disk. It interrupts when timeout_delay is exceeded"""
@@ -147,7 +206,7 @@ class Queue:
         self.timestamps[self.counter] = t
         self.time_of_last_frame = t
         self.counter += 1
-        logging.info("Adding frame to the queue")
+        logging.info(f"Adding frame {self.counter} to the queue")
 
     def new_video(self):
         """Create new video object"""

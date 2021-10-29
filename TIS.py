@@ -68,35 +68,45 @@ class TIS:
 
     def createPipeline(self, video_path=None):
         p = 'tcambin name=source ! capsfilter name=caps'
-        p += " ! tee name=t"
-        p += " t. ! queue ! appsink name=sink"
 
-        if video_path is not None:
+        print(self.livedisplay)
+        if self.livedisplay:
+            logging.info("Testing")
+            p += " ! tee name=t"
+            p += " t. ! videoscale method=0 add-borders=false \
+                      ! video/x-raw,width=640,height=360 \
+                      ! ximagesink name=xsink"
+        elif video_path is not None:
+            logging.info("Not testing")
+            p += " ! tee name=t"
+            p += " t. ! queue ! appsink name=sink"
             p += " t. ! queue name=queue ! videoconvert ! avimux ! filesink name=fsink"
+
         logging.debug(f"Gst pipeline: {p}")
+        self.pipeline = Gst.parse_launch(p)
 
-        try:
-            self.pipeline = Gst.parse_launch(p)
-        except GLib.Error as error:
-            logging.error("Error creating pipeline: {0}".format(error))
-            raise
 
-        if video_path is not None:
+        if self.livedisplay:
+            self.xsink = self.pipeline.get_by_name("xsink")
+            self.xsink.set_property("force-aspect-ratio", True)
+            # self.xsink.set_property("pixel-aspect-ratio", "10/5")
+
+        elif video_path is not None: 
             self.filesink = self.pipeline.get_by_name("fsink")
             self.filesink.set_property("location", video_path)
 
+            self.gstqueue = self.pipeline.get_by_name("queue")
+            self.gstqueue.set_property("max-size-buffers", 0)
+            self.gstqueue.set_property("max-size-time", 0)
+            self.gstqueue.set_property("max-size-bytes", int(1.5*10e8))
+
+            self.appsink = self.pipeline.get_by_name("sink")
+            self.appsink.set_property("max-buffers", 5)
+            self.appsink.set_property("drop",1)
+            self.appsink.set_property("emit-signals",1)
+            self.appsink.connect('new-sample', self.on_new_buffer)
+        
         self.source = self.pipeline.get_by_name("source")
-        self.appsink = self.pipeline.get_by_name("sink")
-        self.appsink.set_property("max-buffers", 300)
-        self.appsink.set_property("drop",1)
-        self.appsink.set_property("emit-signals",1)
-        self.appsink.connect('new-sample', self.on_new_buffer)
-
-        self.gstqueue = self.pipeline.get_by_name("queue")
-        self.gstqueue.set_property("max-size-buffers", 0)
-        self.gstqueue.set_property("max-size-time", 0)
-        self.gstqueue.set_property("max-size-bytes", 0)
-
         self.source.set_property("serial", self.serialnumber)
         self.setcaps()
 
