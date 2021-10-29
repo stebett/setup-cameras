@@ -35,5 +35,15 @@
         "Trigger Polarity": "Rising Edge"
     },
     "serial": "49020439",
-    "version": "v0.1"
+    "version": "v0.1",
+    "format": "video/x-raw",
+    "pixelformat": "BGRx",
+    "width": 1440,
+    "height": 1080,
+    "framerate": "2500000/10593",
+    "pwm": {
+        "frequency": 15,
+        "chunk_size": 50,
+        "chunk_pause": 3000
+    }
 }

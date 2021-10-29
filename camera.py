@@ -64,8 +64,8 @@ class Camera(TIS.TIS):
 
     def apply_properties(self):
         """Apply properties to camera"""
-        for p in self.configs['properties']:
-            self.setProperty(p['property'], p['value'])
+        for k, v in self.configs['properties'].items():
+            self.setProperty(k, v)
 
     def read_configs(self):
         """Read the configuration file"""

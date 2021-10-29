@@ -24,6 +24,14 @@ c["format"] = "video/x-raw"
 c["pixelformat"] = "BGRx"
 c["width"] = 1440
 c["height"] = 1080
-c["framerate"] = "15/1"
+c["framerate"] = "2500000/10593"
 
+pwm = {}
+pwm["frequency"] = 15
+pwm["chunk_size"] = 50
+pwm["chunk_pause"] = 3000
 
+c["pwm"] = pwm
+
+with open(filename, "w") as f:
+    c = json.dump(c, f, indent=4)

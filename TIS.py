@@ -91,16 +91,25 @@ class TIS:
         self.appsink.set_property("drop",1)
         self.appsink.set_property("emit-signals",1)
         self.appsink.connect('new-sample', self.on_new_buffer)
-        self.source.set_property("serial", self.serialnumber)
+
         self.gstqueue = self.pipeline.get_by_name("queue")
         self.gstqueue.set_property("max-size-buffers", 0)
         self.gstqueue.set_property("max-size-time", int(2e9))
         self.gstqueue.set_property("max-size-bytes", 0)
+
+        self.source.set_property("serial", self.serialnumber)
         self.setcaps()
 
+    def stopPipeline(self):
+        self.pipeline.set_state(Gst.State.PAUSED)
+        self.pipeline.set_state(Gst.State.READY)
+        self.pipeline.set_state(Gst.State.NULL)
+
+    def Set_Image_Callback(self, function, *data):
+        self.ImageCallback = function
+        self.ImageCallbackData = data
 
     def on_new_buffer(self, appsink):
-        # self.sample = appsink.get_property('last-sample')
         self.ImageCallback(self, *self.ImageCallbackData);
         return False
 
@@ -118,23 +127,14 @@ class TIS:
         capsfilter = self.pipeline.get_by_name("caps")
         capsfilter.set_property("caps", caps)
 
-    def stopPipeline(self):
-        self.pipeline.set_state(Gst.State.PAUSED)
-        self.pipeline.set_state(Gst.State.READY)
-        self.pipeline.set_state(Gst.State.NULL)
-
-
     def setProperty(self, PropertyName, value):
         try:
 
             property = self.source.get_tcam_property(PropertyName)
             if(type(value) is int and property.type == 'double'):
                 value = float(value)
-
             if(type(value) is float and property.type == 'integer'):
                 value = int(value)
-
-
             result = self.source.set_tcam_property(PropertyName,GObject.Value(type(value),value))
             if result is False:
                 print("Failed to set {} to value {}. value type is {} Property type is {}, range is {}-{}".format(
@@ -147,8 +147,3 @@ class TIS:
         except Exception as error:
             print("Error set Property {0}: {1}",PropertyName, format(error))
             raise
-
-    def Set_Image_Callback(self, function, *data):
-        self.ImageCallback = function
-        self.ImageCallbackData = data
-
