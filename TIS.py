@@ -78,7 +78,7 @@ class TIS:
         try:
             self.pipeline = Gst.parse_launch(p)
         except GLib.Error as error:
-            print("Error creating pipeline: {0}".format(error))
+            logging.error("Error creating pipeline: {0}".format(error))
             raise
 
         if video_path is not None:
@@ -87,14 +87,14 @@ class TIS:
 
         self.source = self.pipeline.get_by_name("source")
         self.appsink = self.pipeline.get_by_name("sink")
-        self.appsink.set_property("max-buffers",5)
+        self.appsink.set_property("max-buffers", 300)
         self.appsink.set_property("drop",1)
         self.appsink.set_property("emit-signals",1)
         self.appsink.connect('new-sample', self.on_new_buffer)
 
         self.gstqueue = self.pipeline.get_by_name("queue")
         self.gstqueue.set_property("max-size-buffers", 0)
-        self.gstqueue.set_property("max-size-time", int(2e9))
+        self.gstqueue.set_property("max-size-time", 0)
         self.gstqueue.set_property("max-size-bytes", 0)
 
         self.source.set_property("serial", self.serialnumber)
@@ -118,7 +118,7 @@ class TIS:
         Set pixel and sink format and frame rate
         """
         caps = Gst.Caps.new_empty()
-        format = 'video/x-raw,format=%s,width=%d,height=%d,framerate=%s' % ( SinkFormats.toString(self.sinkformat),self.width,self.height,self.framerate,)
+        format = 'video/x-raw,format=%s,width=%d,height=%d,framerate=%s/1' % ( SinkFormats.toString(self.sinkformat),self.width,self.height,self.frequency,)
         structure = Gst.Structure.new_from_string(format)
 
         caps.append_structure(structure)
@@ -137,7 +137,7 @@ class TIS:
                 value = int(value)
             result = self.source.set_tcam_property(PropertyName,GObject.Value(type(value),value))
             if result is False:
-                print("Failed to set {} to value {}. value type is {} Property type is {}, range is {}-{}".format(
+                logging.debug("Failed to set {} to value {}. value type is {} Property type is {}, range is {}-{}".format(
                     PropertyName, value,
                     type(value),
                     property.type,
@@ -145,5 +145,5 @@ class TIS:
                     property.max) 
                     )
         except Exception as error:
-            print("Error set Property {0}: {1}",PropertyName, format(error))
+            logging.error("Error set Property {0}: {1}",PropertyName, format(error))
             raise

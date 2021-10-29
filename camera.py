@@ -40,6 +40,7 @@ class Camera(TIS.TIS):
     def initialize(self):
         """Initialize the camera"""
         self.read_configs()
+        self.apply_pwm_properties()
         self.create_callback()
         self.open_device()
         logging.info("Succesfully initialized")
@@ -67,11 +68,17 @@ class Camera(TIS.TIS):
         for k, v in self.configs['properties'].items():
             self.setProperty(k, v)
 
+    def apply_pwm_properties(self):
+        self.frequency = self.configs['pwm']['frequency']
+        self.timeout_delay = self.configs['pwm']['chunk_pause'] // 1000 - 1
+        self.expected_frames = self.configs['pwm']['chunk_size']
+
     def read_configs(self):
         """Read the configuration file"""
         with open(self.config_path) as json_file:
             self.configs = json.load(json_file)
             json_file.close()
+
 
 
 class Queue:
@@ -129,8 +136,8 @@ class Queue:
 
             else:
                 logging.info(f"Buffers in queue: {self.camera.gstqueue.get_property('current-level-buffers')}")
-                logging.info(f"Time in queue: {self.camera.gstqueue.get_property('current-level-time')}")
-                logging.info(f"Bytes in queue: {self.camera.gstqueue.get_property('current-level-bytes')}")
+                logging.debug(f"Time in queue: {self.camera.gstqueue.get_property('current-level-time')}")
+                logging.debug(f"Bytes in queue: {self.camera.gstqueue.get_property('current-level-bytes')}")
                 time.sleep(1)
                 
 
