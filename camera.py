@@ -7,6 +7,7 @@ Author: Stefano Bettani, October 2021, refractoring Romain Fayat's and Sala's co
 """
 import gi
 import os
+import sys
 import TIS
 import json
 import time
@@ -55,6 +56,8 @@ class Camera(TIS.TIS):
         """Start capturing videos"""
         try: 
             if self.test_mode:
+                self.createPipeline()
+                self.pipeline.set_state(Gst.State.PLAYING)
                 self.queue.test()
             else:
                 self.queue.loop()
@@ -139,12 +142,12 @@ class Queue:
     def test(self):
         self.fill_c_array()
         while True:
-            self.camera.createPipeline()
-            self.apply_c_array()
-            self.camera.pipeline.set_state(Gst.State.PLAYING)
             os.system("clear")
+            # self.camera.createPipeline()
+            self.apply_c_array()
+            # self.camera.pipeline.set_state(Gst.State.PLAYING)
             self.modify_conf()
-            self.camera.stopPipeline()
+            # self.camera.stopPipeline()
 
 
     def fill_c_array(self):
@@ -167,11 +170,22 @@ class Queue:
             self.camera.setProperty(x[0], x[1])
         
     def modify_conf(self):
+        print()
         for i, x in enumerate(self.c_array):
             print(f'[{i}]{x[2]}{x[0]}: {x[1]}')
+        print(f'[{i+1} Save configuration') 
 
         n = int(input("Property number: "))
+        if n == i+1:
+            filename = input("Desired path of configuration file: ")
+            self.c_copy["properties"] = self.properties
+            self.c_copy["pwm"] = self.pwm
+            with open(filename, 'w') as f:
+                c = json.dump(self.c_copy, f, indent=4)
+            sys.exit()
+
         v = input("Property value: ")
+
         p = self.c_array[n][0]
         if n >= len(self.properties) + len(self.c_copy):
             self.pwm[p] = v

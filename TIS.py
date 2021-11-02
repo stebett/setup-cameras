@@ -139,15 +139,18 @@ class TIS:
 
     def setProperty(self, PropertyName, value):
         try:
-
+            logging.debug(f"Setting {PropertyName} to value {value}")
             property = self.source.get_tcam_property(PropertyName)
-            if(type(value) is int and property.type == 'double'):
+            if property.type == 'double':
                 value = float(value)
-            if(type(value) is float and property.type == 'integer'):
+            if property.type == 'integer':
                 value = int(value)
+            if property.type == 'boolean':
+                value = bool(value)
+
             result = self.source.set_tcam_property(PropertyName,GObject.Value(type(value),value))
             if result is False:
-                logging.debug("Failed to set {} to value {}. value type is {} Property type is {}, range is {}-{}".format(
+                logging.warning("Failed to set {} to value {}. value type is {} Property type is {}, range is {}-{}".format(
                     PropertyName, value,
                     type(value),
                     property.type,
