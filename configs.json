@@ -2,16 +2,16 @@
     "properties": {
         "Auto Functions ROI Control": true,
         "Auto Functions ROI Preset": "Center 50%",
-        "Brightness": 10,
+        "Brightness": 400,
         "Exposure Auto": true,
         "Exposure Auto Lower Limit": 1,
         "Exposure Auto Reference": 128,
         "Exposure Auto Upper Limit": 33333,
         "Exposure Auto Upper Limit Auto": false,
-        "Exposure Time (us)": 1000,
-        "GPIn": 0,
-        "GPOut": 0,
-        "Gain": 0,
+        "Exposure Time (us)": 13132,
+        "GPIn": 1,
+        "GPOut": 1,
+        "Gain": 4,
         "Gain Auto": false,
         "Gain Auto Lower Limit": 0,
         "Gain Auto Upper Limit": 480,
@@ -31,19 +31,21 @@
         "Trigger Delay (us)": 31,
         "Trigger Exposure Mode": "Frame Start",
         "Trigger Global Reset Release": false,
-        "Trigger Mode": false,
+        "Trigger Mode": "False",
         "Trigger Polarity": "Rising Edge"
     },
-    "serial": "49020439",
-    "version": "v0.1",
-    "format": "video/x-raw",
-    "pixelformat": "BGRx",
-    "width": 1440,
-    "height": 1080,
-    "framerate": "2500000/10593",
     "pwm": {
         "frequency": 15,
         "chunk_size": 50,
         "chunk_pause": 3000
+    },
+    "general": {
+        "serial": "49020439",
+        "version": "v0.1",
+        "format": "video/x-raw",
+        "pixelformat": "BGRx",
+        "width": 1440,
+        "height": 1080,
+        "framerate": "2500000/10593"
     }
 }

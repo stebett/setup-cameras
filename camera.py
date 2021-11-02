@@ -7,7 +7,6 @@ Author: Stefano Bettani, October 2021, refractoring Romain Fayat's and Sala's co
 """
 import gi
 import os
-import sys
 import TIS
 import json
 import time
@@ -25,23 +24,17 @@ class Camera(TIS.TIS):
     :param expected_frames: expected number of frames per chunk, 0 means no expectation
     :param path_to_output: directory where videos and logs should be saved
     """
-    def __init__(self, config_path, timeout_delay=2, expected_frames=0, path_to_output='videos', test_mode=False):
+    def __init__(self, config_path, path_to_output='videos'):
         super().__init__()
         self.config_path = config_path
-        self.timeout_delay = timeout_delay
-        self.expected_frames = expected_frames
         self.path_to_output = path_to_output
         self.configs = None
         self.pipeline = None
         self.queue = None
-        self.test_mode = test_mode
-        self.livedisplay = True if test_mode else False
+        self.livedisplay = False
         
         # logging.basicConfig(filename=path_to_output + '/run.log', level=logging.INFO)
-        if test_mode:
-            logging.basicConfig(level=logging.WARNING) 
-        else:
-            logging.basicConfig(level=logging.INFO) 
+        logging.basicConfig(level=logging.INFO) 
 
 
     def initialize(self):
@@ -49,18 +42,13 @@ class Camera(TIS.TIS):
         self.read_configs()
         self.apply_pwm_properties()
         self.create_callback()
-        self.open_device()
+        self.open_device(self.configs["general"])
         logging.info("Succesfully initialized")
 
     def capture(self):
         """Start capturing videos"""
         try: 
-            if self.test_mode:
-                self.createPipeline()
-                self.pipeline.set_state(Gst.State.PLAYING)
-                self.queue.test()
-            else:
-                self.queue.loop()
+            self.queue.loop()
         except KeyboardInterrupt:
             logging.error("Stopped manually by user")
         finally:
@@ -139,65 +127,6 @@ class Queue:
             self.save_timestamps()
             logging.info("Timestamps saved")
 
-    def test(self):
-        self.fill_c_array()
-        while True:
-            os.system("clear")
-            # self.camera.createPipeline()
-            self.apply_c_array()
-            # self.camera.pipeline.set_state(Gst.State.PLAYING)
-            self.modify_conf()
-            # self.camera.stopPipeline()
-
-
-    def fill_c_array(self):
-        self.c_array = []
-        self.c_copy = self.configs.copy()
-        self.properties = self.c_copy.pop("properties")
-        self.pwm = self.c_copy.pop("pwm")
-
-        for k, v in self.properties.items():
-            self.c_array.append([k, v, " "])
-
-        for k, v in self.c_copy.items():
-            self.c_array.append([k, v, " "])
-
-        for k, v in self.pwm.items():
-            self.c_array.append([k, v, " "])
-
-    def apply_c_array(self):
-        for x in self.c_array[:len(self.properties)]:
-            self.camera.setProperty(x[0], x[1])
-        
-    def modify_conf(self):
-        print()
-        for i, x in enumerate(self.c_array):
-            print(f'[{i}]{x[2]}{x[0]}: {x[1]}')
-        print(f'[{i+1} Save configuration') 
-
-        n = int(input("Property number: "))
-        if n == i+1:
-            filename = input("Desired path of configuration file: ")
-            self.c_copy["properties"] = self.properties
-            self.c_copy["pwm"] = self.pwm
-            with open(filename, 'w') as f:
-                c = json.dump(self.c_copy, f, indent=4)
-            sys.exit()
-
-        v = input("Property value: ")
-
-        p = self.c_array[n][0]
-        if n >= len(self.properties) + len(self.c_copy):
-            self.pwm[p] = v
-        elif n >= len(self.properties):
-            self.c_copy[p] = v
-        else:
-            self.properties[p] = v
-
-        self.c_array[n][1] = v
-        self.c_array[n][2] = "[x] "
-
-
 
     def check_delay(self):
         """Writes frames from queue to disk. It interrupts when timeout_delay is exceeded"""
@@ -212,7 +141,6 @@ class Queue:
                 logging.debug(f"Time in queue: {self.camera.gstqueue.get_property('current-level-time')}")
                 logging.debug(f"Bytes in queue: {self.camera.gstqueue.get_property('current-level-bytes')}")
                 time.sleep(1)
-                
 
     def add_frame(self, camera):
         """Add frame to queue and couples them to the timestamp"""

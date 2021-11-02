@@ -51,7 +51,7 @@ class TIS:
         self.pipeline = None
         self.configs = None
 
-    def open_device(self):
+    def open_device(self, configs):
         ''' Inialize a device, e.g. camera.
         :param serial: Serial number of the camera to be used.
         :param width: Width of the wanted video format
@@ -60,16 +60,15 @@ class TIS:
         :param color: True = 8 bit color, False = 8 bit mono. ToDo: Y16
         :return: none
         '''
-        self.serialnumber = self.configs['serial']
-        self.height = self.configs['height']
-        self.width = self.configs['width']
-        self.framerate = self.configs['framerate']
+        self.serialnumber = configs['serial']
+        self.height = configs['height']
+        self.width = configs['width']
+        self.framerate = configs['framerate']
         self.sinkformat = SinkFormats.BGRA
 
     def createPipeline(self, video_path=None):
         p = 'tcambin name=source ! capsfilter name=caps'
 
-        print(self.livedisplay)
         if self.livedisplay:
             logging.info("Testing")
             p += " ! tee name=t"
@@ -108,7 +107,6 @@ class TIS:
         
         self.source = self.pipeline.get_by_name("source")
         self.source.set_property("serial", self.serialnumber)
-        self.setcaps()
 
     def stopPipeline(self):
         self.pipeline.set_state(Gst.State.PAUSED)
@@ -123,12 +121,12 @@ class TIS:
         self.ImageCallback(self, *self.ImageCallbackData);
         return False
 
-    def setcaps(self):
+    def setcaps(self, configs):
         """ 
         Set pixel and sink format and frame rate
         """
         caps = Gst.Caps.new_empty()
-        format = 'video/x-raw,format=%s,width=%d,height=%d,framerate=%s/1' % ( SinkFormats.toString(self.sinkformat),self.width,self.height,self.frequency,)
+        format = 'video/x-raw,format=%s,width=%d,height=%d,framerate=%s' % ( SinkFormats.toString(self.sinkformat),configs["width"],configs["height"],configs["framerate"])
         structure = Gst.Structure.new_from_string(format)
 
         caps.append_structure(structure)
@@ -146,7 +144,7 @@ class TIS:
             if property.type == 'integer':
                 value = int(value)
             if property.type == 'boolean':
-                value = bool(value)
+                value = True if value == "True" else False
 
             result = self.source.set_tcam_property(PropertyName,GObject.Value(type(value),value))
             if result is False:

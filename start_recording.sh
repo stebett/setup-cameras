@@ -1,0 +1,52 @@
+# Define basedir and create if needed
+basedir=sessions
+mkdir -p $basedir
+
+# Get animal name
+echo "Animal code: "
+read animal
+
+# Get number of session and create dir
+printf -v session_n "%(%Y-%m-%d_%H:%M-$animal)T\n" -1
+echo "Session identifier: (default=$session_n)"
+read session
+if [ -z "${session}" ]; then session=$session_n; fi
+
+sessiondir=$basedir/$session 
+mkdir -p $sessiondir
+
+
+# Get number of block and create dir
+block_n=`expr $(ls $sessiondir | wc -l) + 1`
+echo "Block number: (default=$block_n)"
+read block
+if [ -z "${block}" ]; then block=$block_n; fi
+
+blockdir=$sessiondir/block$block
+mkdir -p $blockdir
+
+
+# Get number of cameras and create dirs
+cameras_n=2
+echo "Number of cameras: (default=$cameras_n)"
+read cameras
+
+if [ -z "${cameras}" ]; then cameras=$cameras_n; fi
+
+for i in $(seq $cameras); do
+	mkdir $blockdir/camera$i
+done
+
+# Generate configuration for cameras
+serials=$(tcam-ctrl -l | awk '{print $5}')
+for serial in $serials; do
+	echo "Camera number for serial $serial"
+	read n
+	python create_configs.py $serial -o $blockdir/camera$n/configs.json
+done
+
+# Calibrate cameras
+
+for n in $(seq $cameras); do
+	python record.py $blockdir/camera$n/configs.json -t
+done
