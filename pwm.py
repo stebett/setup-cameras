@@ -1,6 +1,7 @@
 import json
 import time
 import argparse
+from configs import Configs
 from pwm_py.arduino_pwm import Arduino_PWM
 
 parser = argparse.ArgumentParser(__doc__)
@@ -12,14 +13,13 @@ parser.add_argument("-f",
 args = parser.parse_args()
 filename = str(args.filename)
 
-with open(filename, "r") as f:
-    c = json.load(f)
+configs = Configs(filename)
 
 ser = Arduino_PWM("/dev/ttyACM0",
         timeout=.1,
-        frequency=c["pwm"]["frequency"],
-        chunk_size=c["pwm"]["chunk_size"],
-        chunk_pause=c["pwm"]["chunk_pause"])
+        frequency=configs.pwm["frequency"],
+        chunk_size=configs.pwm["chunk_size"],
+        chunk_pause=configs.pwm["chunk_pause"])
 
 ser.start_pwm()
 

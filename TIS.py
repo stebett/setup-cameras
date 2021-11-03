@@ -51,7 +51,7 @@ class TIS:
         self.pipeline = None
         self.configs = None
 
-    def open_device(self, configs):
+    def open_device(self):
         ''' Inialize a device, e.g. camera.
         :param serial: Serial number of the camera to be used.
         :param width: Width of the wanted video format
@@ -60,11 +60,11 @@ class TIS:
         :param color: True = 8 bit color, False = 8 bit mono. ToDo: Y16
         :return: none
         '''
-        self.serialnumber = configs['serial']
-        self.height = configs['height']
-        self.width = configs['width']
-        self.framerate = configs['framerate']
-        self.sinkformat = SinkFormats.BGRA
+        self.serialnumber = self.configs.general['serial']
+        self.height = self.configs.general['height']
+        self.width = self.configs.general['width']
+        self.framerate = self.configs.general['framerate']
+        self.sinkformat = SinkFormats.toString(self.configs.general['pixelformat'])
 
     def createPipeline(self, video_path=None):
         p = 'tcambin name=source ! capsfilter name=caps'
@@ -88,7 +88,6 @@ class TIS:
         if self.livedisplay:
             self.xsink = self.pipeline.get_by_name("xsink")
             self.xsink.set_property("force-aspect-ratio", True)
-            # self.xsink.set_property("pixel-aspect-ratio", "10/5")
 
         elif video_path is not None: 
             self.filesink = self.pipeline.get_by_name("fsink")
@@ -107,6 +106,7 @@ class TIS:
         
         self.source = self.pipeline.get_by_name("source")
         self.source.set_property("serial", self.serialnumber)
+        self.setcaps()
 
     def stopPipeline(self):
         self.pipeline.set_state(Gst.State.PAUSED)
@@ -121,12 +121,13 @@ class TIS:
         self.ImageCallback(self, *self.ImageCallbackData);
         return False
 
-    def setcaps(self, configs):
+    def setcaps(self):
         """ 
         Set pixel and sink format and frame rate
         """
+        logging.debug("Creating caps")
         caps = Gst.Caps.new_empty()
-        format = 'video/x-raw,format=%s,width=%d,height=%d,framerate=%s' % ( SinkFormats.toString(self.sinkformat),configs["width"],configs["height"],configs["framerate"])
+        format = 'video/x-raw,format=%s,width=%d,height=%d,framerate=%s/1' % (self.configs.general["pixelformat"],self.configs.general["width"],self.configs.general["height"],self.configs.pwm["frequency"])
         structure = Gst.Structure.new_from_string(format)
 
         caps.append_structure(structure)
@@ -137,14 +138,18 @@ class TIS:
 
     def setProperty(self, PropertyName, value):
         try:
-            logging.debug(f"Setting {PropertyName} to value {value}")
             property = self.source.get_tcam_property(PropertyName)
             if property.type == 'double':
                 value = float(value)
             if property.type == 'integer':
                 value = int(value)
             if property.type == 'boolean':
-                value = True if value == "True" else False
+                if (value == "True") or (value == "true") or (value is True):
+                    value = True 
+                elif (value == "False") or (value == "false") or (value is False):
+                    value = False 
+                else:
+                    raise
 
             result = self.source.set_tcam_property(PropertyName,GObject.Value(type(value),value))
             if result is False:

@@ -15,6 +15,7 @@ import logging
 
 gi.require_version("Gst", "1.0")
 from gi.repository import Gst
+from configs import Configs
 
 class Camera(TIS.TIS):
     """The object managing the camera.
@@ -28,7 +29,7 @@ class Camera(TIS.TIS):
         super().__init__()
         self.config_path = config_path
         self.path_to_output = path_to_output
-        self.configs = None
+        self.configs = Configs(config_path)
         self.pipeline = None
         self.queue = None
         self.livedisplay = False
@@ -39,10 +40,8 @@ class Camera(TIS.TIS):
 
     def initialize(self):
         """Initialize the camera"""
-        self.read_configs()
-        self.apply_pwm_properties()
         self.create_callback()
-        self.open_device(self.configs["general"])
+        self.open_device()
         logging.info("Succesfully initialized")
 
     def capture(self):
@@ -58,26 +57,13 @@ class Camera(TIS.TIS):
     def create_callback(self):
         self.queue = Queue(self,
                            self.configs, 
-                           self.timeout_delay,
-                           self.expected_frames,
                            self.path_to_output)
         self.Set_Image_Callback(self.queue.add_frame)
 
     def apply_properties(self):
         """Apply properties to camera"""
-        for k, v in self.configs['properties'].items():
+        for k, v in self.configs.properties.items():
             self.setProperty(k, v)
-
-    def apply_pwm_properties(self):
-        self.frequency = self.configs['pwm']['frequency']
-        self.timeout_delay = self.configs['pwm']['chunk_pause'] // 1000 - 1
-        self.expected_frames = self.configs['pwm']['chunk_size']
-
-    def read_configs(self):
-        """Read the configuration file"""
-        with open(self.config_path) as json_file:
-            self.configs = json.load(json_file)
-            json_file.close()
 
 
 
@@ -90,11 +76,11 @@ class Queue:
     :param path_to_output: directory where videos and logs should be saved
     
     """
-    def __init__(self, camera, configs, timeout_delay, expected_frames, path_to_output):
+    def __init__(self, camera, configs, path_to_output):
         self.camera = camera
         self.configs = configs
-        self.timeout_delay = timeout_delay
-        self.expected_frames = expected_frames
+        self.timeout_delay = self.configs.pwm['chunk_pause'] // 1000 - 1
+        self.expected_frames = self.configs.pwm['chunk_size']
         self.path_to_output = path_to_output
 
         self.videos = []
@@ -137,10 +123,10 @@ class Queue:
                 self.go = False
 
             else:
-                logging.info(f"Buffers in queue: {self.camera.gstqueue.get_property('current-level-buffers')}")
+                logging.debug(f"Buffers in queue: {self.camera.gstqueue.get_property('current-level-buffers')}")
                 logging.debug(f"Time in queue: {self.camera.gstqueue.get_property('current-level-time')}")
                 logging.debug(f"Bytes in queue: {self.camera.gstqueue.get_property('current-level-bytes')}")
-                time.sleep(1)
+                time.sleep(0.25)
 
     def add_frame(self, camera):
         """Add frame to queue and couples them to the timestamp"""

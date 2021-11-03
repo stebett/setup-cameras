@@ -21,7 +21,7 @@ with open(filename, "r") as f:
     c = json.load(f)
 
 c["format"] = "video/x-raw"
-c["pixelformat"] = "BGRx"
+c["pixelformat"] = "GRAY8"
 c["width"] = 1440
 c["height"] = 1080
 c["framerate"] = "2500000/10593"

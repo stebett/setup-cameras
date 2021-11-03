@@ -31,7 +31,7 @@
         "Trigger Delay (us)": 31,
         "Trigger Exposure Mode": "Frame Start",
         "Trigger Global Reset Release": false,
-        "Trigger Mode": "False",
+        "Trigger Mode": true,
         "Trigger Polarity": "Rising Edge"
     },
     "pwm": {
@@ -40,10 +40,10 @@
         "chunk_pause": 3000
     },
     "general": {
-        "serial": "49020439",
+        "serial": "49020441",
         "version": "v0.1",
         "format": "video/x-raw",
-        "pixelformat": "BGRx",
+        "pixelformat": "GRAY8",
         "width": 1440,
         "height": 1080,
         "framerate": "2500000/10593"
