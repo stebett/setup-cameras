@@ -2,14 +2,14 @@
     "properties": {
         "Auto Functions ROI Control": true,
         "Auto Functions ROI Preset": "Center 50%",
-        "Brightness": 400,
-        "Exposure Auto": true,
+        "Brightness": 0,
+        "Exposure Auto": false,
         "Exposure Auto Lower Limit": 1,
         "Exposure Auto Reference": 128,
         "Exposure Auto Upper Limit": 33333,
         "Exposure Auto Upper Limit Auto": false,
-        "Exposure Time (us)": 13132,
-        "GPIn": 1,
+        "Exposure Time (us)": 10000,
+        "GPIn": 0,
         "GPOut": 1,
         "Gain": 4,
         "Gain Auto": false,
@@ -28,7 +28,7 @@
         "Strobe Enable": false,
         "Strobe Exposure": true,
         "Strobe Polarity": false,
-        "Trigger Delay (us)": 31,
+        "Trigger Delay (us)": 0,
         "Trigger Exposure Mode": "Frame Start",
         "Trigger Global Reset Release": false,
         "Trigger Mode": true,
@@ -37,7 +37,8 @@
     "pwm": {
         "frequency": 15,
         "chunk_size": 50,
-        "chunk_pause": 3000
+        "chunk_pause": 5000,
+        "timeout_delay": 100
     },
     "general": {
         "serial": "49020441",

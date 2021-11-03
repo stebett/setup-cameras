@@ -79,7 +79,7 @@ class Queue:
     def __init__(self, camera, configs, path_to_output):
         self.camera = camera
         self.configs = configs
-        self.timeout_delay = self.configs.pwm['chunk_pause'] // 1000 - 1
+        self.timeout_delay = self.configs.pwm['timeout_delay'] / 1000
         self.expected_frames = self.configs.pwm['chunk_size']
         self.path_to_output = path_to_output
 
@@ -87,6 +87,7 @@ class Queue:
         self.video_name = ""
         self.timestamps = {}
         self.counter = 0
+        self.relative_zero = 0
         self.go = True
 
     def loop(self):
@@ -117,8 +118,7 @@ class Queue:
     def check_delay(self):
         """Writes frames from queue to disk. It interrupts when timeout_delay is exceeded"""
         while self.go:
-
-            if time.time() - self.time_of_last_frame > self.timeout_delay:
+            if (self.counter > self.relative_zero) and (time.time() - self.time_of_last_frame > self.timeout_delay):
                 logging.info("Timeout delay exceeded")
                 self.go = False
 
@@ -143,14 +143,15 @@ class Queue:
 
     def new_video_name(self):
         """Create new video name based on number of first frame"""
-        expected_frames_adjusted = self.expected_frames * len(self.videos)
+        self.relative_zero = self.expected_frames * len(self.videos)
+        logging.warning(f"relative zero: {self.relative_zero}")
 
-        if (self.expected_frames > 0) & (self.counter != expected_frames_adjusted):
+        if (self.expected_frames > 0) & (self.counter != self.relative_zero):
             logging.warning(f"""
 [!] Video:                     {self.video_name}
 [!] Number of frames:          {self.counter}
-[!] Expected number of frames: {expected_frames_adjusted}""")
-            self.counter = expected_frames_adjusted
+[!] Expected number of frames: {self.relative_zero}""")
+            self.counter = self.relative_zero
 
         self.video_name = f"{self.path_to_output}/{self.counter :06d}.avi"
 
