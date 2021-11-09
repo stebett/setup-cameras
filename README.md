@@ -57,5 +57,5 @@ You can activate the trigger mode from the **params.json**.
 
 - [x] First frame is 0
 - [x] Wait at the beginning
-- [] autocheck for framedrop
->>>>>>> gst
+- [ ] Autocheck for framedrop
+- [ ] Make it work lol
