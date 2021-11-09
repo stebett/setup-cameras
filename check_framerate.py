@@ -37,7 +37,7 @@ class Timestamps:
 
 if __name__ == "__main__":
 
-    video_path = "/home/bettani/setup-cameras/videos/camera1/"
+    video_path = "/home/bettani/setup-cameras/videos/"
     paths = sorted(glob.glob(video_path + '*.pickle'))
 
     expectation = 50

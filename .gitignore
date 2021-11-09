@@ -1,5 +1,4 @@
-data/
-examples/
+recordings/
 __pycache__
 *.avi
 *.log

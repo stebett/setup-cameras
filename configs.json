@@ -1,18 +1,52 @@
 {
-	"serial": "49020439",
-	"format" : "video/x-raw",
-	"pixelformat" : "BGRx",
-	"fps": 10,
-	"width" : 1440,
-	"height" : 1080,
-	"framerate":"30/1",
-	"properties":
-	[
-		{"property": "Brightness",    "value":20},
-		{"property": "Exposure Auto", "value":true},
-		{"property": "Gain Auto",     "value":false},
-		{"property": "Gain",          "value":0},
-		{"property": "Trigger Mode",  "value":true}
-
-	]
-}        
+    "properties": {
+        "Auto Functions ROI Control": true,
+        "Auto Functions ROI Preset": "Center 50%",
+        "Brightness": 0,
+        "Exposure Auto": false,
+        "Exposure Auto Lower Limit": 1,
+        "Exposure Auto Reference": 128,
+        "Exposure Auto Upper Limit": 33333,
+        "Exposure Auto Upper Limit Auto": false,
+        "Exposure Time (us)": 10000,
+        "GPIn": 0,
+        "GPOut": 1,
+        "Gain": 4,
+        "Gain Auto": false,
+        "Gain Auto Lower Limit": 0,
+        "Gain Auto Upper Limit": 480,
+        "Highlight Reduction": false,
+        "IMX Low-Latency Mode": false,
+        "Offset Auto Center": true,
+        "Offset X": 0,
+        "Offset Y": 0,
+        "Override Scanning Mode": 1,
+        "Reverse X": false,
+        "Reverse Y": false,
+        "Strobe Delay": 0,
+        "Strobe Duration": 100,
+        "Strobe Enable": false,
+        "Strobe Exposure": true,
+        "Strobe Polarity": false,
+        "Trigger Delay (us)": 0,
+        "Trigger Exposure Mode": "Frame Start",
+        "Trigger Global Reset Release": false,
+        "Trigger Mode": true,
+        "Trigger Polarity": "Rising Edge"
+    },
+    "pwm": {
+        "frequency": 15,
+        "chunk_size": 50,
+        "chunk_pause": 5000,
+        "timeout_delay": 100
+    },
+    "general": {
+        "serial": "49020441",
+        "version": "v0.1",
+        "format": "video/x-raw",
+        "pixelformat": "GRAY8",
+        "width": 1440,
+        "height": 1080,
+        "framerate": "2500000/10593"
+    }
+}
