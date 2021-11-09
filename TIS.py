@@ -57,8 +57,6 @@ class TIS:
         :param width: Width of the wanted video format
         :param height: Height of the wanted video format
         :param framerate: Numerator of the frame rate. /1 is added automatically
-        :param color: True = 8 bit color, False = 8 bit mono. ToDo: Y16
-        :return: none
         '''
         self.serialnumber = self.configs.general['serial']
         self.height = self.configs.general['height']
@@ -67,16 +65,15 @@ class TIS:
         self.sinkformat = SinkFormats.toString(self.configs.general['pixelformat'])
 
     def createPipeline(self, video_path=None):
+        """ Creates a Gstreamer pipeline """
         p = 'tcambin name=source ! capsfilter name=caps'
 
         if self.livedisplay:
-            logging.info("Testing")
             p += " ! tee name=t"
             p += " t. ! videoscale method=0 add-borders=false \
                       ! video/x-raw,width=640,height=360 \
                       ! ximagesink name=xsink"
         elif video_path is not None:
-            logging.info("Not testing")
             p += " ! tee name=t"
             p += " t. ! queue ! appsink name=sink"
             p += " t. ! queue name=queue ! videoconvert ! avimux ! filesink name=fsink"
@@ -100,7 +97,7 @@ class TIS:
 
             self.appsink = self.pipeline.get_by_name("sink")
             self.appsink.set_property("max-buffers", 5)
-            self.appsink.set_property("drop",1)
+            self.appsink.set_property("drop",1) # TODO: This would drop frames on purpose, but touching it created issues
             self.appsink.set_property("emit-signals",1)
             self.appsink.connect('new-sample', self.on_new_buffer)
         
@@ -109,22 +106,23 @@ class TIS:
         self.setcaps()
 
     def stopPipeline(self):
+        """ Stops the pipeline """
         self.pipeline.set_state(Gst.State.PAUSED)
         self.pipeline.set_state(Gst.State.READY)
         self.pipeline.set_state(Gst.State.NULL)
 
     def Set_Image_Callback(self, function, *data):
+        """ Sets the specific function called when a frame is received """
         self.ImageCallback = function
         self.ImageCallbackData = data
 
     def on_new_buffer(self, appsink):
+        """ Set the generic ffunction called when a frame is received """
         self.ImageCallback(self, *self.ImageCallbackData);
         return False
 
     def setcaps(self):
-        """ 
-        Set pixel and sink format and frame rate
-        """
+        """ Set pixel and sink format and frame rate """
         logging.debug("Creating caps")
         caps = Gst.Caps.new_empty()
         format = 'video/x-raw,format=%s,width=%d,height=%d,framerate=%s/1' % (self.configs.general["pixelformat"],self.configs.general["width"],self.configs.general["height"],self.configs.pwm["frequency"])
@@ -137,6 +135,7 @@ class TIS:
         capsfilter.set_property("caps", caps)
 
     def setProperty(self, PropertyName, value):
+        """ Set properties, trying to convert the values to the appropriate types """
         try:
             property = self.source.get_tcam_property(PropertyName)
             if property.type == 'double':

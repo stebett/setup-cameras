@@ -5,10 +5,8 @@ from configs import Configs
 from pwm_py.arduino_pwm import Arduino_PWM
 
 parser = argparse.ArgumentParser(__doc__)
-parser.add_argument("-f",
-                    help="Name of the config file", 
-                    dest="filename",
-                    default="tmp_configs.json")
+parser.add_argument("filename",
+                    help="Name of the config file")
 
 args = parser.parse_args()
 filename = str(args.filename)

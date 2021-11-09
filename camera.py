@@ -21,8 +21,6 @@ class Camera(TIS.TIS):
     """The object managing the camera.
 
     :param config_path: path of configuration file
-    :param timeout_delay: interval in triggering after which a new chunk is started
-    :param expected_frames: expected number of frames per chunk, 0 means no expectation
     :param path_to_output: directory where videos and logs should be saved
     """
     def __init__(self, config_path, path_to_output='videos'):
@@ -55,6 +53,7 @@ class Camera(TIS.TIS):
             self.queue.save_timestamps()
 
     def create_callback(self):
+        """Define function to call when a frame is received"""
         self.queue = Queue(self,
                            self.configs, 
                            self.path_to_output)
@@ -68,11 +67,9 @@ class Camera(TIS.TIS):
 
 
 class Queue:
-    """An object that saves frames to memory and writes them to disk as soon as possible
+    """An object that manages video naming and checks the delay between triggers"""
 
     :param config_path: path of configuration file
-    :param timeout_delay: interval in triggering after which a new chunk is started
-    :param expected_frames: expected number of frames per chunk, 0 means no expectation
     :param path_to_output: directory where videos and logs should be saved
     
     """
@@ -116,7 +113,7 @@ class Queue:
 
 
     def check_delay(self):
-        """Writes frames from queue to disk. It interrupts when timeout_delay is exceeded"""
+        """Interrupts video when timeout_delay is exceeded"""
         while self.go:
             if (self.counter > self.relative_zero) and (time.time() - self.time_of_last_frame > self.timeout_delay):
                 logging.info("Timeout delay exceeded")
@@ -129,7 +126,7 @@ class Queue:
                 time.sleep(0.25)
 
     def add_frame(self, camera):
-        """Add frame to queue and couples them to the timestamp"""
+        """Write a timestamp and increases the counter"""
         t = time.time()
         self.timestamps[self.counter] = t
         self.time_of_last_frame = t
@@ -137,11 +134,6 @@ class Queue:
         logging.info(f"Adding frame {self.counter} to the queue")
 
     def new_video(self):
-        """Create new video object"""
-        self.new_video_name()
-        self.videos.append(self.video_name)
-
-    def new_video_name(self):
         """Create new video name based on number of first frame"""
         self.relative_zero = self.expected_frames * len(self.videos)
         logging.warning(f"relative zero: {self.relative_zero}")
@@ -154,8 +146,10 @@ class Queue:
             self.counter = self.relative_zero
 
         self.video_name = f"{self.path_to_output}/{self.counter :06d}.avi"
+        self.videos.append(self.video_name)
 
     def save_timestamps(self):
+        """Write timestamps to disk in pickle format"""
         with open(f'{self.video_name[:-4]}.pickle', 'wb') as handle:
             pickle.dump(self.timestamps, handle, protocol=pickle.HIGHEST_PROTOCOL)
         self.timestamps = {}

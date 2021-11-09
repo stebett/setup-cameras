@@ -9,7 +9,7 @@ parser.add_argument("serial",
 parser.add_argument("-o", "--output",
                     help="Name of the config file", 
                     dest="filename",
-                    default="tmp_configs.json")
+                    default="configs.json")
 
 args = parser.parse_args()
 serial = str(args.serial)

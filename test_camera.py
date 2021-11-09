@@ -10,6 +10,7 @@ gi.require_version("Gst", "1.0")
 from gi.repository import Gst 
 
 class TestCamera(Camera):
+    """Extends the camera object to interactively change properties of the camera"""
     def __init__(self, config_path):
         super().__init__(config_path)
         self.livedisplay = True 
@@ -36,8 +37,9 @@ class TestCamera(Camera):
             self.stopPipeline()
 
     def test(self):
+        """Main loop for changing configuration"""
         while True:
-            # os.system("clear")
+            # os.system("clear") # Uncomment when debugged
             self.print_config_list()
 
             i, v = self.input_index_and_value()
@@ -45,12 +47,14 @@ class TestCamera(Camera):
 
 
     def print_config_list(self):
+        """ Displays current configuration values on terminal, with a checkbox if the have been changed already"""
         print("\nConfigurations (press Enter to save)")
         for i, k, v, m in zip(self.configs.indexes, self.configs.keys, self.configs.values, self.configs.modified):
             check = "[x]" if m else ""
             print(f'[{i}]{check} {k}: {v}')
 
     def save_config(self):
+        """ Saves configuration """
         inp = input(f"Destination path:\n(default={self.config_path})\n> ")
         filename = self.config_path if inp == "" else inp
 
@@ -58,6 +62,7 @@ class TestCamera(Camera):
         self.configs.save(filename)
 
     def input_index_and_value(self):
+        """ Asks for index and value of configuration to change """
         v = None
         i = None
         while True:
@@ -77,8 +82,8 @@ class TestCamera(Camera):
         return i, v
 
     def change_config(self, i, v):
+        """ Applies a property to the camera """
         k = self.configs.keys[i]
-
         
         try:
             self.setProperty(k, v)
@@ -86,4 +91,3 @@ class TestCamera(Camera):
             print(f"The value {v} is not adeguate to property {k}")
 
         self.configs.values[i] = v
-
