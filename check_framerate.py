@@ -1,3 +1,4 @@
+"Visualize delays between frames and frame drops."
 import glob
 import pickle
 import matplotlib.pyplot as plt
@@ -9,7 +10,7 @@ class Timestamps:
         self.dict = {}
         self.frames = []
         self.deltas = []
-        
+
         self.load()
         self.extract()
 
@@ -27,12 +28,10 @@ class Timestamps:
         for f in self.frames:
             self.deltas.append(self.dict[f] - x)
             x = self.dict[f]
-        
+
     def load(self):
         with open(self.path, 'rb') as handle:
             self.dict = pickle.load(handle)
-
-
 
 
 if __name__ == "__main__":

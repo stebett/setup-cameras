@@ -1,31 +1,31 @@
+"Code for interactively change properties of the camera."
+from gi.repository import Gst
 import gi
-import os
 import sys
 import logging
-
 from camera import Camera
 from configs import Configs
-
 gi.require_version("Gst", "1.0")
-from gi.repository import Gst 
+
 
 class TestCamera(Camera):
-    """Extends the camera object to interactively change properties of the camera"""
-    def __init__(self, config_path):
-        super().__init__(config_path)
-        self.livedisplay = True 
-        self.configs = Configs(config_path)
-        logging.basicConfig(level=logging.WARNING) 
+    "Extend Camera to interactively change properties of the camera."
 
+    def __init__(self, config_path):
+        "Create the camera object."
+        super().__init__(config_path)
+        self.livedisplay = True
+        self.configs = Configs(config_path)
+        logging.basicConfig(level=logging.WARNING)
 
     def initialize(self):
-        """Initialize the camera"""
+        "Initialize the camera."
         self.Set_Image_Callback(lambda x: x)
         self.open_device(self.configs.general)
         logging.info("Succesfully initialized")
 
     def capture(self):
-        """Start capturing videos"""
+        "Start capturing videos."
         try:
             self.createPipeline()
             self.setcaps(self.configs.general)
@@ -37,7 +37,7 @@ class TestCamera(Camera):
             self.stopPipeline()
 
     def test(self):
-        """Main loop for changing configuration"""
+        """Main loop for changing configuration."""
         while True:
             # os.system("clear") # Uncomment when debugged
             self.print_config_list()
@@ -45,24 +45,28 @@ class TestCamera(Camera):
             i, v = self.input_index_and_value()
             self.change_config(i, v)
 
-
     def print_config_list(self):
-        """ Displays current configuration values on terminal, with a checkbox if the have been changed already"""
+        """Display current configuration values on terminal.
+
+        A checkbox is added if the have been changed already.
+        """
         print("\nConfigurations (press Enter to save)")
-        for i, k, v, m in zip(self.configs.indexes, self.configs.keys, self.configs.values, self.configs.modified):
+        for i, k, v, m in zip(self.configs.indexes,
+                              self.configs.keys,
+                              self.configs.values,
+                              self.configs.modified):
             check = "[x]" if m else ""
             print(f'[{i}]{check} {k}: {v}')
 
     def save_config(self):
-        """ Saves configuration """
+        "Save the current configuration."
         inp = input(f"Destination path:\n(default={self.config_path})\n> ")
-        filename = self.config_path if inp == "" else inp
-
+        file_path = self.config_path if inp == "" else inp
         self.configs.list_to_dict()
-        self.configs.save(filename)
+        self.configs.save(file_path)
 
     def input_index_and_value(self):
-        """ Asks for index and value of configuration to change """
+        "Asks for index and value of configuration to change."
         v = None
         i = None
         while True:
@@ -82,9 +86,9 @@ class TestCamera(Camera):
         return i, v
 
     def change_config(self, i, v):
-        """ Applies a property to the camera """
+        "Apply a property to the camera."
         k = self.configs.keys[i]
-        
+
         try:
             self.setProperty(k, v)
         except Exception:

@@ -95,7 +95,7 @@ class Queue:
         self.videos = []
         self.video_name = ""
         self.timestamps = {}
-        self.counter = 0  #  Current frame number (total across videos)
+        self.counter = 0  # Current frame number (total across videos)
         self.relative_zero = 0  #  1st frame number in the current video
         self.go = True
 

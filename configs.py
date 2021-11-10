@@ -1,25 +1,26 @@
+"Handle configuration formatting and storage."
 import json
 
+
 class Configs:
-    """A class to store configuration file and ensure right formatting"""
+    "A class to store configuration file and ensure right formatting."
+
     def __init__(self, config_path):
+        "Initialize the object with a configuration path."
         self.config_path = config_path
         self.read_configs()
-
         self.pwm = self.configs["pwm"]
         self.general = self.configs["general"]
         self.properties = self.configs["properties"]
         self.dict_to_list()
 
-
-
     def read_configs(self):
-        """Read the configuration file"""
+        "Read the configuration file."
         with open(self.config_path) as json_file:
             self.configs = json.load(json_file)
 
     def dict_to_list(self):
-        """Create a list from the dict of configs in order to display them"""
+        "Create a list from the dict of configs in order to display them."
         pwm_keys = self.pwm.keys()
         pwm_values = [self.pwm[k] for k in pwm_keys]
 
@@ -37,18 +38,18 @@ class Configs:
         self.indexes = [i for i in range(list_len)]
         self.modified = [False for _ in range(list_len)]
         self.keys = list(pwm_keys) + list(general_keys) + list(properties_keys)
-        self.values = list(pwm_values) + list(general_values) + list(properties_values)
+        self.values = list(pwm_values) + \
+            list(general_values) + list(properties_values)
         self.parent = ["pwm" for _ in range(pwm_len)] + \
                       ["general" for _ in range(general_len)] + \
                       ["properties" for _ in range(properties_len)]
 
     def list_to_dict(self):
-        """Push changes made on the list to the dict"""
+        "Push changes made on the list to the dict."
         for parent, value, key in zip(self.parent, self.values, self.keys):
             self.configs[parent][key] = value
 
-    def save(self, filename):
-        """Save the dictionary as a json file"""
-        with open(filename, 'w') as f:
+    def save(self, file_path):
+        "Save the dictionary as a json file."
+        with open(file_path, 'w') as f:
             json.dump(self.configs, f, indent=4)
-
