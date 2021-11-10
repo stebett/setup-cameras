@@ -84,8 +84,11 @@ class Camera(TIS.TIS):
         "Add timestamp logging to stopPipeline."
         super().stopPipeline()
         logging.info("Old pipeline stopped")
-        self.queue.save_timestamps()
-        logging.info("Timestamps saved")
+        try:
+            self.queue.save_timestamps()
+            logging.info("Timestamps saved")
+        except AttributeError:
+            logging.info("No queue to save timestamps")
 
     def create_callback(self):
         "Define function to call when a frame is received."

@@ -3,7 +3,7 @@ import sys
 import argparse
 from pathlib import Path
 from input_helpers import ask_yes_or_no
-from camera import Camera 
+from camera import Camera
 from test_camera import TestCamera
 from config import Config, DefaultConfig
 
@@ -58,7 +58,6 @@ else:
 
 
 if test_mode:
-    from test_camera import TestCamera
     c = TestCamera(config)
 else:
     c = Camera(config, path_to_output=path_video_folder)

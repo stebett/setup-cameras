@@ -20,7 +20,7 @@ class Config:
         "Read the configuration file."
         try:
             with self.config_path.open("r") as json_file:
-                self.configs = json.load(json_file)
+                self.config = json.load(json_file)
         except FileNotFoundError:
             logging.error("Invalid config file. If you want to use the default"
                           " configuration, run record.py without argument")
@@ -31,7 +31,7 @@ class Config:
         pwm_keys = self.pwm.keys()
         pwm_values = [self.pwm[k] for k in pwm_keys]
 
-        general_keys = self.general.keys
+        general_keys = self.general.keys()
         general_values = [self.general[k] for k in general_keys]
 
         properties_keys = self.properties.keys()

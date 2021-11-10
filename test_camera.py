@@ -12,7 +12,7 @@ class TestCamera(Camera):
 
     def __init__(self, config):
         "Create the camera object."
-        super().__init__(config_path)
+        super().__init__(config)
         self.livedisplay = True
         self.config = config
         logging.basicConfig(level=logging.WARNING)
