@@ -31,9 +31,6 @@ class Camera(TIS.TIS):
         self.pipeline = None
         self.queue = None
         self.livedisplay = False
-
-        # logging.basicConfig(filename=path_to_output + '/run.log',
-        #                     level=logging.INFO)
         logging.basicConfig(level=logging.INFO)
 
     def create_output_dir(self):
@@ -168,21 +165,25 @@ class Queue:
 
     def log_frame_number_warning(self):
         "Log a warning with the actual and expected frame numbers."
+        frames_chunk = self.counter - self.relative_zero
+        expected_number_frame = self.relative_zero + self.expected_frames
         logging.warning(
             "\n\n\n"
             f"[!] Video:                     {self.video_name}\n"
             f"[!] Number of frames:          {self.counter}\n"
-            f"[!] Expected number of frames: {self.relative_zero}\n"
+            f"[!] Expected number of frames: {expected_number_frame}\n"
+            f"[!] Frames in chunk:           {frames_chunk}\n"
+            f"[!] Expected in chunk:         {self.expected_frames}\n"
         )
 
     def new_video(self):
         "Create new video name based on number of first frame."
-        self.relative_zero = self.expected_frames * len(self.videos)
-        logging.warning(f"relative zero: {self.relative_zero}")
-
         if (self.expected_frames > 0) & (self.counter != self.relative_zero):
             self.log_frame_number_warning()
-            self.counter = self.relative_zero
+
+        self.relative_zero = self.expected_frames * len(self.videos)
+        logging.warning(f"relative zero: {self.relative_zero}")
+        self.counter = self.relative_zero
 
         self.video_name = f"{self.path_to_output}/{self.counter :06d}.avi"
         self.videos.append(self.video_name)
