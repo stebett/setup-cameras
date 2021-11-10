@@ -168,7 +168,7 @@ class Queue:
         frames_chunk = self.counter - self.relative_zero
         expected_number_frame = self.relative_zero + self.expected_frames
         logging.warning(
-            "\n\n\n"
+            "\n"
             f"[!] Video:                     {self.video_name}\n"
             f"[!] Number of frames:          {self.counter}\n"
             f"[!] Expected number of frames: {expected_number_frame}\n"
@@ -182,7 +182,7 @@ class Queue:
             self.log_frame_number_warning()
 
         self.relative_zero = self.expected_frames * len(self.videos)
-        logging.warning(f"relative zero: {self.relative_zero}")
+        logging.info(f"relative zero: {self.relative_zero}")
         self.counter = self.relative_zero
 
         self.video_name = f"{self.path_to_output}/{self.counter :06d}.avi"
