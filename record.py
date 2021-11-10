@@ -8,7 +8,7 @@ from config import Config, DefaultConfig
 
 
 parser = argparse.ArgumentParser(__doc__)
-parser.add_argument("-c", "--config_",
+parser.add_argument("-c", "--config_path",
                     help="Path to the state file of the camera",
                     dest="config_path", default="default")
 parser.add_argument("-o", "--output",

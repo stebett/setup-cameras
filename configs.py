@@ -69,7 +69,7 @@ class DefaultConfig():
                     'chunk_size': 50,
                     'chunk_pause': 5000,
                     'timeout_delay': 100}
-        self.general = {'serial': '49020441',
+        self.general = {'serial': '49020441', # The serial number should be handled differently
                         'version': 'v0.1',
                         'format': 'video/x-raw',
                         'pixelformat': 'GRAY8',

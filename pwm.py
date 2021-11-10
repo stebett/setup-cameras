@@ -5,13 +5,19 @@ from config import Config
 from pwmpy.arduino_pwm import Arduino_PWM
 
 parser = argparse.ArgumentParser(__doc__)
-parser.add_argument("filename",
-                    help="Name of the config file")
+parser.add_argument("-c", "--config_path",
+                    help="Path to the state file of the camera",
+                    dest="config_path", default="default")
 
 args = parser.parse_args()
-filename = str(args.filename)
+config_path = args.config_path
 
-config = Config(filename)
+if config_path == "default":
+    if test_mode:
+        raise Exception("Cannot run in test mode with default configuration")
+    config = DefaultConfig()
+else:
+    config = Config(Path(config_path).expanduser().absolute())
 
 ser = Arduino_PWM("/dev/ttyACM0",
         timeout=.1,
