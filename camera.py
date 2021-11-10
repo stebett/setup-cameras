@@ -10,7 +10,6 @@ import gi
 import TIS
 import time
 import pickle
-from configs import Configs
 import logging
 from pathlib import Path
 gi.require_version("Gst", "1.0")
@@ -20,16 +19,15 @@ from gi.repository import Gst  # noqa E402
 class Camera(TIS.TIS):
     """The object managing the camera.
 
-    :param config_path: path of configuration file
+    :param config: Config object that contains configuration
     :param path_to_output: directory where videos and logs should be saved
     """
 
-    def __init__(self, config_path, path_to_output='videos'):
+    def __init__(self, config, path_to_output='videos'):
         "Initialize the Camera object."
         super().__init__()
-        self.config_path = config_path
         self.path_to_output = Path(path_to_output)
-        self.configs = Configs(config_path)
+        self.config = config
         self.pipeline = None
         self.queue = None
         self.livedisplay = False
@@ -89,13 +87,13 @@ class Camera(TIS.TIS):
     def create_callback(self):
         "Define function to call when a frame is received."
         self.queue = Queue(self.path_to_output,
-                           self.configs.pwm['timeout_delay'] / 1000,
-                           self.configs.pwm['chunk_size'])
+                           self.config.pwm['timeout_delay'] / 1000,
+                           self.config.pwm['chunk_size'])
         self.Set_Image_Callback(self.queue.add_frame)
 
     def apply_properties(self):
         "Apply properties to camera."
-        for k, v in self.configs.properties.items():
+        for k, v in self.config.properties.items():
             self.setProperty(k, v)
 
     def log_acquisition_status(self):

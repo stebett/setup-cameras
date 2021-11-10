@@ -4,18 +4,17 @@ import gi
 import sys
 import logging
 from camera import Camera
-from configs import Configs
 gi.require_version("Gst", "1.0")
 
 
 class TestCamera(Camera):
     "Extend Camera to interactively change properties of the camera."
 
-    def __init__(self, config_path):
+    def __init__(self, config):
         "Create the camera object."
         super().__init__(config_path)
         self.livedisplay = True
-        self.configs = Configs(config_path)
+        self.config = config
         logging.basicConfig(level=logging.WARNING)
 
     def initialize(self):
@@ -28,7 +27,7 @@ class TestCamera(Camera):
         "Start capturing videos."
         try:
             self.createPipeline()
-            self.setcaps(self.configs.general)
+            self.setcaps(self.config.general)
             self.pipeline.set_state(Gst.State.PLAYING)
             self.test()
         except KeyboardInterrupt:
@@ -51,10 +50,10 @@ class TestCamera(Camera):
         A checkbox is added if the have been changed already.
         """
         print("\nConfigurations (press Enter to save)")
-        for i, k, v, m in zip(self.configs.indexes,
-                              self.configs.keys,
-                              self.configs.values,
-                              self.configs.modified):
+        for i, k, v, m in zip(self.config.indexes,
+                              self.config.keys,
+                              self.config.values,
+                              self.config.modified):
             check = "[x]" if m else ""
             print(f'[{i}]{check} {k}: {v}')
 
@@ -62,8 +61,8 @@ class TestCamera(Camera):
         "Save the current configuration."
         inp = input(f"Destination path:\n(default={self.config_path})\n> ")
         file_path = self.config_path if inp == "" else inp
-        self.configs.list_to_dict()
-        self.configs.save(file_path)
+        self.config.list_to_dict()
+        self.config.save(file_path)
 
     def input_index_and_value(self):
         "Asks for index and value of configuration to change."
@@ -87,11 +86,11 @@ class TestCamera(Camera):
 
     def change_config(self, i, v):
         "Apply a property to the camera."
-        k = self.configs.keys[i]
+        k = self.config.keys[i]
 
         try:
             self.setProperty(k, v)
         except Exception:
             print(f"The value {v} is not adeguate to property {k}")
 
-        self.configs.values[i] = v
+        self.config.values[i] = v
