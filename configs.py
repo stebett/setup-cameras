@@ -22,8 +22,8 @@ class Config:
             with self.config_path.open("r") as json_file:
                 self.configs = json.load(json_file)
         except FileNotFoundError:
-            logging.error("Invalid config file. If you want to use the default
-                           configuration, run record.py without argument")
+            logging.error("Invalid config file. If you want to use the default"
+                          " configuration, run record.py without argument")
             raise FileNotFoundError("Invalid config file")
 
     def dict_to_list(self):
@@ -64,12 +64,14 @@ class Config:
 
 class DefaultConfig():
     "A class to store default configurations."
-    def __init__(self):
+
+    def __init__(self, serial=49020441):
+        "Create a default configuration in trigg mode."
         self.pwm = {'frequency': 15,
                     'chunk_size': 50,
                     'chunk_pause': 5000,
                     'timeout_delay': 100}
-        self.general = {'serial': '49020441', # The serial number should be handled differently
+        self.general = {'serial': str(serial),
                         'version': 'v0.1',
                         'format': 'video/x-raw',
                         'pixelformat': 'GRAY8',
@@ -111,5 +113,5 @@ class DefaultConfig():
                            'Trigger Polarity': 'Rising Edge'}
 
         self.config = {'properties': self.properties,
-                        'general': self.general,
-                        'pwm': self.pwm}
+                       'general': self.general,
+                       'pwm': self.pwm}
