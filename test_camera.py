@@ -4,6 +4,7 @@ import gi
 import sys
 import logging
 from camera import Camera
+from pathlib import Path
 gi.require_version("Gst", "1.0")
 
 
@@ -27,7 +28,6 @@ class TestCamera(Camera):
         "Start capturing videos."
         try:
             self.createPipeline()
-            self.setcaps(self.config.general)
             self.pipeline.set_state(Gst.State.PLAYING)
             self.test()
         except KeyboardInterrupt:
@@ -59,8 +59,10 @@ class TestCamera(Camera):
 
     def save_config(self):
         "Save the current configuration."
-        inp = input(f"Destination path:\n(default={self.config_path})\n> ")
-        file_path = self.config_path if inp == "" else inp
+        return
+        # TODO: Fix this
+        inp = input("Destination path:\n(default=./config.json)\n> ")
+        file_path = Path("./config.json") if inp == "" else inp
         self.config.list_to_dict()
         self.config.save(file_path)
 
