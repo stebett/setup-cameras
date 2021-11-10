@@ -59,8 +59,6 @@ class TestCamera(Camera):
 
     def save_config(self):
         "Save the current configuration."
-        return
-        # TODO: Fix this
         inp = input("Destination path:\n(default=./config.json)\n> ")
         file_path = Path("./config.json") if inp == "" else inp
         self.config.list_to_dict()
