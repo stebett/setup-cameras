@@ -87,6 +87,8 @@ class Queue:
 
     def __init__(self, camera, path_to_output, timeout_delay, expected_frames):
         "Initialize the queue object."
+        # Not Ideal to have both objects imbricated (camera has a queue and
+        # queue has a camera) but if there is no workaround so be it
         self.camera = camera
         self.timeout_delay = timeout_delay
         self.expected_frames = expected_frames

@@ -7,6 +7,7 @@ class Configs:
 
     def __init__(self, config_path):
         "Initialize the object with a configuration path."
+        # Maybe cleaner to use pathlib.Path (it has a .open(mode) method)
         self.config_path = config_path
         self.read_configs()
         self.pwm = self.configs["pwm"]
@@ -16,11 +17,16 @@ class Configs:
 
     def read_configs(self):
         "Read the configuration file."
-        with open(self.config_path) as json_file:
-            self.configs = json.load(json_file)
+        try:
+            with open(self.config_path, "r") as json_file:
+                self.configs = json.load(json_file)
+        except FileNotFoundError:
+            # Placeholder for dealing with default config
+            raise FileNotFoundError("Invalid config file")
 
     def dict_to_list(self):
         "Create a list from the dict of configs in order to display them."
+        # RF: If this is only for visualize the values replace by __repr__
         pwm_keys = self.pwm.keys()
         pwm_values = [self.pwm[k] for k in pwm_keys]
 

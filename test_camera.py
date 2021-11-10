@@ -21,6 +21,8 @@ class TestCamera(Camera):
     def initialize(self):
         "Initialize the camera."
         self.Set_Image_Callback(lambda x: x)
+        # RF: I'm getting:
+        # TypeError: open_device() takes 1 positional argument but 2 were given
         self.open_device(self.configs.general)
         logging.info("Succesfully initialized")
 
