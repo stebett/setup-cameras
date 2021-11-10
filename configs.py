@@ -18,14 +18,14 @@ class Configs:
     def read_configs(self):
         "Read the configuration file."
         try:
-            with config_path.open() as json_file:
+            with self.config_path.open("r") as json_file:
                 self.configs = json.load(json_file)
         except FileNotFoundError:
             # Placeholder for dealing with default config
             raise FileNotFoundError("Invalid config file")
 
     def dict_to_list(self):
-        "Create a list from the dict of configs in order to display and change them."
+        "Create a list from the dict of configs in order to display/edit them."
         pwm_keys = self.pwm.keys()
         pwm_values = [self.pwm[k] for k in pwm_keys]
 
