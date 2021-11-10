@@ -48,23 +48,47 @@ class Camera(TIS.TIS):
         "Initialize the camera."
         self.create_callback()
         self.open_device()
+        self.create_output_dir()
         logging.info("Succesfully initialized")
 
     def capture(self):
         "Start capturing videos."
         try:
-            self.queue.loop()
+            self.loop()
         except KeyboardInterrupt:
             logging.error("Stopped manually by user")
         finally:
             self.stopPipeline()
-            if self.queue.received_frames:
+            if self.queue.video_started:
                 self.queue.save_timestamps()
+
+    def loop(self):
+        "Manage creation and realease of videos."
+        self.queue.livedisplay = False
+        while True:
+            self.queue.new_video()
+            logging.info(f"New video: {self.video_name}")
+
+            self.createPipeline(video_path=self.queue.video_name)
+            self.apply_properties()
+            logging.info("Created new pipeline")
+
+            self.ipeline.set_state(Gst.State.PLAYING)
+            logging.info("Started pipeline")
+
+            self.queue.time_of_last_frame = time.time()
+            self.queue.check_delay()
+            self.queue.go = True
+
+            self.stopPipeline()
+            logging.info("Old pipeline stopped")
+
+            self.queue.save_timestamps()
+            logging.info("Timestamps saved")
 
     def create_callback(self):
         "Define function to call when a frame is received."
-        self.queue = Queue(self,
-                           self.path_to_output,
+        self.queue = Queue(self.path_to_output,
                            self.configs.pwm['timeout_delay'] / 1000,
                            self.configs.pwm['chunk_size'])
         self.Set_Image_Callback(self.queue.add_frame)
@@ -74,22 +98,29 @@ class Camera(TIS.TIS):
         for k, v in self.configs.properties.items():
             self.setProperty(k, v)
 
+    def log_acquisition_status(self):
+        "Log debugging acquisition informations."
+        logging.debug(
+            f"Buffers in queue: {self.gstqueue.get_property('current-level-buffers')}")
+        logging.debug(
+            f"Time in queue: {self.gstqueue.get_property('current-level-time')}")
+        logging.debug(
+            f"Bytes in queue: {self.gstqueue.get_property('current-level-bytes')}")
+        time.sleep(0.25)
+
+
 
 class Queue:
     """An object to manage video naming and checks the delay between triggers.
 
-    : param camera: The Camera object from which data is streamed
     : param path_to_output: Directory where videos and logs should be saved
     : param timeout_delay: The timeout (in s) for starting an new video
     : param expected_frames: The expected number of frame for each video
 
     """
 
-    def __init__(self, camera, path_to_output, timeout_delay, expected_frames):
+    def __init__(self, path_to_output, timeout_delay, expected_frames):
         "Initialize the queue object."
-        # Not Ideal to have both objects imbricated (camera has a queue and
-        # queue has a camera) but if there is no workaround so be it
-        self.camera = camera
         self.timeout_delay = timeout_delay
         self.expected_frames = expected_frames
         self.path_to_output = path_to_output
@@ -100,35 +131,6 @@ class Queue:
         self.counter = 0  # Current frame number (total across videos)
         self.relative_zero = 0  #  1st frame number in the current video
         self.go = True
-
-    @property
-    def received_frames(self):
-        "Return True if frames were received by the queue."
-        return self.counter > 0
-
-    def loop(self):
-        "Manage creation and realease of videos."
-        self.livedisplay = False
-        while True:
-            self.new_video()
-            logging.info(f"New video: {self.video_name}")
-
-            self.camera.createPipeline(video_path=self.video_name)
-            self.camera.apply_properties()
-            logging.info("Created new pipeline")
-
-            self.camera.pipeline.set_state(Gst.State.PLAYING)
-            logging.info("Started pipeline")
-
-            self.time_of_last_frame = time.time()
-            self.check_delay()
-            self.go = True
-
-            self.camera.stopPipeline()
-            logging.info("Old pipeline stopped")
-
-            self.save_timestamps()
-            logging.info("Timestamps saved")
 
     @property
     def video_started(self):
@@ -150,17 +152,7 @@ class Queue:
             else:
                 self.log_acquisition_status()
 
-    def log_acquisition_status(self):
-        "Log debugging acquisition informations."
-        logging.debug(
-            f"Buffers in queue: {self.camera.gstqueue.get_property('current-level-buffers')}")
-        logging.debug(
-            f"Time in queue: {self.camera.gstqueue.get_property('current-level-time')}")
-        logging.debug(
-            f"Bytes in queue: {self.camera.gstqueue.get_property('current-level-bytes')}")
-        time.sleep(0.25)
-
-    def add_frame(self, camera):
+    def add_frame(self):
         "Write a timestamp and increases the counter."
         t = time.time()
         self.timestamps[self.counter] = t
