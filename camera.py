@@ -73,7 +73,7 @@ class Camera(TIS.TIS):
             self.apply_properties()
             logging.info("Created new pipeline")
 
-            self.ipeline.set_state(Gst.State.PLAYING)
+            self.pipeline.set_state(Gst.State.PLAYING)
             logging.info("Started pipeline")
 
             self.queue.time_of_last_frame = time.time()
@@ -107,7 +107,6 @@ class Camera(TIS.TIS):
         logging.debug(
             f"Bytes in queue: {self.gstqueue.get_property('current-level-bytes')}")
         time.sleep(0.25)
-
 
 
 class Queue:
