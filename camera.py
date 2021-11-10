@@ -65,7 +65,7 @@ class Camera(TIS.TIS):
         self.queue.livedisplay = False
         while True:
             self.queue.new_video()
-            logging.info(f"New video: {self.video_name}")
+            logging.info(f"New video: {self.queue.video_name}")
 
             self.createPipeline(video_path=self.queue.video_name)
             self.apply_properties()
@@ -79,10 +79,13 @@ class Camera(TIS.TIS):
             self.queue.go = True
 
             self.stopPipeline()
-            logging.info("Old pipeline stopped")
 
-            self.queue.save_timestamps()
-            logging.info("Timestamps saved")
+    def stopPipeline(self):
+        "Add timestamp logging to stopPipeline."
+        super().stopPipeline()
+        logging.info("Old pipeline stopped")
+        self.queue.save_timestamps()
+        logging.info("Timestamps saved")
 
     def create_callback(self):
         "Define function to call when a frame is received."
@@ -98,12 +101,12 @@ class Camera(TIS.TIS):
 
     def log_acquisition_status(self):
         "Log debugging acquisition informations."
-        logging.debug(
-            f"Buffers in queue: {self.gstqueue.get_property('current-level-buffers')}")
-        logging.debug(
-            f"Time in queue: {self.gstqueue.get_property('current-level-time')}")
-        logging.debug(
-            f"Bytes in queue: {self.gstqueue.get_property('current-level-bytes')}")
+        level_buffers = self.gstqueue.get_property('current-level-buffers')
+        logging.debug(f"Buffers in queue: {level_buffers}")
+        level_time = self.gstqueue.get_property('current-level-time')
+        logging.debug(f"Time in queue: {level_time}")
+        level_bytes = self.gstqueue.get_property('current-level-bytes')
+        logging.debug(f"Bytes in queue: {level_bytes}")
         time.sleep(0.25)
 
 
@@ -147,9 +150,12 @@ class Queue:
                 logging.info("Timeout delay exceeded")
                 self.go = False
             else:
-                self.log_acquisition_status()
+                # log_acquisition_status was moved to Camera, replace by
+                # smthing else
+                # self.log_acquisition_status()
+                pass
 
-    def add_frame(self):
+    def add_frame(self, *args):
         "Write a timestamp and increases the counter."
         t = time.time()
         self.timestamps[self.counter] = t
