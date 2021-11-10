@@ -3,7 +3,8 @@ import sys
 import argparse
 from pathlib import Path
 from input_helpers import ask_yes_or_no
-from camera import Camera, TestCamera
+from camera import Camera 
+from test_camera import TestCamera
 from config import Config, DefaultConfig
 
 
