@@ -12,6 +12,7 @@ import time
 import pickle
 from configs import Configs
 import logging
+from pathlib import Path
 gi.require_version("Gst", "1.0")
 from gi.repository import Gst  # noqa E402
 
@@ -27,7 +28,7 @@ class Camera(TIS.TIS):
         "Initialize the Camera object."
         super().__init__()
         self.config_path = config_path
-        self.path_to_output = path_to_output
+        self.path_to_output = Path(path_to_output)
         self.configs = Configs(config_path)
         self.pipeline = None
         self.queue = None
@@ -36,6 +37,12 @@ class Camera(TIS.TIS):
         # logging.basicConfig(filename=path_to_output + '/run.log',
         #                     level=logging.INFO)
         logging.basicConfig(level=logging.INFO)
+
+    def create_output_dir(self):
+        "Create the output directory if needed."
+        if not self.path_to_output.exists():
+            self.path_to_output.mkdir(parents=True)
+            logging.info(f"Created output directory ({self.path_to_output})")
 
     def initialize(self):
         "Initialize the camera."
@@ -51,13 +58,15 @@ class Camera(TIS.TIS):
             logging.error("Stopped manually by user")
         finally:
             self.stopPipeline()
-            self.queue.save_timestamps()
+            if self.queue.received_frames:
+                self.queue.save_timestamps()
 
     def create_callback(self):
         "Define function to call when a frame is received."
         self.queue = Queue(self,
-                           self.configs,
-                           self.path_to_output)
+                           self.path_to_output,
+                           self.configs.pwm['timeout_delay'] / 1000,
+                           self.configs.pwm['chunk_size'])
         self.Set_Image_Callback(self.queue.add_frame)
 
     def apply_properties(self):
@@ -69,17 +78,18 @@ class Camera(TIS.TIS):
 class Queue:
     """An object to manage video naming and checks the delay between triggers.
 
-    : param config_path: path of configuration file
-    : param path_to_output: directory where videos and logs should be saved
+    : param camera: The Camera object from which data is streamed
+    : param path_to_output: Directory where videos and logs should be saved
+    : param timeout_delay: The timeout (in s) for starting an new video
+    : param expected_frames: The expected number of frame for each video
 
     """
 
-    def __init__(self, camera, configs, path_to_output):
+    def __init__(self, camera, path_to_output, timeout_delay, expected_frames):
         "Initialize the queue object."
         self.camera = camera
-        self.configs = configs
-        self.timeout_delay = self.configs.pwm['timeout_delay'] / 1000
-        self.expected_frames = self.configs.pwm['chunk_size']
+        self.timeout_delay = timeout_delay
+        self.expected_frames = expected_frames
         self.path_to_output = path_to_output
 
         self.videos = []
@@ -88,6 +98,11 @@ class Queue:
         self.counter = 0  #  Current frame number (total across videos)
         self.relative_zero = 0  #  1st frame number in the current video
         self.go = True
+
+    @property
+    def received_frames(self):
+        "Return True if frames were received by the queue."
+        return self.counter > 0
 
     def loop(self):
         "Manage creation and realease of videos."
