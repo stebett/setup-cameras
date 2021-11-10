@@ -1,13 +1,13 @@
+"Create a config file with default parameters from a camera serial."
 import os
 import json
 import argparse
-import subprocess
 
 parser = argparse.ArgumentParser(__doc__)
 parser.add_argument("serial",
                     help="Serial number of camera")
 parser.add_argument("-o", "--output",
-                    help="Name of the config file", 
+                    help="Name of the config file",
                     dest="filename",
                     default="configs.json")
 

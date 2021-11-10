@@ -49,7 +49,7 @@ class TIS:
         self.sinkformat = SinkFormats.BGRA
         self.ImageCallback = None
         self.pipeline = None
-        self.configs = None
+        self.config = None
 
     def open_device(self):
         ''' Inialize a device, e.g. camera.
@@ -58,11 +58,11 @@ class TIS:
         :param height: Height of the wanted video format
         :param framerate: Numerator of the frame rate. /1 is added automatically
         '''
-        self.serialnumber = self.configs.general['serial']
-        self.height = self.configs.general['height']
-        self.width = self.configs.general['width']
-        self.framerate = self.configs.general['framerate']
-        self.sinkformat = SinkFormats.toString(self.configs.general['pixelformat'])
+        self.serialnumber = self.config.general['serial']
+        self.height = self.config.general['height']
+        self.width = self.config.general['width']
+        self.framerate = self.config.general['framerate']
+        self.sinkformat = SinkFormats.toString(self.config.general['pixelformat'])
 
     def createPipeline(self, video_path=None):
         """ Creates a Gstreamer pipeline """
@@ -125,7 +125,7 @@ class TIS:
         """ Set pixel and sink format and frame rate """
         logging.debug("Creating caps")
         caps = Gst.Caps.new_empty()
-        format = 'video/x-raw,format=%s,width=%d,height=%d,framerate=%s/1' % (self.configs.general["pixelformat"],self.configs.general["width"],self.configs.general["height"],self.configs.pwm["frequency"])
+        format = 'video/x-raw,format=%s,width=%d,height=%d,framerate=%s/1' % (self.config.general["pixelformat"],self.config.general["width"],self.config.general["height"],self.config.pwm["frequency"])
         structure = Gst.Structure.new_from_string(format)
 
         caps.append_structure(structure)

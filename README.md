@@ -36,7 +36,7 @@ Remember to install the [pwmpy](https://github.com/rfayat/PWM_Arduino) package
 
 ## Usage
 
-`$ python record.py -p path/to/params.json -o path/to/camera/dir`
+`$ python record.py path/to/params.json -o path/to/camera/dir`
 
 You can activate the trigger mode from the **params.json**.
 
