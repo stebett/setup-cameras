@@ -41,11 +41,11 @@ class TIS:
         ''' Constructor
         :return: none
         '''
-        Gst.init(["record.py", "-v"])
+        Gst.init(["record.py", "--gst-debug-level=1"])
         self.ImageCallback = None
         self.pipeline = None
         self.config = None
-        self.simple_case = True
+        self.buffer_lock = False
 
     def open_device(self):
         # I will fucking remove you 
@@ -70,22 +70,15 @@ class TIS:
             p += " t. ! videoscale method=0 add-borders=false \
                       ! video/x-raw,width=640,height=360 \
                       ! ximagesink name=xsink"
-        elif self.simple_case:
+        elif video_path is not None:
             p = "tcambin name=source"
             p += " ! capsfilter name=bayercaps"
             p += " ! bayer2rgb ! videoconvert"
             p += " ! capsfilter name=rawcaps"
             p += " ! videoconvert" 
             p += " ! avimux"
-            p += " ! tee name=t"
-            p += " t. ! queue ! appsink name=sink"
-            # p += " t. ! fpsdisplaysink video-sink=ximagesink"
-            # p += " t. ! queue"
-            p += " t. ! filesink name=fsink"
-        elif video_path is not None:
-            p += " ! tee name=t"
-            p += " t. ! queue ! appsink name=sink"
-            p += " t. ! queue name=queue ! videoconvert ! avimux ! filesink name=fsink"
+            p += " ! identity name=id"
+            p += " ! filesink name=fsink"
 
         logging.debug(f"Gst pipeline: {p}")
         self.pipeline = Gst.parse_launch(p)
@@ -95,7 +88,7 @@ class TIS:
             self.xsink = self.pipeline.get_by_name("xsink")
             self.xsink.set_property("force-aspect-ratio", True)
 
-        elif self.simple_case:
+        elif video_path is not None:
             bayercaps = self.getcaps(bayer=True)
             self.bayerfilter = self.pipeline.get_by_name("bayercaps")
             self.bayerfilter.set_property("caps", bayercaps)
@@ -105,13 +98,10 @@ class TIS:
             self.rawfilter.set_property("caps", rawcaps)
 
             try:
-                self.appsink = self.pipeline.get_by_name("sink")
-                self.appsink.set_property("max-buffers", 5)
-                self.appsink.set_property("drop",1) # TODO: This would drop frames on purpose, but touching it created issues
-                self.appsink.set_property("emit-signals",1)
-                self.appsink.connect('new-sample', self.on_new_buffer)
+                self.identity = self.pipeline.get_by_name("id")
+                self.identity.connect("handoff", self.queue.add_frame)
             except AttributeError:
-                logging.warning("No appsink detected")
+                logging.warning("No identity detected")
 
             try:
                 self.filesink = self.pipeline.get_by_name("fsink")
@@ -119,21 +109,7 @@ class TIS:
             except AttributeError:
                 logging.warning("No filesink detected")
 
-        elif video_path is not None: 
-            self.filesink = self.pipeline.get_by_name("fsink")
-            self.filesink.set_property("location", video_path)
 
-            self.gstqueue = self.pipeline.get_by_name("queue")
-            self.gstqueue.set_property("max-size-buffers", 0)
-            self.gstqueue.set_property("max-size-time", 0)
-            self.gstqueue.set_property("max-size-bytes", int(1.5*10e8))
-
-
-            self.appsink = self.pipeline.get_by_name("sink")
-            self.appsink.set_property("max-buffers", 5)
-            self.appsink.set_property("drop", 1)
-            self.appsink.set_property("emit-signals", 1)
-            self.appsink.connect('new-sample', self.on_new_buffer)
         
         self.source = self.pipeline.get_by_name("source")
         self.source.set_property("serial", self.serialnumber)
@@ -150,8 +126,11 @@ class TIS:
         self.ImageCallback = function
         self.ImageCallbackData = data
 
-    def on_new_buffer(self, appsink):
+    def on_new_buffer(self, identity, buff ):
         """ Set the generic ffunction called when a frame is received """
+        if self.buffer_lock:
+            logging.error("[!] Buffer is locked!")
+            return False
         self.ImageCallback(self, *self.ImageCallbackData);
         return False
 

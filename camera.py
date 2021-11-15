@@ -147,6 +147,18 @@ class Queue:
             else:
                 pass
 
+    def add_frame(self, *args):
+        "Write a timestamp and increases the counter."
+        if self.busy:
+            logging.error("[!] Frame dropped!")
+            return
+        self.busy = True
+        t = time.time()
+        self.timestamps[self.counter] = t
+        self.time_of_last_frame = t
+        self.counter += 1
+        logging.info(f"Adding frame {self.counter} to the self")
+        self.busy = False
 
     def log_frame_number_warning(self):
         "Log a warning with the actual and expected frame numbers."
