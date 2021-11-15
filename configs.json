@@ -41,7 +41,7 @@
         "Whitebalance Temperature": 4000
     },
     "pwm": {
-        "frequency": 15,
+        "frequency": 5,
         "chunk_size": 50,
         "chunk_pause": 3000
     },
@@ -50,8 +50,8 @@
         "version": "v0.1",
         "format": "video/x-raw",
         "pixelformat": "GRAY8",
-        "width": 1440,
+        "width": 1920,
         "height": 1080,
-        "framerate": "2500000/10593"
+        "framerate": "140/1"
     }
 }

@@ -103,7 +103,10 @@ class TIS:
         
         self.source = self.pipeline.get_by_name("source")
         self.source.set_property("serial", self.serialnumber)
-        self.setcaps()
+
+        caps = self.getcaps()
+        self.capsfilter = self.pipeline.get_by_name("caps")
+        self.capsfilter.set_property("caps", caps)
 
     def stopPipeline(self):
         """ Stops the pipeline """
@@ -121,18 +124,21 @@ class TIS:
         self.ImageCallback(self, *self.ImageCallbackData);
         return False
 
-    def setcaps(self):
-        """ Set pixel and sink format and frame rate """
+    def getcaps(self):
+        """ Get pixel and sink format and frame rate """
         logging.debug("Creating caps")
+        f = f"""video/x-raw, 
+                format={self.config.general["pixelformat"]},
+                width={self.config.general["width"]},
+                height={self.config.general["height"]},
+                framerate={self.config.general["framerate"]}"""
+                # Maximum accepted framerate, set it high
+
         caps = Gst.Caps.new_empty()
-        format = 'video/x-raw,format=%s,width=%d,height=%d,framerate=%s/1' % (self.config.general["pixelformat"],self.config.general["width"],self.config.general["height"],self.config.pwm["frequency"])
-        structure = Gst.Structure.new_from_string(format)
-
+        structure = Gst.Structure.new_from_string(f)
         caps.append_structure(structure)
-
         structure.free()
-        capsfilter = self.pipeline.get_by_name("caps")
-        capsfilter.set_property("caps", caps)
+        return caps
 
     def setProperty(self, PropertyName, value):
         """ Set properties, trying to convert the values to the appropriate types """

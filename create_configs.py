@@ -22,7 +22,7 @@ with open(filename, "r") as f:
 
 c["format"] = "video/x-raw"
 c["pixelformat"] = "GRAY8"
-c["width"] = 1440
+c["width"] = 1920
 c["height"] = 1080
 c["framerate"] = "2500000/10593"
 
