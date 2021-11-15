@@ -41,8 +41,8 @@
         "Whitebalance Temperature": 4000
     },
     "pwm": {
-        "frequency": 10,
-        "chunk_size": 600,
+        "frequency": 5,
+        "chunk_size": 50,
         "chunk_pause": 3000
     },
     "general": {

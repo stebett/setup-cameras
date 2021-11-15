@@ -41,7 +41,7 @@ class TIS:
         ''' Constructor
         :return: none
         '''
-        Gst.init(["-v"])
+        Gst.init(["record.py", "-v"])
         self.ImageCallback = None
         self.pipeline = None
         self.config = None
@@ -77,7 +77,9 @@ class TIS:
             p += " ! videoconvert" 
             # p += " ! avimux"
             # p += " ! filesink name=fsink"
-            p += " ! fpsdisplaysink video-sink=ximagesink"
+            p += " ! tee name=t"
+            p += " t. ! queue ! appsink name=sink"
+            p += " t. ! fpsdisplaysink video-sink=ximagesink"
         elif video_path is not None:
             p += " ! tee name=t"
             p += " t. ! queue ! appsink name=sink"
@@ -100,6 +102,11 @@ class TIS:
             self.rawfilter = self.pipeline.get_by_name("rawcaps")
             self.rawfilter.set_property("caps", rawcaps)
 
+            self.appsink = self.pipeline.get_by_name("sink")
+            self.appsink.set_property("max-buffers", 5)
+            self.appsink.set_property("drop",1) # TODO: This would drop frames on purpose, but touching it created issues
+            self.appsink.set_property("emit-signals",1)
+            self.appsink.connect('new-sample', self.on_new_buffer)
             # self.filesink = self.pipeline.get_by_name("fsink")
             # self.filesink.set_property("location", video_path)
 
