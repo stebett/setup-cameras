@@ -91,17 +91,6 @@ class Camera(TIS.TIS):
         for k, v in self.config.properties.items():
             self.setProperty(k, v)
 
-    def log_acquisition_status(self):
-        "Log debugging acquisition informations."
-        level_buffers = self.gstqueue.get_property('current-level-buffers')
-        logging.debug(f"Buffers in queue: {level_buffers}")
-        level_time = self.gstqueue.get_property('current-level-time')
-        logging.debug(f"Time in queue: {level_time}")
-        level_bytes = self.gstqueue.get_property('current-level-bytes')
-        logging.debug(f"Bytes in queue: {level_bytes}")
-        time.sleep(0.25)
-
-
 class Queue:
     """An object to manage video naming and checks the delay between triggers.
 
@@ -142,9 +131,6 @@ class Queue:
                 logging.info("Timeout delay exceeded")
                 self.go = False
             else:
-                # log_acquisition_status was moved to Camera, replace by
-                # smthing else
-                # self.log_acquisition_status()
                 pass
 
     def add_frame(self, *args):
