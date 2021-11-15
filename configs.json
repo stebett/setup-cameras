@@ -3,12 +3,12 @@
         "Auto Functions ROI Control": true,
         "Auto Functions ROI Preset": "Center 50%",
         "Brightness": 240,
-        "Exposure Auto": true,
+        "Exposure Auto": false,
         "Exposure Auto Lower Limit": 333,
         "Exposure Auto Reference": 128,
         "Exposure Auto Upper Limit": 333,
         "Exposure Auto Upper Limit Auto": true,
-        "Exposure Time (us)": 3059,
+        "Exposure Time (us)": 1500,
         "GPIn": 0,
         "GPOut": 0,
         "Gain": 117,
@@ -29,7 +29,7 @@
         "Strobe Polarity": false,
         "Trigger Delay (us)": 31,
         "Trigger Global Reset Release": false,
-        "Trigger Mode": false,
+        "Trigger Mode": true,
         "Trigger Polarity": "Rising Edge",
         "White Balance Temperature Preset": "Cool White Fluorescent Light",
         "Whitebalance": false,
@@ -41,8 +41,8 @@
         "Whitebalance Temperature": 4000
     },
     "pwm": {
-        "frequency": 30,
-        "chunk_size": 50,
+        "frequency": 10,
+        "chunk_size": 600,
         "chunk_pause": 3000
     },
     "general": {

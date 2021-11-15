@@ -74,8 +74,10 @@ class TIS:
             p += " ! capsfilter name=bayercaps"
             p += " ! bayer2rgb ! videoconvert"
             p += " ! capsfilter name=rawcaps"
-            p += " ! videoconvert ! avimux"
-            p += " ! filesink name=fsink"
+            p += " ! videoconvert" 
+            # p += " ! avimux"
+            # p += " ! filesink name=fsink"
+            p += " ! fpsdisplaysink video-sink=ximagesink"
         elif video_path is not None:
             p += " ! tee name=t"
             p += " t. ! queue ! appsink name=sink"
@@ -98,8 +100,8 @@ class TIS:
             self.rawfilter = self.pipeline.get_by_name("rawcaps")
             self.rawfilter.set_property("caps", rawcaps)
 
-            self.filesink = self.pipeline.get_by_name("fsink")
-            self.filesink.set_property("location", video_path)
+            # self.filesink = self.pipeline.get_by_name("fsink")
+            # self.filesink.set_property("location", video_path)
 
         elif video_path is not None: 
             self.filesink = self.pipeline.get_by_name("fsink")
