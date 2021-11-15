@@ -84,12 +84,25 @@ class Camera(TIS.TIS):
         self.queue = Queue(self.path_to_output,
                            self.config.pwm['chunk_pause'],
                            self.config.pwm['chunk_size'])
-        self.Set_Image_Callback(self.queue.add_frame)
+        self.Set_Image_Callback(add_frame, self.queue)
 
     def apply_properties(self):
         "Apply properties to camera."
         for k, v in self.config.properties.items():
             self.setProperty(k, v)
+
+def add_frame(tisobject, queue):
+    "Write a timestamp and increases the counter."
+    if queue.busy:
+        logging.error("[!] Frame dropped!")
+        return
+    queue.busy = True
+    t = time.time()
+    queue.timestamps[queue.counter] = t
+    queue.time_of_last_frame = t
+    queue.counter += 1
+    logging.info(f"Adding frame {queue.counter} to the queue")
+    queue.busy = False
 
 class Queue:
     """An object to manage video naming and checks the delay between triggers.
@@ -112,6 +125,7 @@ class Queue:
         self.counter = 0  # Current frame number (total across videos)
         self.relative_zero = 0  #  1st frame number in the current video
         self.go = True
+        self.busy = False
 
     @property
     def video_started(self):
@@ -133,13 +147,6 @@ class Queue:
             else:
                 pass
 
-    def add_frame(self, *args):
-        "Write a timestamp and increases the counter."
-        t = time.time()
-        self.timestamps[self.counter] = t
-        self.time_of_last_frame = t
-        self.counter += 1
-        logging.info(f"Adding frame {self.counter} to the queue")
 
     def log_frame_number_warning(self):
         "Log a warning with the actual and expected frame numbers."

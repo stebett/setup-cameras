@@ -48,6 +48,7 @@ class TIS:
         self.simple_case = True
 
     def open_device(self):
+        # I will fucking remove you 
         ''' Inialize a device, e.g. camera.
         :param serial: Serial number of the camera to be used.
         :param width: Width of the wanted video format
@@ -75,11 +76,12 @@ class TIS:
             p += " ! bayer2rgb ! videoconvert"
             p += " ! capsfilter name=rawcaps"
             p += " ! videoconvert" 
-            # p += " ! avimux"
-            # p += " ! filesink name=fsink"
+            p += " ! avimux"
             p += " ! tee name=t"
             p += " t. ! queue ! appsink name=sink"
-            p += " t. ! fpsdisplaysink video-sink=ximagesink"
+            # p += " t. ! fpsdisplaysink video-sink=ximagesink"
+            # p += " t. ! queue"
+            p += " t. ! filesink name=fsink"
         elif video_path is not None:
             p += " ! tee name=t"
             p += " t. ! queue ! appsink name=sink"
@@ -102,13 +104,20 @@ class TIS:
             self.rawfilter = self.pipeline.get_by_name("rawcaps")
             self.rawfilter.set_property("caps", rawcaps)
 
-            self.appsink = self.pipeline.get_by_name("sink")
-            self.appsink.set_property("max-buffers", 5)
-            self.appsink.set_property("drop",1) # TODO: This would drop frames on purpose, but touching it created issues
-            self.appsink.set_property("emit-signals",1)
-            self.appsink.connect('new-sample', self.on_new_buffer)
-            # self.filesink = self.pipeline.get_by_name("fsink")
-            # self.filesink.set_property("location", video_path)
+            try:
+                self.appsink = self.pipeline.get_by_name("sink")
+                self.appsink.set_property("max-buffers", 5)
+                self.appsink.set_property("drop",1) # TODO: This would drop frames on purpose, but touching it created issues
+                self.appsink.set_property("emit-signals",1)
+                self.appsink.connect('new-sample', self.on_new_buffer)
+            except AttributeError:
+                logging.warning("No appsink detected")
+
+            try:
+                self.filesink = self.pipeline.get_by_name("fsink")
+                self.filesink.set_property("location", video_path)
+            except AttributeError:
+                logging.warning("No filesink detected")
 
         elif video_path is not None: 
             self.filesink = self.pipeline.get_by_name("fsink")
@@ -119,10 +128,11 @@ class TIS:
             self.gstqueue.set_property("max-size-time", 0)
             self.gstqueue.set_property("max-size-bytes", int(1.5*10e8))
 
+
             self.appsink = self.pipeline.get_by_name("sink")
             self.appsink.set_property("max-buffers", 5)
-            self.appsink.set_property("drop",1) # TODO: This would drop frames on purpose, but touching it created issues
-            self.appsink.set_property("emit-signals",1)
+            self.appsink.set_property("drop", 1)
+            self.appsink.set_property("emit-signals", 1)
             self.appsink.connect('new-sample', self.on_new_buffer)
         
         self.source = self.pipeline.get_by_name("source")
