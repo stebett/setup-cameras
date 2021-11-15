@@ -84,7 +84,7 @@ class Camera(TIS.TIS):
         self.queue = Queue(self.path_to_output,
                            self.config.pwm['chunk_pause'],
                            self.config.pwm['chunk_size'])
-        self.Set_Image_Callback(add_frame, self.queue)
+        # self.Set_Image_Callback(add_frame, self.queue)
 
     def apply_properties(self):
         "Apply properties to camera."
