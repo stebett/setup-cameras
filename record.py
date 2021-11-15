@@ -39,7 +39,7 @@ if path_video_folder.exists():
     has_file = len(files_to_remove) > 0
 else:
     path_video_folder.mkdir(parents=True)
-    logging.info(f"Created output directory ({self.path_to_output})")
+    logging.info(f"Created output directory ({path_video_folder})")
     has_file = False
 
 # If files were detected, remove it if the --force option was provided

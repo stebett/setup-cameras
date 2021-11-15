@@ -37,7 +37,6 @@ class Camera(TIS.TIS):
         "Initialize the camera."
         self.create_callback()
         self.open_device()
-        self.create_output_dir()
         logging.info("Succesfully initialized")
 
     def capture(self):
@@ -84,7 +83,7 @@ class Camera(TIS.TIS):
     def create_callback(self):
         "Define function to call when a frame is received."
         self.queue = Queue(self.path_to_output,
-                           self.config.pwm['timeout_delay'] / 1000,
+                           self.config.pwm['chunk_pause'],
                            self.config.pwm['chunk_size'])
         self.Set_Image_Callback(self.queue.add_frame)
 
@@ -113,9 +112,9 @@ class Queue:
 
     """
 
-    def __init__(self, path_to_output, timeout_delay, expected_frames):
+    def __init__(self, path_to_output, chunk_pause, expected_frames):
         "Initialize the queue object."
-        self.timeout_delay = timeout_delay
+        self.timeout_delay = chunk_pause / 1000 - 1
         self.expected_frames = expected_frames
         self.path_to_output = path_to_output
 
