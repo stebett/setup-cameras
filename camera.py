@@ -33,12 +33,6 @@ class Camera(TIS.TIS):
         self.livedisplay = False
         logging.basicConfig(level=logging.INFO)
 
-    def create_output_dir(self):
-        "Create the output directory if needed."
-        if not self.path_to_output.exists():
-            self.path_to_output.mkdir(parents=True)
-            logging.info(f"Created output directory ({self.path_to_output})")
-
     def initialize(self):
         "Initialize the camera."
         self.create_callback()

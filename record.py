@@ -1,6 +1,7 @@
 "Start a recording from a json parameters file to an output folder."
 import sys
 import argparse
+import logging
 from pathlib import Path
 from input_helpers import ask_yes_or_no
 from camera import Camera
@@ -37,7 +38,9 @@ if path_video_folder.exists():
             files_to_remove.append(f)
     has_file = len(files_to_remove) > 0
 else:
-    has_file = True
+    path_video_folder.mkdir(parents=True)
+    logging.info(f"Created output directory ({self.path_to_output})")
+    has_file = False
 
 # If files were detected, remove it if the --force option was provided
 # If not, ask the user if we need to overwrite the directory's content.
