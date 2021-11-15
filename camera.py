@@ -31,7 +31,6 @@ class Camera(TIS.TIS):
         self.pipeline = None
         self.queue = None
         self.livedisplay = False
-        logging.basicConfig(level=logging.INFO)
 
     def initialize(self):
         "Initialize the camera."

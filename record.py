@@ -30,6 +30,8 @@ path_video_folder = args.path_video_folder.absolute()
 test_mode = args.test_mode
 overwrite = args.overwrite
 
+logging.basicConfig(level=logging.DEBUG)
+
 # List the avi and pickle files in the folder
 if path_video_folder.exists():
     files_to_remove = []

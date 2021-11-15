@@ -41,15 +41,11 @@ class TIS:
         ''' Constructor
         :return: none
         '''
-        Gst.init([])
-        self.serialnumber = ""
-        self.height = 0
-        self.width = 0
-        self.framerate="15/1"
-        self.sinkformat = SinkFormats.BGRA
+        Gst.init(["-v"])
         self.ImageCallback = None
         self.pipeline = None
         self.config = None
+        self.simple_case = True
 
     def open_device(self):
         ''' Inialize a device, e.g. camera.
@@ -73,6 +69,13 @@ class TIS:
             p += " t. ! videoscale method=0 add-borders=false \
                       ! video/x-raw,width=640,height=360 \
                       ! ximagesink name=xsink"
+        elif self.simple_case:
+            p = "tcambin name=source"
+            p += " ! capsfilter name=bayercaps"
+            p += " ! bayer2rgb ! videoconvert"
+            p += " ! capsfilter name=rawcaps"
+            p += " ! videoconvert ! avimux"
+            p += " ! filesink name=fsink"
         elif video_path is not None:
             p += " ! tee name=t"
             p += " t. ! queue ! appsink name=sink"
@@ -85,6 +88,18 @@ class TIS:
         if self.livedisplay:
             self.xsink = self.pipeline.get_by_name("xsink")
             self.xsink.set_property("force-aspect-ratio", True)
+
+        elif self.simple_case:
+            bayercaps = self.getcaps(bayer=True)
+            self.bayerfilter = self.pipeline.get_by_name("bayercaps")
+            self.bayerfilter.set_property("caps", bayercaps)
+
+            rawcaps = self.getcaps(bayer=False)
+            self.rawfilter = self.pipeline.get_by_name("rawcaps")
+            self.rawfilter.set_property("caps", rawcaps)
+
+            self.filesink = self.pipeline.get_by_name("fsink")
+            self.filesink.set_property("location", video_path)
 
         elif video_path is not None: 
             self.filesink = self.pipeline.get_by_name("fsink")
@@ -104,9 +119,6 @@ class TIS:
         self.source = self.pipeline.get_by_name("source")
         self.source.set_property("serial", self.serialnumber)
 
-        caps = self.getcaps()
-        self.capsfilter = self.pipeline.get_by_name("caps")
-        self.capsfilter.set_property("caps", caps)
 
     def stopPipeline(self):
         """ Stops the pipeline """
@@ -124,18 +136,24 @@ class TIS:
         self.ImageCallback(self, *self.ImageCallbackData);
         return False
 
-    def getcaps(self):
+    def getcaps(self, bayer=False):
         """ Get pixel and sink format and frame rate """
         logging.debug("Creating caps")
-        f = f"""video/x-raw, 
-                format={self.config.general["pixelformat"]},
-                width={self.config.general["width"]},
-                height={self.config.general["height"]},
-                framerate={self.config.general["framerate"]}"""
-                # Maximum accepted framerate, set it high
+        fmt = ""
+        if bayer:
+            fmt += "video/x-bayer, format=rggb,"
+        else:
+            fmt += "video/x-raw, format=BGRx,"
+            
+
+        fmt += f"""width={self.config.general["width"]},
+                   height={self.config.general["height"]},
+                   framerate={self.config.general["framerate"]}"""
+                   # Maximum accepted framerate, set it high
+
 
         caps = Gst.Caps.new_empty()
-        structure = Gst.Structure.new_from_string(f)
+        structure = Gst.Structure.new_from_string(fmt)
         caps.append_structure(structure)
         structure.free()
         return caps
