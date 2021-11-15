@@ -63,9 +63,9 @@ class TIS:
 
     def createPipeline(self, video_path=None):
         """ Creates a Gstreamer pipeline """
-        p = 'tcambin name=source ! capsfilter name=caps'
 
         if self.livedisplay:
+            p = 'tcambin name=source ! capsfilter name=caps'
             p += " ! tee name=t"
             p += " t. ! videoscale method=0 add-borders=false \
                       ! video/x-raw,width=640,height=360 \
@@ -121,18 +121,18 @@ class TIS:
         self.pipeline.set_state(Gst.State.READY)
         self.pipeline.set_state(Gst.State.NULL)
 
-    def Set_Image_Callback(self, function, *data):
-        """ Sets the specific function called when a frame is received """
-        self.ImageCallback = function
-        self.ImageCallbackData = data
+    # def Set_Image_Callback(self, function, *data):
+    #     """ Sets the specific function called when a frame is received """
+    #     self.ImageCallback = function
+    #     self.ImageCallbackData = data
 
-    def on_new_buffer(self, identity, buff ):
-        """ Set the generic ffunction called when a frame is received """
-        if self.buffer_lock:
-            logging.error("[!] Buffer is locked!")
-            return False
-        self.ImageCallback(self, *self.ImageCallbackData);
-        return False
+    # def on_new_buffer(self, identity, buff ):
+    #     """ Set the generic ffunction called when a frame is received """
+    #     if self.buffer_lock:
+    #         logging.error("[!] Buffer is locked!")
+    #         return False
+    #     self.ImageCallback(self, *self.ImageCallbackData);
+    #     return False
 
     def getcaps(self, bayer=False):
         """ Get pixel and sink format and frame rate """

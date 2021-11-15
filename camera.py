@@ -91,18 +91,18 @@ class Camera(TIS.TIS):
         for k, v in self.config.properties.items():
             self.setProperty(k, v)
 
-def add_frame(tisobject, queue):
-    "Write a timestamp and increases the counter."
-    if queue.busy:
-        logging.error("[!] Frame dropped!")
-        return
-    queue.busy = True
-    t = time.time()
-    queue.timestamps[queue.counter] = t
-    queue.time_of_last_frame = t
-    queue.counter += 1
-    logging.info(f"Adding frame {queue.counter} to the queue")
-    queue.busy = False
+# def add_frame(tisobject, queue):
+#     "Write a timestamp and increases the counter."
+#     if queue.busy:
+#         logging.error("[!] Frame dropped!")
+#         return
+#     queue.busy = True
+#     t = time.time()
+#     queue.timestamps[queue.counter] = t
+#     queue.time_of_last_frame = t
+#     queue.counter += 1
+#     logging.info(f"Adding frame {queue.counter} to the queue")
+#     queue.busy = False
 
 class Queue:
     """An object to manage video naming and checks the delay between triggers.
