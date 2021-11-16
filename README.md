@@ -58,4 +58,17 @@ You can activate the trigger mode from the **params.json**.
 - [x] First frame is 0
 - [x] Wait at the beginning
 - [ ] Autocheck for framedrop
-- [ ] Make it work lol
+- [x] Make it work lol
+
+remove:
+
+- [ ] open_device
+- [ ] sinkformats
+
+add:
+
+- [ ] color/grayscale option
+- [ ] comment for identity position
+- [ ] standardize check_frames and check_timestamps
+- [ ] gst log level arg
+- [ ] python log level arg

@@ -1,6 +1,5 @@
 import gi
 import logging
-import pdb
 
 gi.require_version("Gst", "1.0")
 gi.require_version("Tcam", "0.1")
@@ -36,17 +35,15 @@ class SinkFormats(Enum):
 
 
 class TIS:
-    'The Imaging Source Camera'
-
+    "The Imaging Source Camera"
     def __init__(self):
-        ''' Constructor
-        :return: none
-        '''
-        Gst.init(["record.py", "--gst-debug-level=1"])
+        "Constructor of TIS object"
         self.ImageCallback = None
         self.pipeline = None
         self.config = None
-        self.buffer_lock = False
+
+        self.gst_debug_level = 1
+        Gst.init(["record.py", f"--gst-debug-level={self.gst_debug_level}"])
 
     def open_device(self):
         # I will fucking remove you 
@@ -63,7 +60,7 @@ class TIS:
         self.sinkformat = SinkFormats.toString(self.config.general['pixelformat'])
 
     def createPipeline(self, video_path=None):
-        """ Creates a Gstreamer pipeline """
+        "Creates a Gstreamer pipeline"
 
         if self.livedisplay:
             p = 'tcambin name=source ! capsfilter name=caps'
@@ -73,6 +70,7 @@ class TIS:
                       ! ximagesink name=xsink"
         elif video_path is not None:
             p = "tcambin name=source"
+            # WARNING: Do not change position of identity plugin
             p += " ! identity name=id"
             p += " ! capsfilter name=bayercaps"
             p += " ! bayer2rgb ! videoconvert"
@@ -117,33 +115,23 @@ class TIS:
 
 
     def stopPipeline(self):
-        """ Stops the pipeline """
+        "Stops the pipeline"
         self.pipeline.set_state(Gst.State.PAUSED)
         self.pipeline.set_state(Gst.State.READY)
         self.pipeline.set_state(Gst.State.NULL)
 
     def Set_Image_Callback(self, function, *data):
-        """ Sets the specific function called when a frame is received """
+        "Sets the specific function called when a frame is received"
         self.ImageCallback = function
         self.ImageCallbackData = data
 
     def on_new_buffer(self, identity, buff):
-        """ Set the generic ffunction called when a frame is received """
-        if self.buffer_lock:
-            logging.error("[!] Buffer is locked!")
-            return False
-        # func = buff.foreach_meta(lambda x: True)
-        # print(func)
-        # mem = buff.get_all_memory()
-        # success, info = mem.map(Gst.MapFlags.READ)
-
-        # meta = buff.get_meta("TcamStatisticsMetaApi")
-        # pdb.set_trace()
+        "Set the generic ffunction called when a frame is received"
         self.ImageCallback(self, identity, buff, *self.ImageCallbackData);
         return False
 
     def getcaps(self, bayer=False):
-        """ Get pixel and sink format and frame rate """
+        "Get pixel and sink format and frame rate"
         logging.debug("Creating caps")
         fmt = ""
         if bayer:
@@ -164,15 +152,15 @@ class TIS:
         structure.free()
         return caps
 
-    def setProperty(self, PropertyName, value):
-        """ Set properties, trying to convert the values to the appropriate types """
+    def setProperty(self, propertyName, value):
+        "Set properties, trying to convert the values to the appropriate types"
         try:
-            property = self.source.get_tcam_property(PropertyName)
-            if property.type == 'double':
+            prop = self.source.get_tcam_property(propertyName)
+            if prop.type == 'double':
                 value = float(value)
-            if property.type == 'integer':
+            if prop.type == 'integer':
                 value = int(value)
-            if property.type == 'boolean':
+            if prop.type == 'boolean':
                 if (value == "True") or (value == "true") or (value is True):
                     value = True 
                 elif (value == "False") or (value == "false") or (value is False):
@@ -180,15 +168,15 @@ class TIS:
                 else:
                     raise
 
-            result = self.source.set_tcam_property(PropertyName,GObject.Value(type(value),value))
+            result = self.source.set_tcam_property(propertyName, GObject.Value(type(value),value))
             if result is False:
-                logging.warning("Failed to set {} to value {}. value type is {} Property type is {}, range is {}-{}".format(
-                    PropertyName, value,
+                logging.warning("Failed to set {} to value {}. value type is {} prop type is {}, range is {}-{}".format(
+                    propertyName, value,
                     type(value),
-                    property.type,
-                    property.min,
-                    property.max) 
+                    prop.type,
+                    prop.min,
+                    prop.max) 
                     )
         except Exception as error:
-            logging.error("Error set Property {0}: {1}",PropertyName, format(error))
+            logging.error("Error set Property {0}: {1}",propertyName, format(error))
             raise
