@@ -1,5 +1,6 @@
 import gi
 import logging
+import pdb
 
 gi.require_version("Gst", "1.0")
 gi.require_version("Tcam", "0.1")
@@ -72,12 +73,12 @@ class TIS:
                       ! ximagesink name=xsink"
         elif video_path is not None:
             p = "tcambin name=source"
+            p += " ! identity name=id"
             p += " ! capsfilter name=bayercaps"
             p += " ! bayer2rgb ! videoconvert"
             p += " ! capsfilter name=rawcaps"
             p += " ! videoconvert" 
             p += " ! avimux"
-            p += " ! identity name=id"
             p += " ! filesink name=fsink"
 
         logging.debug(f"Gst pipeline: {p}")
@@ -99,7 +100,7 @@ class TIS:
 
             try:
                 self.identity = self.pipeline.get_by_name("id")
-                self.identity.connect("handoff", self.queue.add_frame)
+                self.identity.connect("handoff", self.on_new_buffer)
             except AttributeError:
                 logging.warning("No identity detected")
 
@@ -121,18 +122,25 @@ class TIS:
         self.pipeline.set_state(Gst.State.READY)
         self.pipeline.set_state(Gst.State.NULL)
 
-    # def Set_Image_Callback(self, function, *data):
-    #     """ Sets the specific function called when a frame is received """
-    #     self.ImageCallback = function
-    #     self.ImageCallbackData = data
+    def Set_Image_Callback(self, function, *data):
+        """ Sets the specific function called when a frame is received """
+        self.ImageCallback = function
+        self.ImageCallbackData = data
 
-    # def on_new_buffer(self, identity, buff ):
-    #     """ Set the generic ffunction called when a frame is received """
-    #     if self.buffer_lock:
-    #         logging.error("[!] Buffer is locked!")
-    #         return False
-    #     self.ImageCallback(self, *self.ImageCallbackData);
-    #     return False
+    def on_new_buffer(self, identity, buff):
+        """ Set the generic ffunction called when a frame is received """
+        if self.buffer_lock:
+            logging.error("[!] Buffer is locked!")
+            return False
+        # func = buff.foreach_meta(lambda x: True)
+        # print(func)
+        # mem = buff.get_all_memory()
+        # success, info = mem.map(Gst.MapFlags.READ)
+
+        # meta = buff.get_meta("TcamStatisticsMetaApi")
+        # pdb.set_trace()
+        self.ImageCallback(self, identity, buff, *self.ImageCallbackData);
+        return False
 
     def getcaps(self, bayer=False):
         """ Get pixel and sink format and frame rate """
