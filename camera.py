@@ -23,9 +23,9 @@ class Camera(TIS.TIS):
     :param path_to_output: directory where videos and logs should be saved
     """
 
-    def __init__(self, config, path_to_output='videos'):
+    def __init__(self, config, path_to_output='videos', gst_debug_level=1):
         "Initialize the Camera object."
-        super().__init__()
+        super().__init__(gst_debug_level)
         self.path_to_output = Path(path_to_output)
         self.config = config
         self.pipeline = None

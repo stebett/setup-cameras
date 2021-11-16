@@ -62,7 +62,6 @@ You can activate the trigger mode from the **params.json**, refer to [pwmpy](htt
 - [x] color/grayscale option
 - [x] comment for identity position
 - [x] standardize case convention
-- [ ] Autocheck for framedrop
-- [ ] standardize check_frames and check_timestamps
-- [ ] Argument to set gst log level
-- [ ] Argument to set python log level
+- [x] Autocheck for framedrop
+- [x] Argument to set gst log level
+- [x] Argument to set python log level

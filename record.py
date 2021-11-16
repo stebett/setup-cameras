@@ -23,14 +23,33 @@ parser.add_argument("-t", "--test",
 parser.add_argument("-f", "--force",
                     help="Force overwritting of the output directory content",
                     dest="overwrite", action="store_true")
+parser.add_argument("-l", "--log",
+                    help="Set log level, possible values are debug | info | warning | error",
+                    dest="log_level", default="info")
+parser.add_argument("--gst-debug-level",
+                    help="Gstreamer debug level, values go from 1 to 5",
+                    dest="gst_debug_level", default="1")
 
 args = parser.parse_args()
 config_path = args.config_path
 path_video_folder = args.path_video_folder.absolute()
 test_mode = args.test_mode
 overwrite = args.overwrite
+log_level = args.log_level
+gst_debug_level = args.gst_debug_level
 
-logging.basicConfig(level=logging.INFO) # TODO: Put this as argument
+if log_level == "debug":
+    level = logging.DEBUG
+elif log_level == "info":
+    level = logging.INFO
+elif log_level == "warning":
+    level = logging.WARNING
+elif log_level == "error":
+    level = logging.ERROR
+else:
+    raise Exception("Invalid log level! Run the command with argument --help to see the allowed values")
+
+logging.basicConfig(level=level)
 
 # List the avi and pickle files in the folder
 if path_video_folder.exists():
@@ -54,6 +73,8 @@ if has_file:
     else:
         sys.exit()
 
+# Run with default config if no config had been provided
+# TODO: update default config
 if config_path == "default":
     if test_mode:
         raise Exception("Cannot run in test mode with default configuration")
@@ -65,5 +86,5 @@ else:
 if test_mode:
     c = TestCamera(config)
 else:
-    c = Camera(config, path_to_output=path_video_folder)
+    c = Camera(config, path_to_output=path_video_folder, gst_debug_level=gst_debug_level)
 c.capture()

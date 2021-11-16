@@ -9,9 +9,9 @@ from gi.repository import GObject, Gst, Tcam
 
 class TIS:
     "The Imaging Source Camera"
-    def __init__(self):
+    def __init__(self, gst_debug_level):
         "Constructor of TIS object"
-        self.gst_debug_level = 1
+        self.gst_debug_level = gst_debug_level
         Gst.init(["record.py", f"--gst-debug-level={self.gst_debug_level}"])
 
     def create_pipeline(self):
