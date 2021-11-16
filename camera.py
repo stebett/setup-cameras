@@ -135,13 +135,12 @@ class Queue:
 
     def log_frame_number_warning(self):
         "Log a warning with the actual and expected frame numbers."
-        frames_chunk = self.counter - self.relative_zero
-        expected_number_frame = self.relative_zero + self.expected_frames
+        frames_chunk = self.counter - self.relative_zero + self.expected_frames
         logging.warning(
             "\n"
             f"[!] Video:                     {self.video_name}\n"
             f"[!] Number of frames:          {self.counter}\n"
-            f"[!] Expected number of frames: {expected_number_frame}\n"
+            f"[!] Expected number of frames: {self.relative_zero}\n"
             f"[!] Frames in chunk:           {frames_chunk}\n"
             f"[!] Expected in chunk:         {self.expected_frames}\n"
         )

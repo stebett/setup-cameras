@@ -41,9 +41,9 @@
         "Whitebalance Temperature": 4000
     },
     "pwm": {
-        "frequency": 5,
+        "frequency": 10,
         "chunk_size": 50,
-        "chunk_pause": 3000
+        "chunk_pause": 6000
     },
     "general": {
         "serial": "44120535",
