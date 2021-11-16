@@ -36,7 +36,6 @@ class Camera(TIS.TIS):
         "Initialize the camera."
         # TODO 
         self.create_callback()
-        self.open_device()
         logging.info("Succesfully initialized")
 
     def capture(self):

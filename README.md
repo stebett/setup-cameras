@@ -68,7 +68,7 @@ remove:
 add:
 
 - [ ] color/grayscale option
-- [ ] comment for identity position
+- [x] comment for identity position
 - [ ] standardize check_frames and check_timestamps
 - [ ] gst log level arg
 - [ ] python log level arg

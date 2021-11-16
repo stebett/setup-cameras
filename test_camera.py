@@ -20,7 +20,6 @@ class TestCamera(Camera):
     def initialize(self):
         "Initialize the camera."
         self.Set_Image_Callback(lambda x: x)
-        self.open_device()
         logging.info("Succesfully initialized")
 
     def capture(self):

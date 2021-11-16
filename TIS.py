@@ -45,20 +45,6 @@ class TIS:
         self.gst_debug_level = 1
         Gst.init(["record.py", f"--gst-debug-level={self.gst_debug_level}"])
 
-    def open_device(self):
-        # I will fucking remove you 
-        ''' Inialize a device, e.g. camera.
-        :param serial: Serial number of the camera to be used.
-        :param width: Width of the wanted video format
-        :param height: Height of the wanted video format
-        :param framerate: Numerator of the frame rate. /1 is added automatically
-        '''
-        self.serialnumber = self.config.general['serial']
-        self.height = self.config.general['height']
-        self.width = self.config.general['width']
-        self.framerate = self.config.general['framerate']
-        # self.sinkformat = SinkFormats.toString(self.config.general['pixelformat'])
-
     def createPipeline(self):
         "Creates a Gstreamer pipeline"
         p = "tcambin name=source ! identity name=id"
@@ -84,7 +70,7 @@ class TIS:
     def initPipeline(self, video_path):
         "Initializes the Gstreamer pipeline"
         self.source = self.pipeline.get_by_name("source")
-        self.source.set_property("serial", self.serialnumber)
+        self.source.set_property("serial", self.config.general["serial"])
 
         self.identity = self.pipeline.get_by_name("id")
         self.identity.connect("handoff", self.on_new_buffer)
