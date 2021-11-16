@@ -74,7 +74,7 @@ class DefaultConfig():
         self.general = {'serial': str(serial),
                         'version': 'v0.1',
                         'format': 'video/x-raw',
-                        'pixelformat': 'GRAY8',
+                        'color': True,
                         'width': 1440,
                         'height': 1080,
                         'framerate': '2500000/10593'}

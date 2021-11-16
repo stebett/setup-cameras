@@ -57,61 +57,52 @@ class TIS:
         self.height = self.config.general['height']
         self.width = self.config.general['width']
         self.framerate = self.config.general['framerate']
-        self.sinkformat = SinkFormats.toString(self.config.general['pixelformat'])
+        # self.sinkformat = SinkFormats.toString(self.config.general['pixelformat'])
 
-    def createPipeline(self, video_path=None):
+    def createPipeline(self):
         "Creates a Gstreamer pipeline"
+        p = "tcambin name=source ! identity name=id"
+        # WARNING: Do not change position of identity plugin
 
-        if self.livedisplay:
-            p = 'tcambin name=source ! capsfilter name=caps'
-            p += " ! tee name=t"
-            p += " t. ! videoscale method=0 add-borders=false \
-                      ! video/x-raw,width=640,height=360 \
-                      ! ximagesink name=xsink"
-        elif video_path is not None:
-            p = "tcambin name=source"
-            # WARNING: Do not change position of identity plugin
-            p += " ! identity name=id"
+        if self.config.general["color"]:
             p += " ! capsfilter name=bayercaps"
             p += " ! bayer2rgb ! videoconvert"
-            p += " ! capsfilter name=rawcaps"
-            p += " ! videoconvert" 
+
+        p += " ! capsfilter name=rawcaps ! videoconvert"
+
+        if self.livedisplay:
+            p += " ! videoscale method=0 add-borders=false"
+            p += " ! video/x-raw,width=640,height=360"
+            p += " ! ximagesink name=xsink"
+        else:
             p += " ! avimux"
             p += " ! filesink name=fsink"
 
         logging.debug(f"Gst pipeline: {p}")
         self.pipeline = Gst.parse_launch(p)
 
+    def initPipeline(self, video_path):
+        "Initializes the Gstreamer pipeline"
+        self.source = self.pipeline.get_by_name("source")
+        self.source.set_property("serial", self.serialnumber)
+
+        self.identity = self.pipeline.get_by_name("id")
+        self.identity.connect("handoff", self.on_new_buffer)
+
+        if self.config.general["color"]:
+            self.bayerfilter = self.pipeline.get_by_name("bayercaps")
+            self.bayerfilter.set_property("caps", self.getcaps(bayer=True))
+
+        self.rawfilter = self.pipeline.get_by_name("rawcaps")
+        self.rawfilter.set_property("caps", self.getcaps(bayer=False))
 
         if self.livedisplay:
             self.xsink = self.pipeline.get_by_name("xsink")
             self.xsink.set_property("force-aspect-ratio", True)
-
-        elif video_path is not None:
-            bayercaps = self.getcaps(bayer=True)
-            self.bayerfilter = self.pipeline.get_by_name("bayercaps")
-            self.bayerfilter.set_property("caps", bayercaps)
-
-            rawcaps = self.getcaps(bayer=False)
-            self.rawfilter = self.pipeline.get_by_name("rawcaps")
-            self.rawfilter.set_property("caps", rawcaps)
-
-            try:
-                self.identity = self.pipeline.get_by_name("id")
-                self.identity.connect("handoff", self.on_new_buffer)
-            except AttributeError:
-                logging.warning("No identity detected")
-
-            try:
-                self.filesink = self.pipeline.get_by_name("fsink")
-                self.filesink.set_property("location", video_path)
-            except AttributeError:
-                logging.warning("No filesink detected")
-
-
+        else:
+            self.filesink = self.pipeline.get_by_name("fsink")
+            self.filesink.set_property("location", video_path)
         
-        self.source = self.pipeline.get_by_name("source")
-        self.source.set_property("serial", self.serialnumber)
 
 
     def stopPipeline(self):
@@ -133,6 +124,7 @@ class TIS:
     def getcaps(self, bayer=False):
         "Get pixel and sink format and frame rate"
         logging.debug("Creating caps")
+        # TODO rm
         fmt = ""
         if bayer:
             fmt += "video/x-bayer, format=rggb,"

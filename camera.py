@@ -34,6 +34,7 @@ class Camera(TIS.TIS):
 
     def initialize(self):
         "Initialize the camera."
+        # TODO 
         self.create_callback()
         self.open_device()
         logging.info("Succesfully initialized")
@@ -56,7 +57,8 @@ class Camera(TIS.TIS):
             self.queue.new_video()
             logging.info(f"New video: {self.queue.video_name}")
 
-            self.createPipeline(video_path=self.queue.video_name)
+            self.createPipeline()
+            self.initPipeline(video_path=self.queue.video_name)
             self.apply_properties()
             logging.info("Created new pipeline")
 

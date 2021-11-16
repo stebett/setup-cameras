@@ -16,7 +16,6 @@ class TestCamera(Camera):
         super().__init__(config)
         self.livedisplay = True
         self.config = config
-        logging.basicConfig(level=logging.WARNING)
 
     def initialize(self):
         "Initialize the camera."
@@ -28,6 +27,7 @@ class TestCamera(Camera):
         "Start capturing videos."
         try:
             self.createPipeline()
+            self.initPipeline()
             self.pipeline.set_state(Gst.State.PLAYING)
             self.test()
         except KeyboardInterrupt:

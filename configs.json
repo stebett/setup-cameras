@@ -49,7 +49,7 @@
         "serial": "44120535",
         "version": "v0.1",
         "format": "video/x-raw",
-        "pixelformat": "GRAY8",
+        "color": true,
         "width": 1920,
         "height": 1080,
         "framerate": "140/1"
