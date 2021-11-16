@@ -66,5 +66,4 @@ if test_mode:
     c = TestCamera(config)
 else:
     c = Camera(config, path_to_output=path_video_folder)
-c.initialize()
 c.capture()

@@ -32,20 +32,15 @@ class Camera(TIS.TIS):
         self.queue = None
         self.livedisplay = False
 
-    def initialize(self):
-        "Initialize the camera."
-        # TODO 
-        self.create_callback()
-        logging.info("Succesfully initialized")
-
     def capture(self):
         "Start capturing videos."
+        self.create_callback()
         try:
             self.loop()
         except KeyboardInterrupt:
             logging.error("Stopped manually by user")
         finally:
-            self.stopPipeline()
+            self.stop_pipeline()
             if self.queue.video_started:
                 self.queue.save_timestamps()
 
@@ -56,8 +51,8 @@ class Camera(TIS.TIS):
             self.queue.new_video()
             logging.info(f"New video: {self.queue.video_name}")
 
-            self.createPipeline()
-            self.initPipeline(video_path=self.queue.video_name)
+            self.create_pipeline()
+            self.init_pipeline(video_path=self.queue.video_name)
             self.apply_properties()
             logging.info("Created new pipeline")
 
@@ -68,11 +63,11 @@ class Camera(TIS.TIS):
             self.queue.check_delay()
             self.queue.go = True
 
-            self.stopPipeline()
+            self.stop_pipeline()
 
-    def stopPipeline(self):
-        "Add timestamp logging to stopPipeline."
-        super().stopPipeline()
+    def stop_pipeline(self):
+        "Add timestamp logging to stop_pipeline."
+        super().stop_pipeline()
         logging.info("Old pipeline stopped")
         try:
             self.queue.save_timestamps()
@@ -85,12 +80,12 @@ class Camera(TIS.TIS):
         self.queue = Queue(self.path_to_output,
                            self.config.pwm['chunk_pause'],
                            self.config.pwm['chunk_size'])
-        self.Set_Image_Callback(add_frame, self.queue)
+        self.set_image_callback(add_frame, self.queue)
 
     def apply_properties(self):
         "Apply properties to camera."
         for k, v in self.config.properties.items():
-            self.setProperty(k, v)
+            self.set_property(k, v)
 
 def add_frame(tis, queue):
     "Write a timestamp and increases the counter."

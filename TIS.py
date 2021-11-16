@@ -11,11 +11,10 @@ class TIS:
     "The Imaging Source Camera"
     def __init__(self):
         "Constructor of TIS object"
-
         self.gst_debug_level = 1
         Gst.init(["record.py", f"--gst-debug-level={self.gst_debug_level}"])
 
-    def createPipeline(self):
+    def create_pipeline(self):
         "Creates a Gstreamer pipeline"
         p = "tcambin name=source ! identity name=id"
         # WARNING: Do not change position of identity plugin
@@ -37,7 +36,7 @@ class TIS:
         logging.debug(f"Gst pipeline: {p}")
         self.pipeline = Gst.parse_launch(p)
 
-    def initPipeline(self, video_path):
+    def init_pipeline(self, video_path):
         "Initializes the Gstreamer pipeline"
         self.source = self.pipeline.get_by_name("source")
         self.source.set_property("serial", self.config.general["serial"])
@@ -47,10 +46,10 @@ class TIS:
 
         if self.config.general["color"]:
             self.bayerfilter = self.pipeline.get_by_name("bayercaps")
-            self.bayerfilter.set_property("caps", self.getcaps(bayer=True))
+            self.bayerfilter.set_property("caps", self.get_caps(bayer=True))
 
         self.rawfilter = self.pipeline.get_by_name("rawcaps")
-        self.rawfilter.set_property("caps", self.getcaps(bayer=False))
+        self.rawfilter.set_property("caps", self.get_caps(bayer=False))
 
         if self.livedisplay:
             self.xsink = self.pipeline.get_by_name("xsink")
@@ -59,23 +58,23 @@ class TIS:
             self.filesink = self.pipeline.get_by_name("fsink")
             self.filesink.set_property("location", video_path)
         
-    def stopPipeline(self):
+    def stop_pipeline(self):
         "Stops the pipeline"
         self.pipeline.set_state(Gst.State.PAUSED)
         self.pipeline.set_state(Gst.State.READY)
         self.pipeline.set_state(Gst.State.NULL)
 
-    def Set_Image_Callback(self, function, *data):
+    def set_image_callback(self, function, *data):
         "Sets the specific function called when a frame is received"
-        self.ImageCallback = function
-        self.ImageCallbackData = data
+        self.image_callback = function
+        self.image_callback_data = data
 
     def on_new_buffer(self, *args):
         "Set the generic ffunction called when a frame is received"
-        self.ImageCallback(self, *self.ImageCallbackData);
+        self.image_callback(self, *self.image_callback_data);
         return False
 
-    def getcaps(self, bayer=False):
+    def get_caps(self, bayer=False):
         "Get pixel and sink format and frame rate"
         logging.debug("Creating caps")
         if bayer:
@@ -95,10 +94,10 @@ class TIS:
         structure.free()
         return caps
 
-    def setProperty(self, propertyName, value):
+    def set_property(self, property_name, value):
         "Set properties, trying to convert the values to the appropriate types"
         try:
-            prop = self.source.get_tcam_property(propertyName)
+            prop = self.source.get_tcam_property(property_name)
             if prop.type == 'double':
                 value = float(value)
             if prop.type == 'integer':
@@ -111,15 +110,9 @@ class TIS:
                 else:
                     raise
 
-            result = self.source.set_tcam_property(propertyName, GObject.Value(type(value),value))
+            result = self.source.set_tcam_property(property_name, GObject.Value(type(value),value))
             if result is False:
-                logging.warning("Failed to set {} to value {}. value type is {} prop type is {}, range is {}-{}".format(
-                    propertyName, value,
-                    type(value),
-                    prop.type,
-                    prop.min,
-                    prop.max) 
-                    )
+                logging.warning("Failed to set {} to value {}. value type is {} prop type is {}, range is {}-{}".format(property_name, value, type(value), prop.type, prop.min, prop.max))
         except Exception as error:
-            logging.error("Error set Property {0}: {1}",propertyName, format(error))
+            logging.error("Error set Property {0}: {1}",property_name, format(error))
             raise

@@ -17,22 +17,18 @@ class TestCamera(Camera):
         self.livedisplay = True
         self.config = config
 
-    def initialize(self):
-        "Initialize the camera."
-        self.Set_Image_Callback(lambda x: x)
-        logging.info("Succesfully initialized")
-
     def capture(self):
         "Start capturing videos."
+        self.set_image_callback(lambda x: x)
         try:
-            self.createPipeline()
-            self.initPipeline(None)
+            self.create_pipeline()
+            self.init_pipeline(None)
             self.pipeline.set_state(Gst.State.PLAYING)
             self.test()
         except KeyboardInterrupt:
             logging.error("Stopped manually by user")
         finally:
-            self.stopPipeline()
+            self.stop_pipeline()
 
     def test(self):
         """Main loop for changing configuration."""
@@ -88,7 +84,7 @@ class TestCamera(Camera):
         k = self.config.keys[i]
 
         try:
-            self.setProperty(k, v)
+            self.set_property(k, v)
         except Exception:
             print(f"The value {v} is not adeguate to property {k}")
 

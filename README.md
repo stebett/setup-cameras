@@ -48,7 +48,6 @@ You can activate the trigger mode from the **params.json**.
 - `record.py` is the script to start acquisition
 - `create_configs.py` is a script that generates configuration taking as input the serial code of the camera
 - `test_camera.py` extends the `Camera` class, adding methods to interactively change the properties of the camera
-- `pwm.py` is a script to start a pwm given the config file
 - `check_framerate.py` is a script to check frame drops, **still under developement**
 - `start_recording.sh` is an helper script to start recording and creating directories, **still under developement**
 
@@ -58,17 +57,18 @@ You can activate the trigger mode from the **params.json**.
 - [x] First frame is 0
 - [x] Wait at the beginning
 - [ ] Autocheck for framedrop
-- [x] Make it work lol
+- [x] Solve frame count issue
 
 remove:
 
-- [ ] open_device
-- [ ] sinkformats
+- [x] open_device
+- [x] sinkformats
 
 add:
 
-- [ ] color/grayscale option
+- [x] color/grayscale option
 - [x] comment for identity position
 - [ ] standardize check_frames and check_timestamps
 - [ ] gst log level arg
 - [ ] python log level arg
+- [ ] standardize case convention
