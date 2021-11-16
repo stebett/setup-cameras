@@ -4,34 +4,7 @@ import logging
 gi.require_version("Gst", "1.0")
 gi.require_version("Tcam", "0.1")
 
-from enum import Enum
 from gi.repository import GLib, GObject, Gst, Tcam
-
-
-class SinkFormats(Enum):
-    GRAY8 = 0
-    GRAY16_LE = 1
-    BGRA = 2
-
-    def toString(pf):
-        if( pf == SinkFormats.GRAY16_LE ):
-            return "GRAY16_LE"
-
-        if( pf == SinkFormats.GRAY8 ):
-            return "GRAY8"
-
-        if( pf == SinkFormats.BGRA ):
-            return "BGRx"
-
-        return "BGRx"
-
-    def fromString(pf):
-        if( pf == "GRAY16_LE"):
-            return SinkFormats.GRAY16_LE
-        if( pf == "GRAY8"):
-            return SinkFormats.GRAY8
-      
-        return SinkFormats.BGRA
 
 
 class TIS:
