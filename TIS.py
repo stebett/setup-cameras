@@ -2,9 +2,8 @@ import gi
 import logging
 
 gi.require_version("Gst", "1.0")
-gi.require_version("Tcam", "0.1")
 
-from gi.repository import GLib, GObject, Gst, Tcam
+from gi.repository import GObject, Gst, Tcam
 
 
 class TIS:
