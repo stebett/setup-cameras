@@ -41,8 +41,7 @@ class Camera(TIS.TIS):
             logging.error("Stopped manually by user")
         finally:
             self.stop_pipeline()
-            if self.queue.video_started:
-                self.queue.save_timestamps()
+            self.queue.save_timestamps()
 
     def loop(self):
         "Manage creation and realease of videos."
@@ -64,16 +63,7 @@ class Camera(TIS.TIS):
             self.queue.go = True
 
             self.stop_pipeline()
-
-    def stop_pipeline(self):
-        "Add timestamp logging to stop_pipeline."
-        super().stop_pipeline()
-        logging.info("Old pipeline stopped")
-        try:
             self.queue.save_timestamps()
-            logging.info("Timestamps saved")
-        except AttributeError:
-            logging.info("No queue to save timestamps")
 
     def create_callback(self):
         "Define function to call when a frame is received."
@@ -158,11 +148,12 @@ class Queue:
 
     def new_video(self):
         "Create new video name based on number of first frame."
+        self.relative_zero = self.expected_frames * len(self.videos)
+        logging.info(f"relative zero: {self.relative_zero}")
+
         if (self.expected_frames > 0) & (self.counter != self.relative_zero):
             self.log_frame_number_warning()
 
-        self.relative_zero = self.expected_frames * len(self.videos)
-        logging.info(f"relative zero: {self.relative_zero}")
         self.counter = self.relative_zero
 
         self.video_name = f"{self.path_to_output}/{self.counter :06d}.avi"
@@ -170,7 +161,9 @@ class Queue:
 
     def save_timestamps(self):
         "Write timestamps to disk in pickle format."
-        with open(f'{self.video_name[:-4]}.pickle', 'wb') as handle:
-            pickle.dump(self.timestamps, handle,
-                        protocol=pickle.HIGHEST_PROTOCOL)
-        self.timestamps = {}
+        if self.video_started:
+            with open(f'{self.video_name[:-4]}.pickle', 'wb') as handle:
+                pickle.dump(self.timestamps, handle,
+                            protocol=pickle.HIGHEST_PROTOCOL)
+            logging.info("Timestamps saved")
+            self.timestamps = {}
