@@ -43,7 +43,7 @@
     "pwm": {
         "frequency": 10,
         "chunk_size": 50,
-        "chunk_pause": 6000
+        "chunk_pause": 5000
     },
     "general": {
         "serial": "44120535",
