@@ -92,7 +92,7 @@ class Camera(TIS.TIS):
         for k, v in self.config.properties.items():
             self.setProperty(k, v)
 
-def add_frame(tis, identity, buff, queue):
+def add_frame(tis, queue):
     "Write a timestamp and increases the counter."
     if queue.busy:
         logging.error("[!] Frame dropped!")

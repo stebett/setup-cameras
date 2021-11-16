@@ -26,7 +26,7 @@ class TestCamera(Camera):
         "Start capturing videos."
         try:
             self.createPipeline()
-            self.initPipeline()
+            self.initPipeline(None)
             self.pipeline.set_state(Gst.State.PLAYING)
             self.test()
         except KeyboardInterrupt:

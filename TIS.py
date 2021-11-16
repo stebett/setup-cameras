@@ -2,6 +2,7 @@ import gi
 import logging
 
 gi.require_version("Gst", "1.0")
+gi.require_version("Tcam", "0.1")
 
 from gi.repository import GObject, Gst, Tcam
 
@@ -10,9 +11,6 @@ class TIS:
     "The Imaging Source Camera"
     def __init__(self):
         "Constructor of TIS object"
-        self.ImageCallback = None
-        self.pipeline = None
-        self.config = None
 
         self.gst_debug_level = 1
         Gst.init(["record.py", f"--gst-debug-level={self.gst_debug_level}"])
@@ -61,8 +59,6 @@ class TIS:
             self.filesink = self.pipeline.get_by_name("fsink")
             self.filesink.set_property("location", video_path)
         
-
-
     def stopPipeline(self):
         "Stops the pipeline"
         self.pipeline.set_state(Gst.State.PAUSED)
@@ -74,27 +70,24 @@ class TIS:
         self.ImageCallback = function
         self.ImageCallbackData = data
 
-    def on_new_buffer(self, identity, buff):
+    def on_new_buffer(self, *args):
         "Set the generic ffunction called when a frame is received"
-        self.ImageCallback(self, identity, buff, *self.ImageCallbackData);
+        self.ImageCallback(self, *self.ImageCallbackData);
         return False
 
     def getcaps(self, bayer=False):
         "Get pixel and sink format and frame rate"
         logging.debug("Creating caps")
-        # TODO rm
-        fmt = ""
         if bayer:
-            fmt += "video/x-bayer, format=rggb,"
+            fmt = "video/x-bayer, format=rggb,"
         else:
-            fmt += "video/x-raw, format=BGRx,"
+            fmt = "video/x-raw, format=BGRx,"
             
 
         fmt += f"""width={self.config.general["width"]},
                    height={self.config.general["height"]},
                    framerate={self.config.general["framerate"]}"""
                    # Maximum accepted framerate, set it high
-
 
         caps = Gst.Caps.new_empty()
         structure = Gst.Structure.new_from_string(fmt)
