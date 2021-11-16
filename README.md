@@ -38,7 +38,7 @@ Remember to install the [pwmpy](https://github.com/rfayat/PWM_Arduino) package
 
 `$ python record.py path/to/params.json -o path/to/camera/dir`
 
-You can activate the trigger mode from the **params.json**.
+You can activate the trigger mode from the **params.json**, refer to [pwmpy](https://github.com/rfayat/PWM_Arduino) for documentation on usage.
 
 ## Files
 
@@ -56,19 +56,13 @@ You can activate the trigger mode from the **params.json**.
 
 - [x] First frame is 0
 - [x] Wait at the beginning
-- [ ] Autocheck for framedrop
 - [x] Solve frame count issue
-
-remove:
-
-- [x] open_device
-- [x] sinkformats
-
-add:
-
+- [x] Remove open_device
+- [x] Remove sinkformats
 - [x] color/grayscale option
 - [x] comment for identity position
+- [x] standardize case convention
+- [ ] Autocheck for framedrop
 - [ ] standardize check_frames and check_timestamps
-- [ ] gst log level arg
-- [ ] python log level arg
-- [ ] standardize case convention
+- [ ] Argument to set gst log level
+- [ ] Argument to set python log level
