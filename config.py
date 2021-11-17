@@ -30,20 +30,20 @@ class Config:
 
     def check_exposure_time(self):
         "Check that exposure time is not too long for the selected framerate"
-
+        exposure = int(self.properties["Exposure Time (us)"])
         if self.properties["Trigger Mode"] == "true":
             fps = int(self.pwm["frequency"])
         else:
             fps = int(self.general["framerate"])
 
-        max_fps = 1e6 / int(self.properties["Exposure Time (us)"])
+        max_fps = 1e6 / exposure
 
         if fps > max_fps:
             max_exposure = 1e6 / fps
             self.logger.error(f"Exposure Time is too long for your framerate!")
-            self.logger.error(f"Maximum theorical framerate: {max_fps}Hz")
-            self.logger.error(f"Maximum exposure time for {fps}Hz: {round(max_exposure)}us")
-            ignore = input_helpers.ask_yes_or_no("Do you want to start the recording anyway?")
+            self.logger.error(f"Selected exposure: {exposure}us -> max framerate possible: {max_fps}Hz")
+            self.logger.error(f"Desired framerate: {fps}Hz -> max exposure required: {round(max_exposure)}us")
+            ignore = input_helpers.ask_yes_or_no("Do you want to start the recording anyway? ")
             if not ignore:
                 raise Exception("Excecution interrupted by user")
             
