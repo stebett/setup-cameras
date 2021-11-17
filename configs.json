@@ -8,7 +8,7 @@
         "Exposure Auto Reference": 128,
         "Exposure Auto Upper Limit": 33333,
         "Exposure Auto Upper Limit Auto": false,
-        "Exposure Time (us)": 20000,
+        "Exposure Time (us)": 5000,
         "GPIn": 0,
         "GPOut": 0,
         "Gain": 30,

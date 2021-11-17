@@ -53,9 +53,9 @@ else:
     raise Exception("Invalid log level! Run the command with argument --help to see the allowed values")
 
 root_logger = logging.getLogger()
-root_logger.setLevel(level)
+root_logger.setLevel(level=level)
 handler = logging.FileHandler("record.log")
-handler.setLevel(level=level)
+handler.setLevel(level=logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s.%(msecs)03d - %(levelname)s - %(message)s', datefmt='%H:%M:%S')
 handler.setFormatter(formatter)
 root_logger.addHandler(handler)

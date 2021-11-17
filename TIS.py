@@ -28,7 +28,7 @@ class TIS:
         if self.livedisplay:
             p += " ! videoscale method=0 add-borders=false"
             p += " ! video/x-raw,width=640,height=360"
-            p += " ! ximagesink name=xsink"
+            p += " ! fpsdisplaysink sink=ximagesink"
         else:
             p += " ! avimux"
             p += " ! filesink name=fsink"
@@ -51,10 +51,7 @@ class TIS:
         self.rawfilter = self.pipeline.get_by_name("rawcaps")
         self.rawfilter.set_property("caps", self.get_caps(bayer=False))
 
-        if self.livedisplay:
-            self.xsink = self.pipeline.get_by_name("xsink")
-            self.xsink.set_property("force-aspect-ratio", True)
-        else:
+        if not self.livedisplay:
             self.filesink = self.pipeline.get_by_name("fsink")
             self.filesink.set_property("location", video_path)
         

@@ -139,14 +139,11 @@ class Queue:
     def log_frame_number_warning(self):
         "Log a warning with the actual and expected frame numbers."
         frames_chunk = self.counter - self.relative_zero + self.expected_frames
-        self.logger.warning(
-            "\n"
-            f"[!] Video:                     {self.video_name}\n"
-            f"[!] Number of frames:          {self.counter}\n"
-            f"[!] Expected number of frames: {self.relative_zero}\n"
-            f"[!] Frames in chunk:           {frames_chunk}\n"
-            f"[!] Expected in chunk:         {self.expected_frames}\n"
-        )
+        self.logger.warning(f"[!] Video:                     {self.video_name}")
+        self.logger.warning(f"[!] Number of frames:          {self.counter}")
+        self.logger.warning(f"[!] Expected number of frames: {self.relative_zero}")
+        self.logger.warning(f"[!] Frames in chunk:           {frames_chunk}")
+        self.logger.warning(f"[!] Expected in chunk:         {self.expected_frames}")
 
     def new_video(self):
         "Create new video name based on number of first frame."
@@ -160,10 +157,12 @@ class Queue:
 
         self.video_name = f"{self.path_to_output}/{self.counter :06d}.avi"
         self.videos.append(self.video_name)
+        self.start_time = time.time()
 
     def save_timestamps(self):
         "Write timestamps to disk in pickle format."
         if self.video_started:
+            self.logger.info(f"Estimated framerate for the last video: {len(self.timestamps) / (time.time() - self.start_time):.2f}Hz")
             with open(f'{self.video_name[:-4]}.pickle', 'wb') as handle:
                 pickle.dump(self.timestamps, handle,
                             protocol=pickle.HIGHEST_PROTOCOL)

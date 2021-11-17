@@ -42,7 +42,7 @@ class Config:
             max_exposure = 1e6 / fps
             self.logger.error(f"Exposure Time is too long for your framerate!")
             self.logger.error(f"Selected exposure: {exposure}us -> max framerate possible: {max_fps}Hz")
-            self.logger.error(f"Desired framerate: {fps}Hz -> max exposure required: {round(max_exposure)}us")
+            self.logger.error(f"Desired framerate: {fps}Hz -> max exposure required: {(max_exposure):.1f}us")
             ignore = input_helpers.ask_yes_or_no("Do you want to start the recording anyway? ")
             if not ignore:
                 raise Exception("Excecution interrupted by user")
@@ -100,7 +100,7 @@ class DefaultConfig():
                         'color': False,
                         'width': 1440,
                         'height': 1080,
-                        'framerate': '2500000/10593'}
+                        'framerate': '120/1'}
         self.properties = {'Auto Functions ROI Control': True,
                            'Auto Functions ROI Preset': 'Center 50%',
                            'Brightness': 0,
