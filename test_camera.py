@@ -11,9 +11,9 @@ gi.require_version("Gst", "1.0")
 class TestCamera(Camera):
     "Extend Camera to interactively change properties of the camera."
 
-    def __init__(self, config):
+    def __init__(self, config, logger):
         "Create the camera object."
-        super().__init__(config, gst_debug_level=1)
+        super().__init__(config, logger, gst_debug_level=1)
         self.livedisplay = True
         self.config = config
 

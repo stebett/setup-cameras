@@ -38,6 +38,9 @@ overwrite = args.overwrite
 log_level = args.log_level
 gst_debug_level = args.gst_debug_level
 
+
+# Logging
+
 if log_level == "debug":
     level = logging.DEBUG
 elif log_level == "info":
@@ -49,7 +52,13 @@ elif log_level == "error":
 else:
     raise Exception("Invalid log level! Run the command with argument --help to see the allowed values")
 
-logging.basicConfig(level=level)
+root = logging.getLogger()
+root.setLevel(level)
+handler = logging.FileHandler("prova.log")
+handler.setLevel(level=level)
+formatter = logging.Formatter('%(asctime)s.%(msecs)03d - %(levelname)s - %(message)s', datefmt='%H:%M:%S')
+handler.setFormatter(formatter)
+root.addHandler(handler)
 
 # List the avi and pickle files in the folder
 if path_video_folder.exists():
@@ -84,7 +93,7 @@ else:
 
 
 if test_mode:
-    c = TestCamera(config)
+    c = TestCamera(config, logger=root)
 else:
-    c = Camera(config, path_to_output=path_video_folder, gst_debug_level=gst_debug_level)
+    c = Camera(config, path_to_output=path_video_folder, logger=root, gst_debug_level=gst_debug_level)
 c.capture()

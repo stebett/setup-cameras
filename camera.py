@@ -10,7 +10,6 @@ import gi
 import TIS
 import time
 import pickle
-import logging
 from pathlib import Path
 gi.require_version("Gst", "1.0")
 from gi.repository import Gst  # noqa E402
@@ -23,11 +22,12 @@ class Camera(TIS.TIS):
     :param path_to_output: directory where videos and logs should be saved
     """
 
-    def __init__(self, config, path_to_output='videos', gst_debug_level=1):
+    def __init__(self, config, logger, path_to_output='videos', gst_debug_level=1):
         "Initialize the Camera object."
         super().__init__(gst_debug_level)
         self.path_to_output = Path(path_to_output)
         self.config = config
+        self.logger = logger
         self.pipeline = None
         self.queue = None
         self.livedisplay = False
@@ -38,7 +38,7 @@ class Camera(TIS.TIS):
         try:
             self.loop()
         except KeyboardInterrupt:
-            logging.error("Stopped manually by user")
+            self.logger.error("Stopped manually by user")
         finally:
             self.stop_pipeline()
             self.queue.save_timestamps()
@@ -48,15 +48,15 @@ class Camera(TIS.TIS):
         self.queue.livedisplay = False
         while True:
             self.queue.new_video()
-            logging.info(f"New video: {self.queue.video_name}")
+            self.logger.info(f"New video: {self.queue.video_name}")
 
             self.create_pipeline()
             self.init_pipeline(video_path=self.queue.video_name)
             self.apply_properties()
-            logging.info("Created new pipeline")
+            self.logger.info("Created new pipeline")
 
             self.pipeline.set_state(Gst.State.PLAYING)
-            logging.info("Started pipeline")
+            self.logger.info("Started pipeline")
 
             self.queue.time_of_last_frame = time.time()
             self.queue.check_delay()
@@ -69,7 +69,8 @@ class Camera(TIS.TIS):
         "Define function to call when a frame is received."
         self.queue = Queue(self.path_to_output,
                            self.config.pwm['chunk_pause'],
-                           self.config.pwm['chunk_size'])
+                           self.config.pwm['chunk_size'],
+                           self.logger)
         self.set_image_callback(add_frame, self.queue)
 
     def apply_properties(self):
@@ -80,14 +81,14 @@ class Camera(TIS.TIS):
 def add_frame(tis, queue):
     "Write a timestamp and increases the counter."
     if queue.busy:
-        logging.error("[!] Frame dropped!")
+        queue.logger.error("[!] Frame dropped!")
         return
     queue.busy = True
     t = time.time()
     queue.timestamps[queue.counter] = t
     queue.time_of_last_frame = t
     queue.counter += 1
-    logging.info(f"Adding frame {queue.counter} to the queue")
+    queue.logger.info(f"Adding frame {queue.counter} to the queue")
     queue.busy = False
 
 class Queue:
@@ -99,12 +100,13 @@ class Queue:
 
     """
 
-    def __init__(self, path_to_output, chunk_pause, expected_frames):
+    def __init__(self, path_to_output, chunk_pause, expected_frames, logger):
         "Initialize the queue object."
         # TODO: Find a better way to define timeout_delay
         self.timeout_delay = chunk_pause / 1000 - 1
         self.expected_frames = expected_frames
         self.path_to_output = path_to_output
+        self.logger = logger
 
         self.videos = []
         self.video_name = ""
@@ -129,7 +131,7 @@ class Queue:
         "Interrupts video when timeout_delay is exceeded."
         while self.go:
             if self.video_started and self.timeout_is_exceeded:
-                logging.info("Timeout delay exceeded")
+                self.logger.info("Timeout delay exceeded")
                 self.go = False
             else:
                 pass
@@ -137,7 +139,7 @@ class Queue:
     def log_frame_number_warning(self):
         "Log a warning with the actual and expected frame numbers."
         frames_chunk = self.counter - self.relative_zero + self.expected_frames
-        logging.warning(
+        self.logger.warning(
             "\n"
             f"[!] Video:                     {self.video_name}\n"
             f"[!] Number of frames:          {self.counter}\n"
@@ -149,7 +151,7 @@ class Queue:
     def new_video(self):
         "Create new video name based on number of first frame."
         self.relative_zero = self.expected_frames * len(self.videos)
-        logging.info(f"relative zero: {self.relative_zero}")
+        self.logger.info(f"relative zero: {self.relative_zero}")
 
         if (self.expected_frames > 0) & (self.counter != self.relative_zero):
             self.log_frame_number_warning()
@@ -165,5 +167,5 @@ class Queue:
             with open(f'{self.video_name[:-4]}.pickle', 'wb') as handle:
                 pickle.dump(self.timestamps, handle,
                             protocol=pickle.HIGHEST_PROTOCOL)
-            logging.info("Timestamps saved")
+            self.logger.info("Timestamps saved")
             self.timestamps = {}
