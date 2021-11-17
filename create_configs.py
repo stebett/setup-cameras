@@ -20,11 +20,10 @@ os.system(f"tcam-ctrl --save {serial} > {filename}")
 with open(filename, "r") as f:
     c = json.load(f)
 
-c["format"] = "video/x-raw"
-c["pixelformat"] = "GRAY8"
+c["color"] = "false"
 c["width"] = 1920
 c["height"] = 1080
-c["framerate"] = "2500000/10593"
+c["framerate"] = "30/1"
 
 pwm = {}
 pwm["frequency"] = 15

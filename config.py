@@ -73,8 +73,7 @@ class DefaultConfig():
                     'timeout_delay': 100}
         self.general = {'serial': str(serial),
                         'version': 'v0.1',
-                        'format': 'video/x-raw',
-                        'color': True,
+                        'color': False,
                         'width': 1440,
                         'height': 1080,
                         'framerate': '2500000/10593'}

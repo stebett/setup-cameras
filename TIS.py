@@ -19,7 +19,7 @@ class TIS:
         p = "tcambin name=source ! identity name=id"
         # WARNING: Do not change position of identity plugin
 
-        if self.config.general["color"]:
+        if self.config.general["color"] == "true":
             p += " ! capsfilter name=bayercaps"
             p += " ! bayer2rgb ! videoconvert"
 
@@ -44,7 +44,7 @@ class TIS:
         self.identity = self.pipeline.get_by_name("id")
         self.identity.connect("handoff", self.on_new_buffer)
 
-        if self.config.general["color"]:
+        if self.config.general["color"] == "true":
             self.bayerfilter = self.pipeline.get_by_name("bayercaps")
             self.bayerfilter.set_property("caps", self.get_caps(bayer=True))
 
