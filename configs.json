@@ -29,7 +29,7 @@
         "Strobe Polarity": false,
         "Trigger Delay (us)": 31,
         "Trigger Global Reset Release": false,
-        "Trigger Mode": true,
+        "Trigger Mode": false,
         "Trigger Polarity": "Rising Edge",
         "White Balance Temperature Preset": "Cool White Fluorescent Light",
         "Whitebalance": false,
@@ -51,6 +51,6 @@
         "color": "true",
         "width": 1920,
         "height": 1080,
-        "framerate": "140"
+        "framerate": "120"
     }
 }

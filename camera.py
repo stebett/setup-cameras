@@ -41,6 +41,7 @@ class Camera(TIS.TIS):
             self.logger.error("Stopped manually by user")
         finally:
             self.stop_pipeline()
+            self.queue.estimate_framerate()
             self.queue.save_timestamps()
 
     def loop(self):
@@ -63,6 +64,7 @@ class Camera(TIS.TIS):
             self.queue.go = True
 
             self.stop_pipeline()
+            self.queue.estimate_framerate()
             self.queue.save_timestamps()
 
     def create_callback(self):
@@ -157,15 +159,14 @@ class Queue:
 
         self.video_name = f"{self.path_to_output}/{self.counter :06d}.avi"
         self.videos.append(self.video_name)
-        self.start_time = time.time()
 
     def estimate_framerate(self):
-        return len(self.timestamps) / (self.time_of_last_frame - self.start_time)
+        estimate = len(self.timestamps) / (self.time_of_last_frame - self.timestamps[self.relative_zero])
+        self.logger.info(f"Estimated framerate for the last video: {estimate:.2f}Hz")
 
     def save_timestamps(self):
         "Write timestamps to disk in pickle format."
         if self.video_started:
-            self.logger.info(f"Estimated framerate for the last video: {self.estimate_framerate():.2f}Hz")
             with open(f'{self.video_name[:-4]}.pickle', 'wb') as handle:
                 pickle.dump(self.timestamps, handle,
                             protocol=pickle.HIGHEST_PROTOCOL)
