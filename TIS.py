@@ -85,7 +85,7 @@ class TIS:
 
         fmt += f"""width={self.config.general["width"]},
                    height={self.config.general["height"]},
-                   framerate={self.config.general["framerate"]}"""
+                   framerate={self.config.general["framerate"]}/1"""
                    # Maximum accepted framerate, set it high
 
         caps = Gst.Caps.new_empty()

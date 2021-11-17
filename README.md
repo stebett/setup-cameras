@@ -65,7 +65,7 @@ You can activate the trigger mode from the **params.json**, refer to [pwmpy](htt
 - [x] Autocheck for framedrop
 - [x] Argument to set gst log level
 - [x] Argument to set python log level
+- [x] Argument to set log output to file
 - [ ] Exposure time auto check
-- [ ] Argument to set log output to file
 - [ ] File size (either parallel conversion or through gst)
 - [ ] Implement non-dropping queue

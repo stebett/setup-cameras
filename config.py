@@ -1,19 +1,21 @@
 "Handle configuration formatting and storage."
 import json
-import logging
+import input_helpers
 from pathlib import Path
 
 
 class Config:
     "A class to store configuration file and ensure right formatting."
 
-    def __init__(self, config_path):
+    def __init__(self, config_path, logger):
         "Initialize the object with a configuration path."
         self.config_path = Path(config_path).expanduser()
+        self.logger = logger
         self.read_config()
         self.pwm = self.config["pwm"]
         self.general = self.config["general"]
         self.properties = self.config["properties"]
+        self.check_exposure_time()
         self.dict_to_list()
 
     def read_config(self):
@@ -22,9 +24,31 @@ class Config:
             with self.config_path.open("r") as json_file:
                 self.config = json.load(json_file)
         except FileNotFoundError:
-            logging.error("Invalid config file. If you want to use the default"
+            logger.error("Invalid config file. If you want to use the default"
                           " configuration, run record.py without argument")
             raise FileNotFoundError("Invalid config file")
+
+    def check_exposure_time(self):
+        "Check that exposure time is not too long for the selected framerate"
+
+        if self.properties["Trigger Mode"] == "true":
+            fps = int(self.pwm["frequency"])
+        else:
+            fps = int(self.general["framerate"])
+
+        max_fps = 1e6 / int(self.properties["Exposure Time (us)"])
+
+        if fps > max_fps:
+            max_exposure = 1e6 / fps
+            self.logger.error(f"Exposure Time is too long for your framerate!")
+            self.logger.error(f"Maximum theorical framerate: {max_fps}Hz")
+            self.logger.error(f"Maximum exposure time for {fps}Hz: {round(max_exposure)}us")
+            ignore = input_helpers.ask_yes_or_no("Do you want to start the recording anyway?")
+            if not ignore:
+                raise Exception("Excecution interrupted by user")
+            
+            
+
 
     def dict_to_list(self):
         "Create a list from the dict of configs in order to display/edit them."

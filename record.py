@@ -54,7 +54,7 @@ else:
 
 root_logger = logging.getLogger()
 root_logger.setLevel(level)
-handler = logging.FileHandler("prova.log")
+handler = logging.FileHandler("record.log")
 handler.setLevel(level=level)
 formatter = logging.Formatter('%(asctime)s.%(msecs)03d - %(levelname)s - %(message)s', datefmt='%H:%M:%S')
 handler.setFormatter(formatter)
@@ -89,7 +89,7 @@ if config_path == "default":
         raise Exception("Cannot run in test mode with default configuration")
     config = DefaultConfig()
 else:
-    config = Config(Path(config_path).expanduser().absolute())
+    config = Config(Path(config_path).expanduser().absolute(), root_logger)
 
 
 if test_mode:
