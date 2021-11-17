@@ -23,7 +23,7 @@ with open(filename, "r") as f:
 c["color"] = "false"
 c["width"] = 1920
 c["height"] = 1080
-c["framerate"] = "30/1"
+c["framerate"] = "30"
 
 pwm = {}
 pwm["frequency"] = 15
