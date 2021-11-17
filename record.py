@@ -52,13 +52,13 @@ elif log_level == "error":
 else:
     raise Exception("Invalid log level! Run the command with argument --help to see the allowed values")
 
-root = logging.getLogger()
-root.setLevel(level)
+root_logger = logging.getLogger()
+root_logger.setLevel(level)
 handler = logging.FileHandler("prova.log")
 handler.setLevel(level=level)
 formatter = logging.Formatter('%(asctime)s.%(msecs)03d - %(levelname)s - %(message)s', datefmt='%H:%M:%S')
 handler.setFormatter(formatter)
-root.addHandler(handler)
+root_logger.addHandler(handler)
 
 # List the avi and pickle files in the folder
 if path_video_folder.exists():
@@ -93,7 +93,7 @@ else:
 
 
 if test_mode:
-    c = TestCamera(config, logger=root)
+    c = TestCamera(config, logger=root_logger)
 else:
-    c = Camera(config, path_to_output=path_video_folder, logger=root, gst_debug_level=gst_debug_level)
+    c = Camera(config, path_to_output=path_video_folder, logger=root_logger, gst_debug_level=gst_debug_level)
 c.capture()
