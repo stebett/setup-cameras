@@ -134,7 +134,7 @@ class Queue:
                 self.logger.info("Timeout delay exceeded")
                 self.go = False
             else:
-                pass
+                time.sleep(0.001)
 
     def log_frame_number_warning(self):
         "Log a warning with the actual and expected frame numbers."
@@ -159,10 +159,13 @@ class Queue:
         self.videos.append(self.video_name)
         self.start_time = time.time()
 
+    def estimate_framerate(self):
+        return len(self.timestamps) / (self.time_of_last_frame - self.start_time)
+
     def save_timestamps(self):
         "Write timestamps to disk in pickle format."
         if self.video_started:
-            self.logger.info(f"Estimated framerate for the last video: {len(self.timestamps) / (time.time() - self.start_time):.2f}Hz")
+            self.logger.info(f"Estimated framerate for the last video: {self.estimate_framerate():.2f}Hz")
             with open(f'{self.video_name[:-4]}.pickle', 'wb') as handle:
                 pickle.dump(self.timestamps, handle,
                             protocol=pickle.HIGHEST_PROTOCOL)
