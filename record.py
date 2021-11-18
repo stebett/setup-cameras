@@ -55,13 +55,18 @@ elif log_level == "warning":
 elif log_level == "error":
     level = logging.ERROR
 else:
-    raise Exception("Invalid log level! Run the command with argument --help to see the allowed values")
+    raise Exception(
+        "Invalid log level! Run the command with argument --help to see the allowed values"  # noqa E501
+    )
 
 root_logger = logging.getLogger()
 root_logger.setLevel(level=level)
 handler = logging.FileHandler("record.log")
 handler.setLevel(level=logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s.%(msecs)03d - %(levelname)s - %(message)s', datefmt='%H:%M:%S')
+formatter = logging.Formatter(
+    '%(asctime)s.%(msecs)03d - %(levelname)s - %(message)s',
+    datefmt='%H:%M:%S'
+)
 handler.setFormatter(formatter)
 root_logger.addHandler(handler)
 
@@ -101,5 +106,7 @@ else:
 if test_mode:
     c = TestCamera(config, logger=root_logger)
 else:
-    c = Camera(config, path_to_output=path_video_folder, logger=root_logger, gst_debug_level=gst_debug_level)
 c.capture()
+    c = Camera(config, path_to_output=path_video_folder,
+               logger=root_logger, gst_debug_level=gst_debug_level)
+
