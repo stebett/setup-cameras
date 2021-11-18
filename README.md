@@ -54,6 +54,10 @@ You can activate the trigger mode from the **params.json**, refer to [pypwm](htt
 
 ### TODO
 
+- [ ] Options for MJPEG + AVI and H.264/H.265 + MP4
+- [ ] Implement non-dropping queue (?)
+- [ ] create_configs with automatic serial code
+
 - [x] First frame is 0
 - [x] Wait at the beginning
 - [x] Solve frame count issue
@@ -67,5 +71,3 @@ You can activate the trigger mode from the **params.json**, refer to [pypwm](htt
 - [x] Argument to set python log level
 - [x] Argument to set log output to file
 - [x] Exposure time auto check
-- [ ] File size (either parallel conversion or through gst)
-- [ ] Implement non-dropping queue (?)

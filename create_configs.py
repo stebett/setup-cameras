@@ -15,13 +15,20 @@ args = parser.parse_args()
 serial = str(args.serial)
 filename = str(args.filename)
 
-os.system(f"tcam-ctrl --save {serial} > {filename}")
+serials = os.system(tcam-ctrl -l | awk '{print $5}')
 
-with open(filename, "r") as f:
-    c = json.load(f)
+for s in serials:
+    os.system(f"tcam-ctrl --save {s} > {s}_conf.json")
 
+
+all_confs = []
+for s in serial:
+    with open(f"{s}_conf.json", "r") as f:
+    all_confs.append(json.load(f))
+
+c = {}
 c["color"] = "false"
-c["width"] = 1920
+c["width"] = 1440
 c["height"] = 1080
 c["framerate"] = "30"
 
@@ -36,6 +43,14 @@ x = {}
 x["properties"] = properties
 x["pwm"] = pwm
 x["general"] = c
+x["cams"] = []
+
+for cam_confs in all_confs:
+    tmp = {}
+    tmp["general"] = cam_confs
+    tmp["properties"] = {}
+    x["cam_specific"].append()
+    
 
 with open(filename, "w") as f:
     json.dump(x, f, indent=4)
