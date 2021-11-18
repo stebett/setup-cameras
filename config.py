@@ -7,16 +7,29 @@ from pathlib import Path
 class Config:
     "A class to store configuration file and ensure right formatting."
 
-    def __init__(self, config_path, logger):
+    def __init__(self, config_path, logger, cam_id=-1):
         "Initialize the object with a configuration path."
         self.config_path = Path(config_path).expanduser()
         self.logger = logger
         self.read_config()
+        if cam_id >= 0 :
+            self.apply_cam_specific_config()
+
         self.pwm = self.config["pwm"]
         self.general = self.config["general"]
         self.properties = self.config["properties"]
         self.check_exposure_time()
         self.dict_to_list()
+
+
+    def apply_cam_specific_config(self):
+        tmp = self.config["cam_specific"][cam_id]
+        for key, value in tmp["general"]:
+            self.configs["general"][key] = value
+
+        for key, value in tmp["properties"]:
+            self.configs["properties"][key] = value
+
 
     def read_config(self):
         "Read the configuration file."
