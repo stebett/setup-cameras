@@ -31,7 +31,7 @@ parser.add_argument("--gst-debug-level",
                     dest="gst_debug_level", default="1")
 parser.add_argument("-i", "--camera-id",
                     help="Identifier of camera",
-                    dest="cam_id", default="-1",
+                    dest="cam_id", default="0",
                     type=lambda x: int(x))
 
 args = parser.parse_args()

@@ -7,7 +7,7 @@ from pathlib import Path
 class Config:
     "A class to store configuration file and ensure right formatting."
 
-    def __init__(self, config_path, logger, cam_id=-1):
+    def __init__(self, config_path, logger, cam_id=):
         "Initialize the object with a configuration path."
         self.config_path = Path(config_path).expanduser()
         self.logger = logger
