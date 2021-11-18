@@ -33,7 +33,7 @@ class Camera(TIS.TIS):
         self.livedisplay = False
 
     def capture(self):
-        "Start capturing videos."
+        "Start capturing videos and handle keyboardinterrupt."
         self.create_callback()
         try:
             self.loop()
@@ -43,6 +43,17 @@ class Camera(TIS.TIS):
             self.stop_pipeline()
             self.queue.estimate_framerate()
             self.queue.save_timestamps()
+
+    def start_capture(self):
+        "Start capturing videos."
+        self.create_callback()
+        self.loop()
+
+    def stop_capture(self):
+        "Stop the capture and cleanup."
+        self.stop_pipeline()
+        self.queue.estimate_framerate()
+        self.queue.save_timestamps()
 
     def loop(self):
         "Manage creation and realease of videos."

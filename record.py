@@ -3,6 +3,7 @@ import sys
 import argparse
 import logging
 from pathlib import Path
+import signal
 from input_helpers import ask_yes_or_no
 from camera import Camera
 from test_camera import TestCamera
@@ -106,7 +107,17 @@ else:
 if test_mode:
     c = TestCamera(config, logger=root_logger)
 else:
-c.capture()
     c = Camera(config, path_to_output=path_video_folder,
                logger=root_logger, gst_debug_level=gst_debug_level)
 
+
+# Attach interruption signal to stop_capture and start the recording
+def cleanup(*args):
+    "Stop the capture and clean up."
+    global c
+    c.stop_capture()
+    sys.exit()
+
+
+signal.signal(signal.SIGINT, cleanup)
+c.start_capture()
