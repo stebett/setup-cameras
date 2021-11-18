@@ -1,5 +1,4 @@
 import gi
-import logging
 
 gi.require_version("Gst", "1.0")
 gi.require_version("Tcam", "0.1")
@@ -12,6 +11,7 @@ class TIS:
     def __init__(self, gst_debug_level):
         "Constructor of TIS object"
         self.gst_debug_level = gst_debug_level
+        self.logger = None
         Gst.init(["record.py", f"--gst-debug-level={self.gst_debug_level}"])
 
     def create_pipeline(self):
@@ -19,7 +19,7 @@ class TIS:
         p = "tcambin name=source ! identity name=id"
         # WARNING: Do not change position of identity plugin
 
-        if self.config.general["color"] == "true":
+        if self.config.general["color"]:
             p += " ! capsfilter name=bayercaps"
             p += " ! bayer2rgb ! videoconvert"
 
@@ -33,13 +33,15 @@ class TIS:
             p += " ! avimux"
             p += " ! filesink name=fsink"
 
-        logging.debug(f"Gst pipeline: {p}")
+        self.logger.debug(f"Gst pipeline: {p}")
         self.pipeline = Gst.parse_launch(p)
 
     def init_pipeline(self, video_path):
         "Initializes the Gstreamer pipeline"
         self.source = self.pipeline.get_by_name("source")
         self.source.set_property("serial", self.config.general["serial"])
+        self.logger.debug(f"Serial: {self.config.general['serial']}")
+        self.logger.debug(self.config.config)
 
         self.identity = self.pipeline.get_by_name("id")
         self.identity.connect("handoff", self.on_new_buffer)
@@ -73,18 +75,18 @@ class TIS:
 
     def get_caps(self, bayer=False):
         "Get pixel and sink format and frame rate"
-        logging.debug("Creating caps")
+        self.logger.debug("Creating caps")
         if bayer:
-            fmt = "video/x-bayer, format=rggb,"
+            fmt = "video/x-bayer,format=rggb,"
         else:
-            fmt = "video/x-raw, format=BGRx,"
-            
+            fmt = "video/x-raw,format=BGRx,"
 
-        fmt += f"""width={self.config.general["width"]},
-                   height={self.config.general["height"]},
-                   framerate={self.config.general["framerate"]}/1"""
+        fmt += f"width={self.config.general['width']},"
+        fmt += f"height={self.config.general['height']},"
+        fmt += f"framerate={self.config.general['framerate']}/1"
                    # Maximum accepted framerate, set it high
 
+        self.logger.debug(f"Caps: {fmt}")
         caps = Gst.Caps.new_empty()
         structure = Gst.Structure.new_from_string(fmt)
         caps.append_structure(structure)
@@ -109,7 +111,7 @@ class TIS:
 
             result = self.source.set_tcam_property(property_name, GObject.Value(type(value),value))
             if result is False:
-                logging.warning("Failed to set {} to value {}. value type is {} prop type is {}, range is {}-{}".format(property_name, value, type(value), prop.type, prop.min, prop.max))
+                self.logger.warning("Failed to set {} to value {}. value type is {} prop type is {}, range is {}-{}".format(property_name, value, type(value), prop.type, prop.min, prop.max))
         except Exception as error:
-            logging.error("Error set Property {0}: {1}",property_name, format(error))
+            self.logger.error("Error set Property {0}: {1}",property_name, format(error))
             raise

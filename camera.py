@@ -177,10 +177,11 @@ class Queue:
         self.videos.append(self.video_name)
 
     def estimate_framerate(self):
-        estimate = len(self.timestamps) / (self.time_of_last_frame
-                                           - self.timestamps[self.relative_zero])
-        self.logger.info(
-            f"Estimated framerate for the last video: {estimate:.2f}Hz")
+        if self.video_started:
+            estimate = len(self.timestamps) / (self.time_of_last_frame
+                                               - self.timestamps[self.relative_zero])
+            self.logger.info(
+                f"Estimated framerate for the last video: {estimate:.2f}Hz")
 
     def save_timestamps(self):
         "Write timestamps to disk in pickle format."

@@ -37,10 +37,10 @@ for c in all_confs:
     properties = c.pop("properties")
     
 c = {}
-c["color"] = "false"
-c["width"] = 1440
-c["height"] = 1080
-c["framerate"] = "30"
+c["color"] = False
+c["width"] = "1440"
+c["height"] = "1080"
+c["framerate"] = "120"
 
 pwm = {}
 pwm["frequency"] = 15

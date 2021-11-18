@@ -7,7 +7,7 @@ from pathlib import Path
 class Config:
     "A class to store configuration file and ensure right formatting."
 
-    def __init__(self, config_path, logger, cam_id=):
+    def __init__(self, config_path, logger, cam_id):
         "Initialize the object with a configuration path."
         self.config_path = Path(config_path).expanduser()
         self.logger = logger
@@ -47,7 +47,7 @@ class Config:
     def check_exposure_time(self):
         "Check that exposure time is not too long for the selected framerate"
         exposure = int(self.properties["Exposure Time (us)"])
-        if self.properties["Trigger Mode"] == "true":
+        if self.properties["Trigger Mode"]:
             fps = int(self.pwm["frequency"])
         else:
             fps = int(self.general["framerate"])

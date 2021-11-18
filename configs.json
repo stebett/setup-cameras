@@ -1,0 +1,96 @@
+{
+	"properties": {
+		"Auto Functions ROI Control": true,
+		"Auto Functions ROI Preset": "Center 50%",
+		"Brightness": 469,
+		"Exposure Auto": false,
+		"Exposure Auto Lower Limit": 20,
+		"Exposure Auto Reference": 100,
+		"Exposure Auto Upper Limit": 33333,
+		"Exposure Auto Upper Limit Auto": true,
+		"Exposure Time (us)": 22776,
+		"GPIn": 0,
+		"GPOut": 0,
+		"Gain": 0,
+		"Gain Auto": false,
+		"Gain Auto Lower Limit": 0,
+		"Gain Auto Upper Limit": 240,
+		"Highlight Reduction": false,
+		"Offset Auto Center": true,
+		"Offset X": 0,
+		"Offset Y": 0,
+		"Override Scanning Mode": 1,
+		"Reverse X": false,
+		"Reverse Y": false,
+		"Strobe Delay": 0,
+		"Strobe Duration": 100,
+		"Strobe Enable": false,
+		"Strobe Exposure": true,
+		"Strobe Polarity": false,
+		"Trigger Delay (us)": 31,
+		"Trigger Global Reset Release": false,
+		"Trigger Mode": true,
+		"Trigger Polarity": "Falling Edge"
+	},
+	"pwm": {
+		"frequency": 15,
+		"chunk_size": 50,
+		"chunk_pause": 3000
+	},
+	"general": {
+		"color": false,
+		"width": "1440",
+		"height": "1080",
+		"framerate": "120"
+	},
+	"cam_specific": [
+		{
+			"general": {
+				"serial": "02020172",
+				"version": "v0.1"
+			},
+			"properties": {
+				"Trigger Exposure Mode": "Frame Start",
+				"IMX Low-Latency Mode": false
+			}
+		},
+		{
+			"general": {
+				"serial": "02020176",
+				"version": "v0.1"
+			},
+			"properties": {
+				"Trigger Exposure Mode": "Frame Start",
+				"IMX Low-Latency Mode": false
+			}
+		},
+		{
+			"general": {
+				"serial": "44120513",
+				"version": "v0.1",
+				"width": "1920"
+			},
+			"properties": {}
+		},
+		{
+			"general": {
+				"serial": "49020380",
+				"version": "v0.1"
+			},
+			"properties": {
+				"Trigger Exposure Mode": "Frame Start",
+				"IMX Low-Latency Mode": false
+			}
+		},
+		{
+			"general": {
+				"serial": "49020382",
+				"version": "v0.1"
+			},
+			"properties": {
+				"Trigger Exposure Mode": "Frame Start",
+				"IMX Low-Latency Mode": false
+			}
+		}
+	]
+}

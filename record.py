@@ -62,14 +62,6 @@ else:
 
 root_logger = logging.getLogger()
 root_logger.setLevel(level=level)
-handler = logging.FileHandler("record.log")
-handler.setLevel(level=logging.DEBUG)
-formatter = logging.Formatter(
-    '%(asctime)s.%(msecs)03d - %(levelname)s - %(message)s',
-    datefmt='%H:%M:%S'
-)
-handler.setFormatter(formatter)
-root_logger.addHandler(handler)
 
 # List the avi and pickle files in the folder
 if path_video_folder.exists():
@@ -80,8 +72,17 @@ if path_video_folder.exists():
     has_file = len(files_to_remove) > 0
 else:
     path_video_folder.mkdir(parents=True)
-    logging.info(f"Created output directory ({path_video_folder})")
+    root_logger.info(f"Created output directory ({path_video_folder})")
     has_file = False
+
+handler = logging.FileHandler(path_video_folder / "record.log")
+handler.setLevel(level=logging.DEBUG)
+formatter = logging.Formatter(
+    '%(asctime)s.%(msecs)03d - %(levelname)s - %(message)s',
+    datefmt='%H:%M:%S'
+)
+handler.setFormatter(formatter)
+root_logger.addHandler(handler)
 
 # If files were detected, remove it if the --force option was provided
 # If not, ask the user if we need to overwrite the directory's content.
