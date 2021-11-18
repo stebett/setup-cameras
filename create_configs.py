@@ -19,7 +19,6 @@ filename = str(args.filename)
 ps = subprocess.Popen(('tcam-ctrl', '-l'), stdout=subprocess.PIPE)
 serials = subprocess.check_output(("awk", "{print $5}"), stdin=ps.stdout)
 ps.wait()
-
 serials = serials.decode(encoding='UTF-8').split('\n')[:-1]
 
 for s in serials:

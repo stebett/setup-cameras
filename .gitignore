@@ -1,6 +1,5 @@
 recordings/
 __pycache__
-*.json
 *.avi
 *.mp4
 *.log
