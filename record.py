@@ -29,6 +29,10 @@ parser.add_argument("-l", "--log",
 parser.add_argument("--gst-debug-level",
                     help="Gstreamer debug level, values go from 1 to 5",
                     dest="gst_debug_level", default="1")
+parser.add_argument("-i", "--camera-id",
+                    help="Identifier of camera",
+                    dest="cam_id", default="-1",
+                    type=lambda x: int(x))
 
 args = parser.parse_args()
 config_path = args.config_path
@@ -36,6 +40,7 @@ path_video_folder = args.path_video_folder.absolute()
 test_mode = args.test_mode
 overwrite = args.overwrite
 log_level = args.log_level
+cam_id = args.cam_id
 gst_debug_level = args.gst_debug_level
 
 
@@ -89,7 +94,8 @@ if config_path == "default":
         raise Exception("Cannot run in test mode with default configuration")
     config = DefaultConfig()
 else:
-    config = Config(Path(config_path).expanduser().absolute(), root_logger)
+    config_path = Path(config_path).expanduser().absolute()
+    config = Config(config_path, root_logger, cam_id)
 
 
 if test_mode:

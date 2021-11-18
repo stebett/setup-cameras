@@ -11,8 +11,9 @@ class Config:
         "Initialize the object with a configuration path."
         self.config_path = Path(config_path).expanduser()
         self.logger = logger
+        self.cam_id = cam_id
         self.read_config()
-        if cam_id >= 0 :
+        if self.cam_id >= 0 :
             self.apply_cam_specific_config()
 
         self.pwm = self.config["pwm"]
@@ -23,12 +24,14 @@ class Config:
 
 
     def apply_cam_specific_config(self):
-        tmp = self.config["cam_specific"][cam_id]
-        for key, value in tmp["general"]:
-            self.configs["general"][key] = value
+        tmp = self.config["cam_specific"][self.cam_id]
+        for key, value in tmp["general"].items():
+            self.config["general"][key] = value
 
-        for key, value in tmp["properties"]:
-            self.configs["properties"][key] = value
+        for key, value in tmp["properties"].items():
+            self.config["properties"][key] = value
+
+        self.config.pop("cam_specific")
 
 
     def read_config(self):
