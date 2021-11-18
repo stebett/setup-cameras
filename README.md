@@ -31,14 +31,14 @@ Troubles with the installation of the **gi module** can be solved [using one of 
 
 
 ### Pwm software
-Remember to install the [pwmpy](https://github.com/rfayat/PWM_Arduino) package
+Remember to install the [pypwm](https://github.com/rfayat/PWM_Arduino) package
 
 
 ## Usage
 
 `$ python record.py path/to/params.json -o path/to/camera/dir`
 
-You can activate the trigger mode from the **params.json**, refer to [pwmpy](https://github.com/rfayat/PWM_Arduino) for documentation on usage.
+You can activate the trigger mode from the **params.json**, refer to [pypwm](https://github.com/rfayat/PWM_Arduino) for documentation on usage.
 
 ## Files
 
@@ -66,6 +66,6 @@ You can activate the trigger mode from the **params.json**, refer to [pwmpy](htt
 - [x] Argument to set gst log level
 - [x] Argument to set python log level
 - [x] Argument to set log output to file
-- [ ] Exposure time auto check
+- [x] Exposure time auto check
 - [ ] File size (either parallel conversion or through gst)
-- [ ] Implement non-dropping queue
+- [ ] Implement non-dropping queue (?)
