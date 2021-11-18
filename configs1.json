@@ -31,12 +31,12 @@
         "Trigger Delay (us)": 31,
         "Trigger Exposure Mode": "Frame Start",
         "Trigger Global Reset Release": false,
-        "Trigger Mode": false,
-        "Trigger Polarity": "Rising Edge"
+        "Trigger Mode": true,
+        "Trigger Polarity": "Falling Edge"
     },
     "pwm": {
-        "frequency": 15,
-        "chunk_size": 50,
+        "frequency": 30,
+        "chunk_size": 3600,
         "chunk_pause": 3000
     },
     "general": {

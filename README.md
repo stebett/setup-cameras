@@ -69,3 +69,4 @@ You can activate the trigger mode from the **params.json**, refer to [pwmpy](htt
 - [ ] Exposure time auto check
 - [ ] File size (either parallel conversion or through gst)
 - [ ] Implement non-dropping queue
+- [ ] single config file

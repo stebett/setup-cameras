@@ -42,7 +42,7 @@
     },
     "pwm": {
         "frequency": 30,
-        "chunk_size": 60,
+        "chunk_size": 3600,
         "chunk_pause": 3000
     },
     "general": {
