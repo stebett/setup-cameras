@@ -33,7 +33,7 @@ class Camera(TIS.TIS):
         self.livedisplay = False
 
     def capture(self):
-        "Start capturing videos."
+        "Start capturing videos and handle keyboardinterrupt."
         self.create_callback()
         try:
             self.loop()
@@ -43,6 +43,17 @@ class Camera(TIS.TIS):
             self.stop_pipeline()
             self.queue.estimate_framerate()
             self.queue.save_timestamps()
+
+    def start_capture(self):
+        "Start capturing videos."
+        self.create_callback()
+        self.loop()
+
+    def stop_capture(self):
+        "Stop the capture and cleanup."
+        self.stop_pipeline()
+        self.queue.estimate_framerate()
+        self.queue.save_timestamps()
 
     def loop(self):
         "Manage creation and realease of videos."
@@ -80,6 +91,7 @@ class Camera(TIS.TIS):
         for k, v in self.config.properties.items():
             self.set_property(k, v)
 
+
 def add_frame(tis, queue):
     "Write a timestamp and increases the counter."
     if queue.busy:
@@ -92,6 +104,7 @@ def add_frame(tis, queue):
     queue.counter += 1
     queue.logger.info(f"Adding frame {queue.counter} to the queue")
     queue.busy = False
+
 
 class Queue:
     """An object to manage video naming and checks the delay between triggers.
@@ -141,11 +154,14 @@ class Queue:
     def log_frame_number_warning(self):
         "Log a warning with the actual and expected frame numbers."
         frames_chunk = self.counter - self.relative_zero + self.expected_frames
-        self.logger.warning(f"[!] Video:                     {self.video_name}")
+        self.logger.warning(
+            f"[!] Video:                     {self.video_name}")
         self.logger.warning(f"[!] Number of frames:          {self.counter}")
-        self.logger.warning(f"[!] Expected number of frames: {self.relative_zero}")
+        self.logger.warning(
+            f"[!] Expected number of frames: {self.relative_zero}")
         self.logger.warning(f"[!] Frames in chunk:           {frames_chunk}")
-        self.logger.warning(f"[!] Expected in chunk:         {self.expected_frames}")
+        self.logger.warning(
+            f"[!] Expected in chunk:         {self.expected_frames}")
 
     def new_video(self):
         "Create new video name based on number of first frame."
@@ -161,11 +177,19 @@ class Queue:
         self.videos.append(self.video_name)
 
     def estimate_framerate(self):
-        estimate = len(self.timestamps) / (self.time_of_last_frame - self.timestamps[self.relative_zero])
-        self.logger.info(f"Estimated framerate for the last video: {estimate:.2f}Hz")
+        estimate = len(self.timestamps) / (self.time_of_last_frame
+                                           - self.timestamps[self.relative_zero])
+        self.logger.info(
+            f"Estimated framerate for the last video: {estimate:.2f}Hz")
 
     def save_timestamps(self):
         "Write timestamps to disk in pickle format."
+        if self.video_started:
+            with open(f'{self.video_name[:-4]}.pickle', 'wb') as handle:
+                pickle.dump(self.timestamps, handle,
+                            protocol=pickle.HIGHEST_PROTOCOL)
+            self.logger.info("Timestamps saved")
+            self.timestamps = {}
         if self.video_started:
             with open(f'{self.video_name[:-4]}.pickle', 'wb') as handle:
                 pickle.dump(self.timestamps, handle,
