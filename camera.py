@@ -170,10 +170,11 @@ class Queue:
         self.relative_zero = self.expected_frames * len(self.videos)
         self.logger.info(f"relative zero: {self.relative_zero}")
 
-        if (self.expected_frames > 0) & (self.counter != self.relative_zero):
-            self.log_frame_number_warning()
+        if self.expected_frames > 0:
+            if self.counter != self.relative_zero):
+                self.log_frame_number_warning()
 
-        self.counter = self.relative_zero
+            self.counter = self.relative_zero
 
         self.video_name = f"{self.path_to_output}/{self.counter :06d}.avi"
         self.videos.append(self.video_name)
