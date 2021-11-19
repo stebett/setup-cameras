@@ -167,11 +167,13 @@ class Queue:
 
     def new_video(self):
         "Create new video name based on number of first frame."
-        self.relative_zero = self.expected_frames * len(self.videos)
+        self.relative_zero = self.counter
+        if self.expected_frames > 0:
+            self.relative_zero = self.expected_frames * len(self.videos)
         self.logger.info(f"relative zero: {self.relative_zero}")
 
         if self.expected_frames > 0:
-            if self.counter != self.relative_zero):
+            if self.counter != self.relative_zero:
                 self.log_frame_number_warning()
 
             self.counter = self.relative_zero

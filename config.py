@@ -22,6 +22,11 @@ class Config:
         self.check_exposure_time()
         self.dict_to_list()
 
+    def set_real_framerate(self):
+        if self.config["properties"]["Trigger Mode"]:
+            self.framerate = self.config["pwm"]["frequency"]
+        else:
+            self.framerate = self.config["general"]["framerate"]
 
     def apply_cam_specific_config(self):
         tmp = self.config["cam_specific"][self.cam_id]

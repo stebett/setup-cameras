@@ -83,7 +83,7 @@ class TIS:
 
         fmt += f"width={self.config.general['width']},"
         fmt += f"height={self.config.general['height']},"
-        fmt += f"framerate={self.config.general['framerate']}/1"
+        fmt += f"framerate={self.config.framerate}/1"
                    # Maximum accepted framerate, set it high
 
         self.logger.debug(f"Caps: {fmt}")
