@@ -46,14 +46,18 @@ class Camera(TIS.TIS):
 
     def start_capture(self):
         "Start capturing videos."
+        self.logger.info("Starting to record")
         self.create_callback()
         self.loop()
 
     def stop_capture(self):
         "Stop the capture and cleanup."
+        self.logger.info("Killing pipeline")
         self.stop_pipeline()
         self.queue.estimate_framerate()
         self.queue.save_timestamps()
+        self.logger.info("Recording stopped")
+
 
     def loop(self):
         "Manage creation and realease of videos."
@@ -74,9 +78,7 @@ class Camera(TIS.TIS):
             self.queue.check_delay()
             self.queue.go = True
 
-            self.stop_pipeline()
-            self.queue.estimate_framerate()
-            self.queue.save_timestamps()
+            self.stop_capture()
 
     def create_callback(self):
         "Define function to call when a frame is received."

@@ -33,8 +33,8 @@
 		"Trigger Polarity": "Falling Edge"
 	},
 	"pwm": {
-		"frequency": 15,
-		"chunk_size": 50,
+		"frequency": 30,
+		"chunk_size": 0,
 		"chunk_pause": 3000
 	},
 	"general": {
@@ -70,7 +70,9 @@
 				"version": "v0.1",
 				"width": "1920"
 			},
-			"properties": {}
+			"properties": {
+				"Gain": 30
+			}
 		},
 		{
 			"general": {

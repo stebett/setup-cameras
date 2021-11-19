@@ -5,10 +5,11 @@ stty -echoctl # hide ^C
 
 # function called by trap
 kill_recordings() {
-	printf "sigint caught\n"
+	printf "[!] Caught SIGINT\n"
 	for pid in $(cat .pids); do
 		kill -SIGINT $pid
 	done
+	rm .pids
 	exit
 }
 
