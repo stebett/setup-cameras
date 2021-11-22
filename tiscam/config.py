@@ -1,7 +1,7 @@
 "Handle configuration formatting and storage."
 import os
 import json
-import input_helpers
+import tiscam.input_helpers
 import subprocess
 from pathlib import Path
 

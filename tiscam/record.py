@@ -1,13 +1,13 @@
 "Start a recording from a json parameters file to an output folder."
 import sys
-import argparse
-import logging
-from pathlib import Path
 import signal
-from input_helpers import ask_yes_or_no
-from camera import Camera
-from test_camera import TestCamera
-from config import Config, DefaultConfig
+import logging
+import argparse
+from pathlib import Path
+
+from tiscam.input_helpers import ask_yes_or_no
+from tiscam.camera import Camera, TestCamera
+from tiscam.config import Config, DefaultConfig
 
 
 parser = argparse.ArgumentParser(__doc__)
@@ -46,7 +46,6 @@ gst_debug_level = args.gst_debug_level
 
 
 # Logging
-
 if log_level == "debug":
     level = logging.DEBUG
 elif log_level == "info":
@@ -56,9 +55,7 @@ elif log_level == "warning":
 elif log_level == "error":
     level = logging.ERROR
 else:
-    raise Exception(
-        "Invalid log level! Run the command with argument --help to see the allowed values"  # noqa E501
-    )
+    raise Exception("record: invalid log level!\nTry '--help' for more information.")
 
 root_logger = logging.getLogger()
 root_logger.setLevel(level=level)
