@@ -75,7 +75,7 @@ else:
     root_logger.info(f"Created output directory ({path_video_folder})")
     has_file = False
 
-handler = logging.FileHandler(path_video_folder / "record.log")
+handler = logging.FileHandler(path_video_folder / "record.log", mode="w")
 handler.setLevel(level=logging.DEBUG)
 formatter = logging.Formatter(
     '%(asctime)s.%(msecs)03d - %(levelname)s - %(message)s',

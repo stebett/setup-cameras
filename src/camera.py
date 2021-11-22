@@ -44,20 +44,22 @@ class Camera(TIS):
         except KeyboardInterrupt:
             self.logger.error("Stopped manually by user")
         finally:
-            self.stop_pipeline()
-            self.queue.estimate_framerate()
-            self.queue.save_timestamps()
+            self.stop_capture()
 
     def start_capture(self):
         "Start capturing videos."
+        self.logger.info("Starting to record")
         self.create_callback()
         self.loop()
 
     def stop_capture(self):
         "Stop the capture and cleanup."
+        self.logger.info("Killing pipeline")
         self.stop_pipeline()
         self.queue.estimate_framerate()
         self.queue.save_timestamps()
+        self.logger.info("Recording stopped")
+
 
     def loop(self):
         "Manage creation and realease of videos."
@@ -78,9 +80,7 @@ class Camera(TIS):
             self.queue.check_delay()
             self.queue.go = True
 
-            self.stop_pipeline()
-            self.queue.estimate_framerate()
-            self.queue.save_timestamps()
+            self.stop_capture()
 
     def create_callback(self):
         "Define function to call when a frame is received."
@@ -169,13 +169,16 @@ class Queue:
 
     def new_video(self):
         "Create new video name based on number of first frame."
-        self.relative_zero = self.expected_frames * len(self.videos)
+        self.relative_zero = self.counter
+        if self.expected_frames > 0:
+            self.relative_zero = self.expected_frames * len(self.videos)
         self.logger.info(f"relative zero: {self.relative_zero}")
 
-        if (self.expected_frames > 0) & (self.counter != self.relative_zero):
-            self.log_frame_number_warning()
+        if self.expected_frames > 0:
+            if self.counter != self.relative_zero:
+                self.log_frame_number_warning()
 
-        self.counter = self.relative_zero
+            self.counter = self.relative_zero
 
         self.video_name = f"{self.path_to_output}/{self.counter :06d}.avi"
         self.videos.append(self.video_name)
@@ -189,12 +192,6 @@ class Queue:
 
     def save_timestamps(self):
         "Write timestamps to disk in pickle format."
-        if self.video_started:
-            with open(f'{self.video_name[:-4]}.pickle', 'wb') as handle:
-                pickle.dump(self.timestamps, handle,
-                            protocol=pickle.HIGHEST_PROTOCOL)
-            self.logger.info("Timestamps saved")
-            self.timestamps = {}
         if self.video_started:
             with open(f'{self.video_name[:-4]}.pickle', 'wb') as handle:
                 pickle.dump(self.timestamps, handle,
@@ -312,6 +309,7 @@ class TIS:
             p += " ! fpsdisplaysink sink=ximagesink"
         else:
             p += " ! avimux"
+            # p += " ! queue name = queue"
             p += " ! filesink name=fsink"
 
         self.logger.debug(f"Gst pipeline: {p}")
@@ -335,6 +333,15 @@ class TIS:
         self.rawfilter.set_property("caps", self.get_caps(bayer=False))
 
         if not self.livedisplay:
+            try: 
+                self._queue = self.pipeline.get_by_name("queue")
+                self._queue.set_property("max-size-buffers", 0)
+                self._queue.set_property("max-size-bytes", int(1.5e9))
+                self._queue.set_property("max-size-time", 0)
+
+            except Exception:
+                self.logger.warning("No queue was found")
+            
             self.filesink = self.pipeline.get_by_name("fsink")
             self.filesink.set_property("location", video_path)
         
@@ -364,7 +371,7 @@ class TIS:
 
         fmt += f"width={self.config.general['width']},"
         fmt += f"height={self.config.general['height']},"
-        fmt += f"framerate={self.config.general['framerate']}/1"
+        fmt += f"framerate={self.config.framerate}/1"
                    # Maximum accepted framerate, set it high
 
         self.logger.debug(f"Caps: {fmt}")
@@ -376,6 +383,7 @@ class TIS:
 
     def set_property(self, property_name, value):
         "Set properties, trying to convert the values to the appropriate types"
+        self.logger.debug(f"Setting property {property_name} at {value}")
         try:
             prop = self.source.get_tcam_property(property_name)
             if prop.type == 'double':

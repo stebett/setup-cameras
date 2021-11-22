@@ -1,6 +1,6 @@
 {
 	"properties": {
-		"Auto Functions ROI Control": true,
+		"Auto Functions ROI Control": false,
 		"Auto Functions ROI Preset": "Center 50%",
 		"Brightness": 469,
 		"Exposure Auto": false,
@@ -8,7 +8,7 @@
 		"Exposure Auto Reference": 100,
 		"Exposure Auto Upper Limit": 33333,
 		"Exposure Auto Upper Limit Auto": true,
-		"Exposure Time (us)": 22776,
+		"Exposure Time (us)": 10000,
 		"GPIn": 0,
 		"GPOut": 0,
 		"Gain": 0,
@@ -27,14 +27,14 @@
 		"Strobe Enable": false,
 		"Strobe Exposure": true,
 		"Strobe Polarity": false,
-		"Trigger Delay (us)": 31,
+		"Trigger Delay (us)": 0,
 		"Trigger Global Reset Release": false,
 		"Trigger Mode": true,
 		"Trigger Polarity": "Falling Edge"
 	},
 	"pwm": {
-		"frequency": 15,
-		"chunk_size": 50,
+		"frequency": 30,
+		"chunk_size": 500,
 		"chunk_pause": 3000
 	},
 	"general": {
@@ -51,7 +51,8 @@
 			},
 			"properties": {
 				"Trigger Exposure Mode": "Frame Start",
-				"IMX Low-Latency Mode": false
+				"Trigger Delay (us)": 0,
+				"IMX Low-Latency Mode": true
 			}
 		},
 		{
@@ -61,7 +62,8 @@
 			},
 			"properties": {
 				"Trigger Exposure Mode": "Frame Start",
-				"IMX Low-Latency Mode": false
+				"Trigger Delay (us)": 500,
+				"IMX Low-Latency Mode": true
 			}
 		},
 		{
@@ -70,7 +72,10 @@
 				"version": "v0.1",
 				"width": "1920"
 			},
-			"properties": {}
+			"properties": {
+				"Gain": 30,
+				"Trigger Delay (us)": 1000
+			}
 		},
 		{
 			"general": {
@@ -79,7 +84,8 @@
 			},
 			"properties": {
 				"Trigger Exposure Mode": "Frame Start",
-				"IMX Low-Latency Mode": false
+				"Trigger Delay (us)": 1500,
+				"IMX Low-Latency Mode": true
 			}
 		},
 		{
@@ -89,7 +95,8 @@
 			},
 			"properties": {
 				"Trigger Exposure Mode": "Frame Start",
-				"IMX Low-Latency Mode": false
+				"IMX Low-Latency Mode": true,
+				"Trigger Delay (us)": 2000
 			}
 		}
 	]

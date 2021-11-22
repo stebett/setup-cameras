@@ -21,9 +21,19 @@ class Config:
         self.pwm = self.config["pwm"]
         self.general = self.config["general"]
         self.properties = self.config["properties"]
+        #self.set_real_framerate()
+        self.set_fake_framerate()
         self.check_exposure_time()
         self.dict_to_list()
 
+    def set_fake_framerate(self):
+        self.framerate = 120
+
+    def set_real_framerate(self):
+        if self.config["properties"]["Trigger Mode"]:
+            self.framerate = self.config["pwm"]["frequency"]
+        else:
+            self.framerate = self.config["general"]["framerate"]
 
     def apply_cam_specific_config(self):
         tmp = self.config["cam_specific"][self.cam_id]
