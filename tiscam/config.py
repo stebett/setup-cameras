@@ -37,14 +37,14 @@ class Config:
             self.framerate = self.config["general"]["framerate"]
 
     def apply_cam_specific_config(self):
-        tmp = self.config["cam_specific"][self.cam_id]
+        tmp = self.config[f"cam_{self.cam_id}"]
         for key, value in tmp["general"].items():
             self.config["general"][key] = value
 
         for key, value in tmp["properties"].items():
             self.config["properties"][key] = value
 
-        self.config.pop("cam_specific")
+        self.config.pop(f"cam_{self.cam_id}")
 
 
     def read_config(self):
