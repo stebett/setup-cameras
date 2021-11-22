@@ -1,3 +1,9 @@
+#!/usr/bin/env bash
+mkdir -p ~/pickles/cam0
+mkdir -p ~/pickles/cam1
+mkdir -p ~/pickles/cam2
+mkdir -p ~/pickles/cam3
+mkdir -p ~/pickles/cam4
 rm ~/pickles/cam*/**
 
 scp dracaufeu:~/data/cam0/*.pickle ~/pickles/cam0

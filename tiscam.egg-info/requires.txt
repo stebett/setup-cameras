@@ -1,6 +1,0 @@
-gobject
-PyGObject
-PyQt5
-matplotlib
-vext
-vext.gi

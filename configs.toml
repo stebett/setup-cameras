@@ -15,7 +15,6 @@ Gain = 0
 "Gain Auto Lower Limit" = 0
 "Gain Auto Upper Limit" = 240
 "Highlight Reduction" = false
-"IMX Low-Latency Mode" = true
 "Offset Auto Center" = true
 "Offset X" = 0
 "Offset Y" = 0
@@ -40,25 +39,28 @@ chunk_pause = 3000
 
 [general]
 color = false
-width = "1440"
-height = "1080"
-framerate = "120"
+width = 1440
+height = 1080
+framerate = 120
 
 [cam_0.general]
 serial = "02020172"
 version = "v0.1"
 
 [cam_0.properties]
+"IMX Low-Latency Mode" = true
 
 [cam_1.general]
 serial = "02020176"
 version = "v0.1"
 
 [cam_1.properties]
+"IMX Low-Latency Mode" = true
 
 [cam_2.general]
 serial = "44120513"
 version = "v0.1"
+width = 1920
 
 [cam_2.properties]
 
@@ -67,9 +69,11 @@ serial = "49020380"
 version = "v0.1"
 
 [cam_3.properties]
+"IMX Low-Latency Mode" = true
 
 [cam_4.general]
 serial = "49020382"
 version = "v0.1"
 
 [cam_4.properties]
+"IMX Low-Latency Mode" = true
