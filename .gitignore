@@ -7,4 +7,5 @@ __pycache__
 *.swp
 .venv
 .pids
+tiscam.egg-info/
 prova*
