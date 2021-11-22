@@ -1,6 +1,6 @@
 {
 	"properties": {
-		"Auto Functions ROI Control": true,
+		"Auto Functions ROI Control": false,
 		"Auto Functions ROI Preset": "Center 50%",
 		"Brightness": 469,
 		"Exposure Auto": false,
@@ -51,7 +51,8 @@
 			},
 			"properties": {
 				"Trigger Exposure Mode": "Frame Start",
-				"IMX Low-Latency Mode": false
+				"Trigger Delay (us)": 0,
+				"IMX Low-Latency Mode": true
 			}
 		},
 		{
@@ -61,7 +62,8 @@
 			},
 			"properties": {
 				"Trigger Exposure Mode": "Frame Start",
-				"IMX Low-Latency Mode": false
+				"Trigger Delay (us)": 500,
+				"IMX Low-Latency Mode": true
 			}
 		},
 		{
@@ -71,7 +73,8 @@
 				"width": "1920"
 			},
 			"properties": {
-				"Gain": 30
+				"Gain": 30,
+				"Trigger Delay (us)": 1000
 			}
 		},
 		{
@@ -81,7 +84,8 @@
 			},
 			"properties": {
 				"Trigger Exposure Mode": "Frame Start",
-				"IMX Low-Latency Mode": false
+				"Trigger Delay (us)": 1500,
+				"IMX Low-Latency Mode": true
 			}
 		},
 		{
@@ -91,7 +95,8 @@
 			},
 			"properties": {
 				"Trigger Exposure Mode": "Frame Start",
-				"IMX Low-Latency Mode": false
+				"IMX Low-Latency Mode": true,
+				"Trigger Delay (us)": 2000
 			}
 		}
 	]

@@ -25,6 +25,9 @@ python record.py -c configs.json -o ~/data/cam3 -f -i 3 &
 PID3=$!
 python record.py -c configs.json -o ~/data/cam4 -f -i 4 &
 PID4=$!
+python -m pasquetbox.run -o ~/data/out.csv --overwrite --silent &
+PID5=$!
+sleep 3.;
 
-echo -e "$PID0\n$PID1\n$PID2\n$PID3\n$PID4" > .pids
+echo -e "$PID0\n$PID1\n$PID2\n$PID3\n$PID4\n$PID5" > .pids
 wait $PID0
