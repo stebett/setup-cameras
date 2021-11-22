@@ -40,9 +40,7 @@ class Camera(TIS.TIS):
         except KeyboardInterrupt:
             self.logger.error("Stopped manually by user")
         finally:
-            self.stop_pipeline()
-            self.queue.estimate_framerate()
-            self.queue.save_timestamps()
+            self.stop_capture()
 
     def start_capture(self):
         "Start capturing videos."
@@ -190,12 +188,6 @@ class Queue:
 
     def save_timestamps(self):
         "Write timestamps to disk in pickle format."
-        if self.video_started:
-            with open(f'{self.video_name[:-4]}.pickle', 'wb') as handle:
-                pickle.dump(self.timestamps, handle,
-                            protocol=pickle.HIGHEST_PROTOCOL)
-            self.logger.info("Timestamps saved")
-            self.timestamps = {}
         if self.video_started:
             with open(f'{self.video_name[:-4]}.pickle', 'wb') as handle:
                 pickle.dump(self.timestamps, handle,

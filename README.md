@@ -55,11 +55,13 @@ You can activate the trigger mode from the **params.json**, refer to [pypwm](htt
 ### TODO
 
 - [ ] Options for MJPEG + AVI and H.264/H.265 + MP4
-- [ ] Implement non-dropping queue (?)
-- [ ] create_configs with automatic serial code
-- [ ] fix estimate framerate bug
-- [ ] don't save empty videos/timestamp
+- [ ] don't save empty videos
+- [ ] check that all metatadata is written on videos
 
+- [x] Implement non-dropping queue (?)
+- [x] create_configs with automatic serial code
+- [x] don't save empty videos
+- [x] fix estimate framerate bug
 - [x] First frame is 0
 - [x] Wait at the beginning
 - [x] Solve frame count issue

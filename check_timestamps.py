@@ -1,5 +1,4 @@
 "Visualize delays between frames and frame drops."
-import glob
 import pickle
 import matplotlib.pyplot as plt
 
@@ -35,11 +34,18 @@ class Timestamps:
 
 
 if __name__ == "__main__":
+    import argparse
+    import glob
 
-    video_path = "/home/bettani/setup-cameras/videos/"
-    paths = sorted(glob.glob(video_path + '*.pickle'))
+    parser = argparse.ArgumentParser(__doc__)
+    parser.add_argument("-p", "--path",
+                        help="Path to the directory containg the timestamps",
+                        dest="path")
 
-    expectation = 50
+
+    args = parser.parse_args()
+    path = args.path
+    paths = sorted(glob.glob(path + '*.pickle'))
 
     frames = []
     deltas = []
@@ -48,13 +54,8 @@ if __name__ == "__main__":
         t = Timestamps(p)
         frames.append(t.frames)
         deltas.append(t.deltas)
-        ax.plot(t.frames, t.deltas, label=p[-13:-7])
+        ax.plot(t.frames, t.deltas, label=p)
         m = max(t.frames)
-        e = expectation * (i + 1) - 1
-        if m > e:
-            ax.hlines(-0.01, e, m, colors='r', linestyles='dotted')
-        elif m < e:
-            ax.hlines(-0.01, m, e, colors='g', linestyles='dotted')
 
     ax.set_xlabel("Frame #")
     ax.set_ylabel("Deltas (s)")

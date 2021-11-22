@@ -31,7 +31,7 @@ class TIS:
             p += " ! fpsdisplaysink sink=ximagesink"
         else:
             p += " ! avimux"
-            p += " ! queue "
+            p += " ! queue name = queue"
             p += " ! filesink name=fsink"
 
         self.logger.debug(f"Gst pipeline: {p}")
@@ -55,6 +55,15 @@ class TIS:
         self.rawfilter.set_property("caps", self.get_caps(bayer=False))
 
         if not self.livedisplay:
+            try: 
+                self._queue = self.pipeline.get_by_name("queue")
+                self._queue.set_property("max-size-buffers", 0)
+                self._queue.set_property("max-size-bytes", int(1.5e9))
+                self._queue.set_property("max-size-time", 0)
+
+            except Exception:
+                self.logger.warning("No queue was found")
+            
             self.filesink = self.pipeline.get_by_name("fsink")
             self.filesink.set_property("location", video_path)
         
@@ -96,6 +105,7 @@ class TIS:
 
     def set_property(self, property_name, value):
         "Set properties, trying to convert the values to the appropriate types"
+        self.logger.debug(f"Setting property {property_name} at {value}")
         try:
             prop = self.source.get_tcam_property(property_name)
             if prop.type == 'double':
