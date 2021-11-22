@@ -57,6 +57,7 @@ You can activate the trigger mode from the **params.json**, refer to [pypwm](htt
 - [ ] Options for MJPEG + AVI and H.264/H.265 + MP4
 - [ ] Implement non-dropping queue (?)
 - [ ] create_configs with automatic serial code
+- [ ] instruction for conda environment to activate for scripts
 
 - [x] First frame is 0
 - [x] Wait at the beginning
