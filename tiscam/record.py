@@ -7,7 +7,7 @@ from pathlib import Path
 
 from tiscam.input_helpers import ask_yes_or_no
 from tiscam.camera import Camera, TestCamera
-from tiscam.config import Config, DefaultConfig
+from tiscam.config import Config 
 
 
 parser = argparse.ArgumentParser(__doc__)
@@ -94,9 +94,7 @@ if has_file:
 # Run with default config if no config had been provided
 # TODO: update default config
 if config_path == "default":
-    if test_mode:
-        raise Exception("Cannot run in test mode with default configuration")
-    config = DefaultConfig()
+    raise Exception("You have to provide a configuration")
 else:
     config_path = Path(config_path).expanduser().absolute()
     config = Config(config_path, root_logger, cam_id)

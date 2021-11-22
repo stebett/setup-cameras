@@ -1,0 +1,75 @@
+[properties]
+"Auto Functions ROI Control" = false
+"Auto Functions ROI Preset" = "Center 50%"
+Brightness = 469
+"Exposure Auto" = false
+"Exposure Auto Lower Limit" = 20
+"Exposure Auto Reference" = 100
+"Exposure Auto Upper Limit" = 33333
+"Exposure Auto Upper Limit Auto" = true
+"Exposure Time (us)" = 25000
+GPIn = 0
+GPOut = 0
+Gain = 0
+"Gain Auto" = false
+"Gain Auto Lower Limit" = 0
+"Gain Auto Upper Limit" = 240
+"Highlight Reduction" = false
+"IMX Low-Latency Mode" = true
+"Offset Auto Center" = true
+"Offset X" = 0
+"Offset Y" = 0
+"Override Scanning Mode" = 1
+"Reverse X" = false
+"Reverse Y" = false
+"Strobe Delay" = 0
+"Strobe Duration" = 100
+"Strobe Enable" = false
+"Strobe Exposure" = true
+"Strobe Polarity" = false
+"Trigger Delay (us)" = 2000
+"Trigger Exposure Mode" = "Frame Start"
+"Trigger Global Reset Release" = false
+"Trigger Mode" = true
+"Trigger Polarity" = "Falling Edge"
+
+[pwm]
+frequency = 15
+chunk_size = 50
+chunk_pause = 3000
+
+[general]
+color = false
+width = "1440"
+height = "1080"
+framerate = "120"
+
+[cam_0.general]
+serial = "02020172"
+version = "v0.1"
+
+[cam_0.properties]
+
+[cam_1.general]
+serial = "02020176"
+version = "v0.1"
+
+[cam_1.properties]
+
+[cam_2.general]
+serial = "44120513"
+version = "v0.1"
+
+[cam_2.properties]
+
+[cam_3.general]
+serial = "49020380"
+version = "v0.1"
+
+[cam_3.properties]
+
+[cam_4.general]
+serial = "49020382"
+version = "v0.1"
+
+[cam_4.properties]
