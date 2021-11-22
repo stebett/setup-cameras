@@ -19,8 +19,8 @@ python record.py -c configs.json -o ~/data/cam0 -f -i 0 &
 PID0=$!
 python record.py -c configs.json -o ~/data/cam1 -f -i 1 &
 PID1=$!
-# python record.py -c configs.json -o ~/data/cam2 -f -i 2 &
-# PID2=$!
+python record.py -c configs.json -o ~/data/cam2 -f -i 2 &
+PID2=$!
 python record.py -c configs.json -o ~/data/cam3 -f -i 3 &
 PID3=$!
 python record.py -c configs.json -o ~/data/cam4 -f -i 4 &

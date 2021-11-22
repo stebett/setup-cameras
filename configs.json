@@ -8,7 +8,7 @@
 		"Exposure Auto Reference": 100,
 		"Exposure Auto Upper Limit": 33333,
 		"Exposure Auto Upper Limit Auto": true,
-		"Exposure Time (us)": 22776,
+		"Exposure Time (us)": 10000,
 		"GPIn": 0,
 		"GPOut": 0,
 		"Gain": 0,
@@ -27,14 +27,14 @@
 		"Strobe Enable": false,
 		"Strobe Exposure": true,
 		"Strobe Polarity": false,
-		"Trigger Delay (us)": 31,
+		"Trigger Delay (us)": 0,
 		"Trigger Global Reset Release": false,
 		"Trigger Mode": true,
 		"Trigger Polarity": "Falling Edge"
 	},
 	"pwm": {
 		"frequency": 30,
-		"chunk_size": 3000,
+		"chunk_size": 500,
 		"chunk_pause": 3000
 	},
 	"general": {
