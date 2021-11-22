@@ -33,7 +33,7 @@ Gain = 0
 "Trigger Polarity" = "Falling Edge"
 
 [pwm]
-frequency = 15
+frequency = 30
 chunk_size = 50
 chunk_pause = 3000
 
