@@ -19,8 +19,13 @@ class Config:
         self.pwm = self.config["pwm"]
         self.general = self.config["general"]
         self.properties = self.config["properties"]
+        #self.set_real_framerate()
+        self.set_fake_framerate()
         self.check_exposure_time()
         self.dict_to_list()
+
+    def set_fake_framerate(self):
+        self.framerate = 120
 
     def set_real_framerate(self):
         if self.config["properties"]["Trigger Mode"]:

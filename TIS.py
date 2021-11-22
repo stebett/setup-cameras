@@ -31,6 +31,7 @@ class TIS:
             p += " ! fpsdisplaysink sink=ximagesink"
         else:
             p += " ! avimux"
+            p += " ! queue "
             p += " ! filesink name=fsink"
 
         self.logger.debug(f"Gst pipeline: {p}")
