@@ -11,22 +11,23 @@ kill_recordings() {
 	for pid in $(cat .pids); do
 		kill -SIGINT $pid
 	done
-	exit
+	rm .pids
 }
 
 trap 'kill_recordings' SIGINT
 
-python ../src/record.py -c ../configs.json -o ~/data/cam1 -f -i 0 &
-PID0=$!../src/
-python ../src/record.py -c ../configs.json -o ~/data/cam2 -f -i 1 &
-PID1=$!../src/
-python ../src/record.py -c ../configs.json -o ~/data/cam3 -f -i 2 &
-PID2=$!../src/
-python ../src/record.py -c ../configs.json -o ~/data/cam4 -f -i 3 &
-PID3=$!../src/
-python ../src/record.py -c ../configs.json -o ~/data/cam5 -f -i 4 &
+python -m tiscam.record -c configs.toml -o ~/data/cam0 -f -i 0 &
+PID0=$!
+python -m tiscam.record -c configs.toml -o ~/data/cam1 -f -i 1 &
+PID1=$!
+python -m tiscam.record -c configs.toml -o ~/data/cam2 -f -i 2 &
+PID2=$!
+python -m tiscam.record -c configs.toml -o ~/data/cam3 -f -i 3 &
+PID3=$!
+python -m tiscam.record -c configs.toml -o ~/data/cam4 -f -i 4 &
 PID4=$!
-sleep 3.;
+
+sleep .1
 
 echo -e "$PID0\n$PID1\n$PID2\n$PID3\n$PID4" > .pids
 wait $PID0

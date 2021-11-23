@@ -27,7 +27,6 @@ Gain = 0
 "Strobe Exposure" = true
 "Strobe Polarity" = false
 "Trigger Delay (us)" = 2000
-"Trigger Exposure Mode" = "Frame Start"
 "Trigger Global Reset Release" = false
 "Trigger Mode" = true
 "Trigger Polarity" = "Falling Edge"
@@ -49,6 +48,7 @@ version = "v0.1"
 
 [cam_0.properties]
 "IMX Low-Latency Mode" = true
+"Trigger Exposure Mode" = "Frame Start"
 
 [cam_1.general]
 serial = "02020176"
@@ -56,6 +56,7 @@ version = "v0.1"
 
 [cam_1.properties]
 "IMX Low-Latency Mode" = true
+"Trigger Exposure Mode" = "Frame Start"
 
 [cam_2.general]
 serial = "44120513"
@@ -70,6 +71,7 @@ version = "v0.1"
 
 [cam_3.properties]
 "IMX Low-Latency Mode" = true
+"Trigger Exposure Mode" = "Frame Start"
 
 [cam_4.general]
 serial = "49020382"
@@ -77,3 +79,4 @@ version = "v0.1"
 
 [cam_4.properties]
 "IMX Low-Latency Mode" = true
+"Trigger Exposure Mode" = "Frame Start"
