@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-source ~/miniconda3/bin/activate;
-eval conda activate setup;
-
 stty -echoctl # hide ^C
 
 # function called by trap

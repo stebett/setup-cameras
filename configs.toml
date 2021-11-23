@@ -38,9 +38,9 @@ chunk_pause = 3000
 
 [general]
 color = false
-width = 1440
-height = 1080
-framerate = 120
+width = "1440"
+height = "1080"
+framerate = "120"
 
 [cam_0.general]
 serial = "02020172"
