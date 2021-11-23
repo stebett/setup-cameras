@@ -1,6 +1,7 @@
 "Handle configuration formatting and storage."
 import os
-import  toml
+import re
+import toml
 import json
 import tiscam.input_helpers
 import subprocess
@@ -44,7 +45,10 @@ class Config:
         for key, value in tmp["properties"].items():
             self.config["properties"][key] = value
 
-        self.config.pop(f"cam_{self.cam_id}")
+        removable_keys = [key for key in self.config if re.match("cam_\d", key)]
+        for key in removable_keys:
+            self.config.pop(key)
+        
 
 
     def read_config(self):
@@ -139,9 +143,9 @@ def create_config(filename):
         
     c = {}
     c["color"] = False
-    c["width"] = "1440"
-    c["height"] = "1080"
-    c["framerate"] = "120"
+    c["width"] = 1440
+    c["height"] = 1080
+    c["framerate"] = 120
 
     pwm = {}
     pwm["frequency"] = 15

@@ -54,7 +54,6 @@ You can activate the trigger mode from the **params.json**, refer to [pypwm](htt
 - [ ] Configuration put union in properties and diff in specific conf
 - [ ] Automatically test with different parameters and save frame loss data
 - [ ] Options for MJPEG + AVI and H.264/H.265 + MP4
-- [ ] instruction for conda environment to activate for scripts
 - [ ] don't save empty videos
 - [ ] check that all metatadata is written on videos
 - [x] Implement non-dropping queue (?)

@@ -115,5 +115,6 @@ def cleanup(*args):
     sys.exit()
 
 
+config.save(path_video_folder / config_path.name)
 signal.signal(signal.SIGINT, cleanup)
 c.start_capture()
