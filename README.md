@@ -45,6 +45,14 @@ To automatically create the configuration based on your connected cameras, run
 To start the recording:  
 `(virtualenv) $ python -m tiscam.record -c path/to/params.json -o path/to/camera/dir`
 
+To start all the recordings: 
+`(virtualenv) $ scripts/./run_all`
+
+To start all the recordings with maximum priority: 
+`(virtualenv) $ nice -n -20 scripts/./run_all`
+
+In order to do so **you must have modified the file `/etc/security/limits.conf` adding a line with `username - nice -20`**
+
 
 You can activate the trigger mode from the **params.json**, refer to [pypwm](https://github.com/rfayat/PWM_Arduino) for documentation on usage.
 
