@@ -5,5 +5,8 @@ __pycache__
 *.log
 *.pickle
 *.swp
+.venv
 .pids
+tiscam.egg-info/
 prova*
+build*

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Define basedir and create if needed
 basedir=sessions
 mkdir -p $basedir

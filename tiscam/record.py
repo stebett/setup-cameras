@@ -1,13 +1,13 @@
 "Start a recording from a json parameters file to an output folder."
 import sys
-import argparse
-import logging
-from pathlib import Path
 import signal
-from input_helpers import ask_yes_or_no
-from camera import Camera
-from test_camera import TestCamera
-from config import Config, DefaultConfig
+import logging
+import argparse
+from pathlib import Path
+
+from tiscam.input_helpers import ask_yes_or_no
+from tiscam.camera import Camera, TestCamera
+from tiscam.config import Config 
 
 
 parser = argparse.ArgumentParser(__doc__)
@@ -32,7 +32,7 @@ parser.add_argument("--gst-debug-level",
                     dest="gst_debug_level", default="1")
 parser.add_argument("-i", "--camera-id",
                     help="Identifier of camera",
-                    dest="cam_id", default="0",
+                    dest="cam_id", default="-1",
                     type=lambda x: int(x))
 
 args = parser.parse_args()
@@ -46,7 +46,6 @@ gst_debug_level = args.gst_debug_level
 
 
 # Logging
-
 if log_level == "debug":
     level = logging.DEBUG
 elif log_level == "info":
@@ -56,9 +55,7 @@ elif log_level == "warning":
 elif log_level == "error":
     level = logging.ERROR
 else:
-    raise Exception(
-        "Invalid log level! Run the command with argument --help to see the allowed values"  # noqa E501
-    )
+    raise Exception("record: invalid log level!\nTry '--help' for more information.")
 
 root_logger = logging.getLogger()
 root_logger.setLevel(level=level)
@@ -97,9 +94,7 @@ if has_file:
 # Run with default config if no config had been provided
 # TODO: update default config
 if config_path == "default":
-    if test_mode:
-        raise Exception("Cannot run in test mode with default configuration")
-    config = DefaultConfig()
+    raise Exception("You have to provide a configuration")
 else:
     config_path = Path(config_path).expanduser().absolute()
     config = Config(config_path, root_logger, cam_id)
@@ -120,5 +115,6 @@ def cleanup(*args):
     sys.exit()
 
 
+config.save(path_video_folder / config_path.name)
 signal.signal(signal.SIGINT, cleanup)
 c.start_capture()

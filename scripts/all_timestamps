@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+for i in 0 1 2 3 4 ; do
+	python scripts/check_timestamps -p ~/pickles/cam$i/ &
+done

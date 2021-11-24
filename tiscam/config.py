@@ -1,6 +1,10 @@
 "Handle configuration formatting and storage."
+import os
+import re
+import toml
 import json
-import input_helpers
+import tiscam.input_helpers
+import subprocess
 from pathlib import Path
 
 
@@ -34,21 +38,24 @@ class Config:
             self.framerate = self.config["general"]["framerate"]
 
     def apply_cam_specific_config(self):
-        tmp = self.config["cam_specific"][self.cam_id]
+        tmp = self.config[f"cam_{self.cam_id}"]
         for key, value in tmp["general"].items():
             self.config["general"][key] = value
 
         for key, value in tmp["properties"].items():
             self.config["properties"][key] = value
 
-        self.config.pop("cam_specific")
+        removable_keys = [key for key in self.config if re.match("cam_\d", key)]
+        for key in removable_keys:
+            self.config.pop(key)
+        
 
 
     def read_config(self):
         "Read the configuration file."
         try:
-            with self.config_path.open("r") as json_file:
-                self.config = json.load(json_file)
+            with self.config_path.open("r") as f:
+                self.config = toml.load(f)
         except FileNotFoundError:
             logger.error("Invalid config file. If you want to use the default"
                           " configuration, run record.py without argument")
@@ -109,58 +116,67 @@ class Config:
     def save(self, file_path):
         "Save the dictionary as a json file."
         with open(file_path, 'w') as f:
-            json.dump(self.config, f, indent=4)
+            toml.dump(self.config, f)
 
 
-class DefaultConfig():
-    "A class to store default configurations."
+def create_config(filename):
+    "Create a config file with default parameters from a camera serial."
+    ps = subprocess.Popen(('tcam-ctrl', '-l'), stdout=subprocess.PIPE)
+    serials = subprocess.check_output(("awk", "{print $5}"), stdin=ps.stdout)
+    ps.wait()
+    serials = serials.decode(encoding='UTF-8').split('\n')[:-1]
 
-    def __init__(self, serial=49020441):
-        "Create a default configuration in trigg mode."
-        self.pwm = {'frequency': 15,
-                    'chunk_size': 50,
-                    'chunk_pause': 5000,
-                    'timeout_delay': 100}
-        self.general = {'serial': str(serial),
-                        'version': 'v0.1',
-                        'color': False,
-                        'width': 1440,
-                        'height': 1080,
-                        'framerate': '120/1'}
-        self.properties = {'Auto Functions ROI Control': True,
-                           'Auto Functions ROI Preset': 'Center 50%',
-                           'Brightness': 0,
-                           'Exposure Auto': False,
-                           'Exposure Auto Lower Limit': 1,
-                           'Exposure Auto Reference': 128,
-                           'Exposure Auto Upper Limit': 33333,
-                           'Exposure Auto Upper Limit Auto': False,
-                           'Exposure Time (us)': 10000,
-                           'GPIn': 0,
-                           'GPOut': 1,
-                           'Gain': 4,
-                           'Gain Auto': False,
-                           'Gain Auto Lower Limit': 0,
-                           'Gain Auto Upper Limit': 480,
-                           'Highlight Reduction': False,
-                           'IMX Low-Latency Mode': False,
-                           'Offset Auto Center': True,
-                           'Offset X': 0,
-                           'Offset Y': 0,
-                           'Override Scanning Mode': 1,
-                           'Reverse X': False,
-                           'Reverse Y': False,
-                           'Strobe Delay': 0,
-                           'Strobe Duration': 100,
-                           'Strobe Enable': False,
-                           'Strobe Exposure': True,
-                           'Strobe Polarity': False,
-                           'Trigger Delay (us)': 0,
-                           'Trigger Exposure Mode': 'Frame Start',
-                           'Trigger Global Reset Release': False,
-                           'Trigger Mode': True,
-                           'Trigger Polarity': 'Rising Edge'}
+    for s in serials:
+        os.system(f"tcam-ctrl --save {s} > {s}_conf.json")
 
-        self.config = {'properties': self.properties,
-                       'general': self.general,
-                       'pwm': self.pwm}
+
+    all_confs = []
+    for s in serials:
+        with open(f"{s}_conf.json", "r") as f:
+            all_confs.append(json.load(f))
+
+    for s in serials:
+        os.system(f"rm {s}_conf.json")
+
+    for c in all_confs:
+        properties = c.pop("properties")
+        
+    c = {}
+    c["color"] = False
+    c["width"] = 1440
+    c["height"] = 1080
+    c["framerate"] = 120
+
+    pwm = {}
+    pwm["frequency"] = 15
+    pwm["chunk_size"] = 50
+    pwm["chunk_pause"] = 3000
+
+
+    x = {}
+    x["properties"] = properties
+    x["pwm"] = pwm
+    x["general"] = c
+
+    for n, cam_confs in enumerate(all_confs):
+        tmp = {}
+        tmp["general"] = cam_confs
+        tmp["properties"] = {}
+        x[f"cam_{n}"] = (tmp)
+        
+
+    with open(filename, "w") as f:
+        toml.dump(x, f)
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(__doc__)
+    parser.add_argument("-o", "--output",
+                        help="Name of the config file",
+                        dest="filename",
+                        default="configs.toml")
+
+    args = parser.parse_args()
+    filename = str(args.filename)
+    create_config(filename)

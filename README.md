@@ -33,31 +33,37 @@ Troubles with the installation of the **gi module** can be solved [using one of 
 ### Pwm software
 Remember to install the [pypwm](https://github.com/rfayat/PWM_Arduino) package
 
+## Installation
+
+Install the package and the dependencies with `(virtualenv) $ python setup.py install clean`
 
 ## Usage
 
-`$ python record.py path/to/params.json -o path/to/camera/dir`
+To automatically create the configuration based on your connected cameras, run  
+`(virtualenv) $ python -m tiscam.config` 
+
+To start the recording:  
+`(virtualenv) $ python -m tiscam.record -c path/to/params.json -o path/to/camera/dir`
+
+To start all the recordings: 
+`(virtualenv) $ scripts/./run_all`
+
+To start all the recordings with maximum priority: 
+`(virtualenv) $ nice -n -20 scripts/./run_all`
+
+In order to do so **you must have modified the file `/etc/security/limits.conf` adding a line with `username - nice -20`**
+
 
 You can activate the trigger mode from the **params.json**, refer to [pypwm](https://github.com/rfayat/PWM_Arduino) for documentation on usage.
-
-## Files
-
-- `TIS.py` defines the class `TIS ` that connects the camera to the pipeline
-- `camera.py` extends the `TIS` class in order to initialize, set configuration and capture. The `Queue` class manages the creation of new videos, checking the delay, and recording the timestamps.
-- `configs.py` defines a class to contain the configuration, useful for changing it interactively
-- `record.py` is the script to start acquisition
-- `create_configs.py` is a script that generates configuration taking as input the serial code of the camera
-- `test_camera.py` extends the `Camera` class, adding methods to interactively change the properties of the camera
-- `check_framerate.py` is a script to check frame drops, **still under developement**
-- `start_recording.sh` is an helper script to start recording and creating directories, **still under developement**
 
 
 ### TODO
 
+- [ ] Configuration put union in properties and diff in specific conf
+- [ ] Automatically test with different parameters and save frame loss data
 - [ ] Options for MJPEG + AVI and H.264/H.265 + MP4
 - [ ] don't save empty videos
 - [ ] check that all metatadata is written on videos
-
 - [x] Implement non-dropping queue (?)
 - [x] create_configs with automatic serial code
 - [x] don't save empty videos
@@ -75,6 +81,4 @@ You can activate the trigger mode from the **params.json**, refer to [pypwm](htt
 - [x] Argument to set python log level
 - [x] Argument to set log output to file
 - [x] Exposure time auto check
-- [ ] File size (either parallel conversion or through gst)
-- [ ] Implement non-dropping queue
-- [ ] single config file
+- [x] single config file
