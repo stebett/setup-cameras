@@ -253,6 +253,7 @@ class Queue:
         self.timestamps = {}
         self.counter = 0  # Current frame number (total across videos)
         self.relative_zero = 0  #  1st frame number in the current video
+        self.frame_loss = 0
         self.go = True
         self.busy = False
 
@@ -279,14 +280,15 @@ class Queue:
     def log_frame_number_warning(self):
         "Log a warning with the actual and expected frame numbers."
         frames_chunk = self.counter - self.relative_zero + self.expected_frames
+        self.frame_loss = self.relative_zero - frames_chunk
         self.logger.warning(
-            f"[!] Video:                     {self.video_name}")
-        self.logger.warning(f"[!] Number of frames:          {self.counter}")
+            f"Video:                     {self.video_name}")
+        self.logger.warning(f"Number of frames:          {self.counter}")
         self.logger.warning(
-            f"[!] Expected number of frames: {self.relative_zero}")
-        self.logger.warning(f"[!] Frames in chunk:           {frames_chunk}")
+            f"Expected number of frames: {self.relative_zero}")
+        self.logger.warning(f"Frames in chunk:           {frames_chunk}")
         self.logger.warning(
-            f"[!] Expected in chunk:         {self.expected_frames}")
+            f"Expected in chunk:         {self.expected_frames}")
 
     def new_video(self):
         "Create new video name based on number of first frame."
@@ -306,14 +308,17 @@ class Queue:
 
     def estimate_framerate(self):
         if self.video_started:
-            estimate = len(self.timestamps) / (self.time_of_last_frame
-                                               - self.timestamps[self.relative_zero])
+            t0 = sorted(self.timestamps.values())[0]
+            t1 = sorted(self.timestamps.values())[-1]
+            estimate = len(self.timestamps) / (t1 - t0)
+                                 
             self.logger.info(
                 f"Estimated framerate for the last video: {estimate:.2f}Hz")
 
     def save_timestamps(self):
         "Write timestamps to disk in pickle format."
         if self.video_started:
+            self.timestamps["loss"] = self.frame_loss 
             with open(f'{self.video_name[:-4]}.pickle', 'wb') as handle:
                 pickle.dump(self.timestamps, handle,
                             protocol=pickle.HIGHEST_PROTOCOL)
