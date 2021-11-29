@@ -119,87 +119,85 @@ class Config:
             toml.dump(self.config, f)
 
 
-def create_config(filename):
-    "Create a config file with default parameters from a camera serial."
+def get_serials():
     ps = subprocess.Popen(('tcam-ctrl', '-l'), stdout=subprocess.PIPE)
     serials = subprocess.check_output(("awk", "{print $5}"), stdin=ps.stdout)
     ps.wait()
     serials = serials.decode(encoding='UTF-8').split('\n')[:-1]
+    return serials
 
-    for s in serials:
-        os.system(f"tcam-ctrl --save {s} > {s}_conf.json")
+def get_camera_config(serial):
+    os.system(f"tcam-ctrl --save {serial} > {serial}_conf.json")
+    with open(f"{serial}_conf.json", "r") as f:
+            conf = json.load(f)
+    os.system(f"rm {serial}_conf.json")
+    return conf
 
-    all_confs = []
-    for s in serials:
-        with open(f"{s}_conf.json", "r") as f:
-            all_confs.append(json.load(f))
-
-    for s in serials:
-        os.system(f"rm {s}_conf.json")
-
+def get_common_properties(configurations):
     all_properties = []
-    for c in all_confs:
+    for c in configurations.values():
         all_properties.append(c["properties"])
-
 
     common_keys = all_properties[0].keys()
     for p in all_properties:
         common_keys &= p.keys() 
 
     common_properties = {k:all_properties[0][k] for k in common_keys}
+    return common_properties
 
-    for s in serials:
-        os.system(f"tcam-ctrl --caps {s} > {s}_caps.txt")
 
-    all_caps = [open(f"{s}_caps.txt").read() for s in serials]
-    formatted_caps = []
-    for caps in all_caps:
-        caps = caps.split('\n')[1:-1]
-        caps = caps.split(',')
+def get_specific_caps(serial):
+    os.system(f"tcam-ctrl --caps {serial} > {serial}_caps.txt")
 
-        tmp = {}
-        tmp["video_format"] = caps[0]
-        tmp["pixel_format"] = caps[1].split('=')[1]
-        tmp["width"] = caps[2].split('=')[1]
-        tmp["height"] = caps[3].split('=')[1]
-        tmp["framerate"] = caps[4].split('=')[1]
-        formatted_caps.append(tmp)
+    caps_dict = {}
+    caps_by_cam = open(f"{serial}_caps.txt").read()
 
-    
+    for all_caps in caps_by_cam:
+        caps = all_caps.split('\n')[1:-1]
+        for c in caps.split(','):
+            width = caps[2].split('=')[1]
+            height = caps[3].split('=')[1]
+            caps_dict[s]["width"].append(width)
+            caps_dict[s]["height"].append(height)
+            caps_dict[s]["color"] = True if ("rggb" in caps[1]) else False
+    os.system(f"rm {serial}_caps.txt")
+    return caps_dict
 
-        
+def get_specific_properties(conf, common_properties):
+    return {k:conf["properties"][k] for k in conf["properties"].keys() - common_properties.keys()} 
 
-    for s in serials:
-        os.system(f"rm {s}_conf.json")
-        os.system(f"rm {s}_caps.txt")
-        
-    c = {}
-    c["color"] = False
-    c["width"] = 1440
-    c["height"] = 1080
-    c["framerate"] = 120
-
+def get_pwm():
     pwm = {}
     pwm["frequency"] = 15
     pwm["chunk_size"] = 50
     pwm["chunk_pause"] = 3000
+    return pwm
 
+def get_general():
+    general = {}
+    general["framerate"] = 120
+    return general
 
-    x = {}
-    x["properties"] = common_properties
-    x["pwm"] = pwm
-    x["general"] = c
+def create_config(filename):
+    "Create a config file with default parameters from a camera serial."
+    serials = get_serials()
+    all_confs = {s:get_camera_config(s) for s in serials}
 
-    for n, cam_confs in enumerate(all_confs):
-        tmp = {}
-        properties = cam_confs.pop("properties")
-        tmp["properties"] = {k:properties[k] for k in properties.keys() - common_keys}
-        tmp["general"] = cam_confs
-        x[f"cam_{n}"] = (tmp)
-        
+    config = {}
+    config["properties"] = get_common_properties(all_confs)
+    config["general"] = get_general
+    config["pwm"] = get_pwm()
+
+    for n, s in enumerate(serials):
+        key = f"cam_{n}"
+        config[key] = {}
+        config[key]["general"] = all_confs[s]
+        config[key]["general"].update(get_specific_caps(s))
+        config[key]["properties"] = get_specific_properties(all_confs[s], common_properties)
+
 
     with open(filename, "w") as f:
-        toml.dump(x, f)
+        toml.dump(root, f)
 
 if __name__ == "__main__":
     import argparse
