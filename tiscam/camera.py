@@ -42,6 +42,7 @@ class TIS:
             p += " ! video/x-raw,width=640,height=360"
             p += " ! fpsdisplaysink sink=ximagesink"
         else:
+            # p += " ! x264enc"
             p += " ! avimux"
             # p += " ! queue name = queue"
             p += " ! filesink name=fsink"
