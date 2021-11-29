@@ -67,7 +67,7 @@ class TIS:
         self.rawfilter.set_property("caps", self.get_caps(bayer=False))
 
         if not self.livedisplay:
-            try: 
+            try:
                 self._queue = self.pipeline.get_by_name("queue")
                 self._queue.set_property("max-size-buffers", 0)
                 self._queue.set_property("max-size-bytes", int(1.5e9))
@@ -75,10 +75,10 @@ class TIS:
 
             except Exception:
                 self.logger.warning("No queue was found")
-            
+
             self.filesink = self.pipeline.get_by_name("fsink")
             self.filesink.set_property("location", video_path)
-        
+
     def stop_pipeline(self):
         "Stops the pipeline"
         self.pipeline.set_state(Gst.State.PAUSED)
@@ -126,9 +126,9 @@ class TIS:
                 value = int(value)
             if prop.type == 'boolean':
                 if (value == "True") or (value == "true") or (value is True):
-                    value = True 
+                    value = True
                 elif (value == "False") or (value == "false") or (value is False):
-                    value = False 
+                    value = False
                 else:
                     raise
 
@@ -136,7 +136,7 @@ class TIS:
             if result is False:
                 self.logger.warning("Failed to set {} to value {}. value type is {} prop type is {}, range is {}-{}".format(property_name, value, type(value), prop.type, prop.min, prop.max))
         except Exception as error:
-            self.logger.error("Error set Property {0}: {1}",property_name, format(error))
+            self.logger.error("Error set Property {0}: {1}", property_name, format(error))
             raise
 
 
@@ -311,14 +311,14 @@ class Queue:
             t0 = sorted(self.timestamps.values())[0]
             t1 = sorted(self.timestamps.values())[-1]
             estimate = len(self.timestamps) / (t1 - t0)
-                                 
+
             self.logger.info(
                 f"Estimated framerate for the last video: {estimate:.2f}Hz")
 
     def save_timestamps(self):
         "Write timestamps to disk in pickle format."
         if self.video_started:
-            self.timestamps["loss"] = self.frame_loss 
+            self.timestamps["loss"] = self.frame_loss
             with open(f'{self.video_name[:-4]}.pickle', 'wb') as handle:
                 pickle.dump(self.timestamps, handle,
                             protocol=pickle.HIGHEST_PROTOCOL)
@@ -408,5 +408,3 @@ class TestCamera(Camera):
             print(f"The value {v} is not adeguate to property {k}")
 
         self.config.values[i] = v
-
-

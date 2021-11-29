@@ -129,7 +129,6 @@ def create_config(filename):
     for s in serials:
         os.system(f"tcam-ctrl --save {s} > {s}_conf.json")
 
-
     all_confs = []
     for s in serials:
         with open(f"{s}_conf.json", "r") as f:
@@ -138,8 +137,41 @@ def create_config(filename):
     for s in serials:
         os.system(f"rm {s}_conf.json")
 
+    all_properties = []
     for c in all_confs:
-        properties = c.pop("properties")
+        all_properties.append(c["properties"])
+
+
+    common_keys = all_properties[0].keys()
+    for p in all_properties:
+        common_keys &= p.keys() 
+
+    common_properties = {k:all_properties[0][k] for k in common_keys}
+
+    for s in serials:
+        os.system(f"tcam-ctrl --caps {s} > {s}_caps.txt")
+
+    all_caps = [open(f"{s}_caps.txt").read() for s in serials]
+    formatted_caps = []
+    for caps in all_caps:
+        caps = caps.split('\n')[1:-1]
+        caps = caps.split(',')
+
+        tmp = {}
+        tmp["video_format"] = caps[0]
+        tmp["pixel_format"] = caps[1].split('=')[1]
+        tmp["width"] = caps[2].split('=')[1]
+        tmp["height"] = caps[3].split('=')[1]
+        tmp["framerate"] = caps[4].split('=')[1]
+        formatted_caps.append(tmp)
+
+    
+
+        
+
+    for s in serials:
+        os.system(f"rm {s}_conf.json")
+        os.system(f"rm {s}_caps.txt")
         
     c = {}
     c["color"] = False
@@ -154,14 +186,15 @@ def create_config(filename):
 
 
     x = {}
-    x["properties"] = properties
+    x["properties"] = common_properties
     x["pwm"] = pwm
     x["general"] = c
 
     for n, cam_confs in enumerate(all_confs):
         tmp = {}
+        properties = cam_confs.pop("properties")
+        tmp["properties"] = {k:properties[k] for k in properties.keys() - common_keys}
         tmp["general"] = cam_confs
-        tmp["properties"] = {}
         x[f"cam_{n}"] = (tmp)
         
 
