@@ -1,35 +1,35 @@
 [properties]
-"Offset X" = 0
+"Strobe Enable" = false
 "Highlight Reduction" = false
-"Strobe Exposure" = true
-"Exposure Auto Upper Limit Auto" = true
-"Strobe Duration" = 100
-"Trigger Polarity" = "Falling Edge"
+"Exposure Auto Upper Limit" = 33333
+"Gain Auto" = false
+"Reverse Y" = false
+GPIn = 0
+"Override Scanning Mode" = 0
+"Offset X" = 0
+"Trigger Delay (us)" = 31
+"Auto Functions ROI Control" = true
+Brightness = 469
 "Trigger Global Reset Release" = false
 "Exposure Auto Lower Limit" = 1
-"Override Scanning Mode" = 0
+"Strobe Exposure" = true
 "Exposure Time (us)" = 33333
-"Gain Auto" = false
-"Exposure Auto Upper Limit" = 33333
+"Strobe Delay" = 0
 "Auto Functions ROI Preset" = "Center 50%"
+"Strobe Duration" = 100
 "Offset Auto Center" = true
-GPOut = 0
+"Gain Auto Upper Limit" = 480
+"Exposure Auto Upper Limit Auto" = true
+"Gain Auto Lower Limit" = 0
+Gain = 4
 "Exposure Auto Reference" = 100
+"Reverse X" = false
+GPOut = 0
+"Trigger Polarity" = "Falling Edge"
 "Trigger Mode" = true
-"Reverse Y" = false
+"Exposure Auto" = false
 "Offset Y" = 0
 "Strobe Polarity" = false
-Gain = 4
-"Gain Auto Lower Limit" = 0
-"Exposure Auto" = false
-"Strobe Enable" = false
-Brightness = 469
-GPIn = 0
-"Trigger Delay (us)" = 31
-"Reverse X" = false
-"Auto Functions ROI Control" = true
-"Strobe Delay" = 0
-"Gain Auto Upper Limit" = 480
 
 [general]
 framerate = 120
@@ -48,8 +48,8 @@ height = 1080
 serial = "02020172"
 
 [cam_0.properties]
-"IMX Low-Latency Mode" = false
-"Trigger Exposure Mode" = "Frame Start"
+serial = "02020172"
+version = "v0.1"
 
 [cam_1.general]
 accepted_width = [ 1440, 640, 1440, 640,]
@@ -60,8 +60,8 @@ height = 1080
 serial = "02020176"
 
 [cam_1.properties]
-"IMX Low-Latency Mode" = false
-"Trigger Exposure Mode" = "Frame Start"
+serial = "02020176"
+version = "v0.1"
 
 [cam_2.general]
 accepted_width = [ 640, 1920, 640, 1920,]
@@ -72,14 +72,8 @@ height = 1080
 serial = "44120513"
 
 [cam_2.properties]
-"Whitebalance Green" = 64
-"Whitebalance Auto" = true
-"Whitebalance Auto Preset" = "Any"
-"White Balance Temperature Preset" = "Cool White Fluorescent Light"
-"Whitebalance Temperature" = 4000
-"Whitebalance Blue" = 64
-"Whitebalance Red" = 64
-Whitebalance = false
+serial = "44120513"
+version = "v0.1"
 
 [cam_3.general]
 accepted_width = [ 1440, 640, 1440, 640,]
@@ -87,20 +81,154 @@ accepted_height = [ 1080, 480, 1080, 480,]
 color = false
 width = 1440
 height = 1080
-serial = "49020380"
-
-[cam_3.properties]
-"IMX Low-Latency Mode" = false
-"Trigger Exposure Mode" = "Frame Start"
-
-[cam_4.general]
-accepted_width = [ 1440, 640, 1440, 640,]
-accepted_height = [ 1080, 480, 1080, 480,]
-color = false
-width = 1440
-height = 1080
 serial = "49020382"
 
-[cam_4.properties]
+[cam_3.properties]
+serial = "49020382"
+version = "v0.1"
+
+[cam_0.properties.properties]
+"Auto Functions ROI Control" = true
+"Auto Functions ROI Preset" = "Center 50%"
+Brightness = 469
+"Exposure Auto" = false
+"Exposure Auto Lower Limit" = 1
+"Exposure Auto Reference" = 100
+"Exposure Auto Upper Limit" = 33333
+"Exposure Auto Upper Limit Auto" = true
+"Exposure Time (us)" = 33333
+GPIn = 0
+GPOut = 0
+Gain = 4
+"Gain Auto" = false
+"Gain Auto Lower Limit" = 0
+"Gain Auto Upper Limit" = 480
+"Highlight Reduction" = false
 "IMX Low-Latency Mode" = false
+"Offset Auto Center" = true
+"Offset X" = 0
+"Offset Y" = 0
+"Override Scanning Mode" = 0
+"Reverse X" = false
+"Reverse Y" = false
+"Strobe Delay" = 0
+"Strobe Duration" = 100
+"Strobe Enable" = false
+"Strobe Exposure" = true
+"Strobe Polarity" = false
+"Trigger Delay (us)" = 31
 "Trigger Exposure Mode" = "Frame Start"
+"Trigger Global Reset Release" = false
+"Trigger Mode" = true
+"Trigger Polarity" = "Falling Edge"
+
+[cam_1.properties.properties]
+"Auto Functions ROI Control" = true
+"Auto Functions ROI Preset" = "Center 50%"
+Brightness = 469
+"Exposure Auto" = false
+"Exposure Auto Lower Limit" = 1
+"Exposure Auto Reference" = 100
+"Exposure Auto Upper Limit" = 33333
+"Exposure Auto Upper Limit Auto" = true
+"Exposure Time (us)" = 33333
+GPIn = 0
+GPOut = 0
+Gain = 4
+"Gain Auto" = false
+"Gain Auto Lower Limit" = 0
+"Gain Auto Upper Limit" = 480
+"Highlight Reduction" = false
+"IMX Low-Latency Mode" = false
+"Offset Auto Center" = true
+"Offset X" = 0
+"Offset Y" = 0
+"Override Scanning Mode" = 0
+"Reverse X" = false
+"Reverse Y" = false
+"Strobe Delay" = 0
+"Strobe Duration" = 100
+"Strobe Enable" = false
+"Strobe Exposure" = true
+"Strobe Polarity" = false
+"Trigger Delay (us)" = 31
+"Trigger Exposure Mode" = "Frame Start"
+"Trigger Global Reset Release" = false
+"Trigger Mode" = true
+"Trigger Polarity" = "Falling Edge"
+
+[cam_2.properties.properties]
+"Auto Functions ROI Control" = true
+"Auto Functions ROI Preset" = "Center 50%"
+Brightness = 469
+"Exposure Auto" = false
+"Exposure Auto Lower Limit" = 60
+"Exposure Auto Reference" = 100
+"Exposure Auto Upper Limit" = 33333
+"Exposure Auto Upper Limit Auto" = true
+"Exposure Time (us)" = 33333
+GPIn = 0
+GPOut = 0
+Gain = 4
+"Gain Auto" = false
+"Gain Auto Lower Limit" = 0
+"Gain Auto Upper Limit" = 240
+"Highlight Reduction" = false
+"Offset Auto Center" = true
+"Offset X" = 0
+"Offset Y" = 0
+"Override Scanning Mode" = 0
+"Reverse X" = false
+"Reverse Y" = false
+"Strobe Delay" = 0
+"Strobe Duration" = 100
+"Strobe Enable" = false
+"Strobe Exposure" = true
+"Strobe Polarity" = false
+"Trigger Delay (us)" = 31
+"Trigger Global Reset Release" = false
+"Trigger Mode" = true
+"Trigger Polarity" = "Falling Edge"
+"White Balance Temperature Preset" = "Cool White Fluorescent Light"
+Whitebalance = false
+"Whitebalance Auto" = true
+"Whitebalance Auto Preset" = "Any"
+"Whitebalance Blue" = 255
+"Whitebalance Green" = 64
+"Whitebalance Red" = 96
+"Whitebalance Temperature" = 4000
+
+[cam_3.properties.properties]
+"Auto Functions ROI Control" = true
+"Auto Functions ROI Preset" = "Center 50%"
+Brightness = 469
+"Exposure Auto" = false
+"Exposure Auto Lower Limit" = 1
+"Exposure Auto Reference" = 100
+"Exposure Auto Upper Limit" = 33333
+"Exposure Auto Upper Limit Auto" = true
+"Exposure Time (us)" = 33333
+GPIn = 0
+GPOut = 0
+Gain = 4
+"Gain Auto" = false
+"Gain Auto Lower Limit" = 0
+"Gain Auto Upper Limit" = 480
+"Highlight Reduction" = false
+"IMX Low-Latency Mode" = false
+"Offset Auto Center" = true
+"Offset X" = 0
+"Offset Y" = 0
+"Override Scanning Mode" = 0
+"Reverse X" = false
+"Reverse Y" = false
+"Strobe Delay" = 0
+"Strobe Duration" = 100
+"Strobe Enable" = false
+"Strobe Exposure" = true
+"Strobe Polarity" = false
+"Trigger Delay (us)" = 31
+"Trigger Exposure Mode" = "Frame Start"
+"Trigger Global Reset Release" = false
+"Trigger Mode" = true
+"Trigger Polarity" = "Falling Edge"
