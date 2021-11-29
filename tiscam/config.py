@@ -148,18 +148,21 @@ def get_common_properties(configurations):
 
 def get_specific_caps(serial):
     os.system(f"tcam-ctrl --caps {serial} > {serial}_caps.txt")
+    all_caps = open(f"{serial}_caps.txt").read().split('\n')[1:-1]
 
-    caps_dict = {}
-    caps_by_cam = open(f"{serial}_caps.txt").read()
+    caps_dict = {"accepted_width":[], "accepted_height":[]}
 
-    for all_caps in caps_by_cam:
-        caps = all_caps.split('\n')[1:-1]
-        for c in caps.split(','):
-            width = caps[2].split('=')[1]
-            height = caps[3].split('=')[1]
-            caps_dict[s]["width"].append(width)
-            caps_dict[s]["height"].append(height)
-            caps_dict[s]["color"] = True if ("rggb" in caps[1]) else False
+    for single_caps in all_caps:
+        caps = single_caps.split(',')
+        width = caps[2].split('=')[1]
+        height = caps[3].split('=')[1]
+
+        caps_dict["accepted_width"].append(int(width))
+        caps_dict["accepted_height"].append(int(height))
+        caps_dict["color"] = True if ("rggb" in caps[1]) else False
+
+    caps_dict["width"] = max(caps_dict["accepted_width"])
+    caps_dict["height"] = max(caps_dict["accepted_height"])
     os.system(f"rm {serial}_caps.txt")
     return caps_dict
 
@@ -185,19 +188,18 @@ def create_config(filename):
 
     config = {}
     config["properties"] = get_common_properties(all_confs)
-    config["general"] = get_general
+    config["general"] = get_general()
     config["pwm"] = get_pwm()
 
     for n, s in enumerate(serials):
         key = f"cam_{n}"
         config[key] = {}
-        config[key]["general"] = all_confs[s]
-        config[key]["general"].update(get_specific_caps(s))
-        config[key]["properties"] = get_specific_properties(all_confs[s], common_properties)
-
+        config[key]["general"] = get_specific_caps(s)
+        config[key]["general"]["serial"] = s
+        config[key]["properties"] = get_specific_properties(all_confs[s], config["properties"])
 
     with open(filename, "w") as f:
-        toml.dump(root, f)
+        toml.dump(config, f)
 
 if __name__ == "__main__":
     import argparse
