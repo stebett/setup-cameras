@@ -3,8 +3,8 @@ import os
 import re
 import toml
 import json
-import tiscam.input_helpers
 import subprocess
+import tiscam.input_helpers
 from pathlib import Path
 
 
@@ -17,14 +17,11 @@ class Config:
         self.logger = logger
         self.cam_id = cam_id
         self.read_config()
+        self.apply_config()
 
-        self.pwm = self.config["pwm"]
-        self.general = self.config["general"] 
-        self.properties = self.config["properties"] if self.config["properties"] else {}
         #self.set_real_framerate()
         self.set_fake_framerate()
         self.check_exposure_time()
-        self.dict_to_list()
 
     def set_fake_framerate(self):
         self.framerate = 120
@@ -35,18 +32,24 @@ class Config:
         else:
             self.framerate = self.config["general"]["framerate"]
 
-    def apply_cam_specific_config(self):
-        self.config = self.config[f"cam_{self.cam_id}"]
-
     def read_config(self):
         "Read the configuration file."
         try:
             with self.config_path.open("r") as f:
-                self.config = toml.load(f)
+                self.raw_config = toml.load(f)
         except FileNotFoundError:
             logger.error("Invalid config file. If you want to use the default"
                           " configuration, run record.py without argument")
             raise FileNotFoundError("Invalid config file")
+
+    def apply_config(self):
+        cam = f"cam_{self.cam_id}"
+        self.pwm = self.raw_config["pwm"]
+        self.general = self.raw_config[cam]["general"]
+        self.properties = self.raw_config[cam]["properties"]
+        self.config = {"pwm": self.pwm,
+                       "general": self.general,
+                       "properties": self.properties}
 
     def check_exposure_time(self):
         "Check that exposure time is not too long for the selected framerate"
@@ -67,14 +70,9 @@ class Config:
             if not ignore:
                 raise Exception("Excecution interrupted by user")
             
-            
-    def save(self, file_path):
-        "Save the dictionary as a json file."
-        with open(file_path, 'w') as f:
-            toml.dump(self.config, f)
-
 
 def get_serials():
+    "Uses tcam commands to retrieve cameras serials"
     ps = subprocess.Popen(('tcam-ctrl', '-l'), stdout=subprocess.PIPE)
     serials = subprocess.check_output(("awk", "{print $5}"), stdin=ps.stdout)
     ps.wait()
@@ -82,6 +80,7 @@ def get_serials():
     return serials
 
 def get_camera_config(serial):
+    "Uses tcam commands to retrieve cameras configurations given the serial"
     os.system(f"tcam-ctrl --save {serial} > {serial}_conf.json")
     with open(f"{serial}_conf.json", "r") as f:
             conf = json.load(f)
@@ -89,6 +88,7 @@ def get_camera_config(serial):
     return conf
 
 def get_caps(serial):
+    "Uses tcam commands to retrieve cameras caps given the serial"
     os.system(f"tcam-ctrl --caps {serial} > {serial}_caps.txt")
     all_caps = open(f"{serial}_caps.txt").read().split('\n')[1:-1]
 
@@ -114,14 +114,14 @@ def get_caps(serial):
 
 
 def get_pwm():
+    "Return pwm parameters"
     pwm = {}
     pwm["frequency"] = 15
     pwm["chunk_size"] = 50
     pwm["chunk_pause"] = 3000
     return pwm
 
-
-def create_config(filename):
+def create_config():
     "Create a config file with default parameters from a camera serial."
     serials = get_serials()
     all_confs = {s:get_camera_config(s) for s in serials}
@@ -134,7 +134,11 @@ def create_config(filename):
         config[cam] = {}
         config[cam]["general"] = get_caps(s)
         config[cam]["properties"] = all_confs[s]["properties"]
+    return config
 
+def write_config(filename):
+    "Create and write the config file"
+    config = create_config()
     with open(filename, "w") as f:
         toml.dump(config, f)
 
@@ -143,10 +147,10 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument("-o", "--output",
-                        help="Name of the config file",
-                        dest="filename",
-                        default="configs.toml")
+                        help="Path where to write the config file",
+                        dest="filename", default="configs.toml",
+                        type=lambda x: Path(x).expanduser().absolute())
 
     args = parser.parse_args()
     filename = str(args.filename)
-    create_config(filename)
+    write_config(filename)
