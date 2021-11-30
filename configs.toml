@@ -1,0 +1,54 @@
+[pwm]
+frequency = 15
+chunk_size = 50
+chunk_pause = 3000
+
+[cam_0.general]
+accepted_width = [ 1920, 1920, 640, 640,]
+accepted_height = [ 1080, 1080, 480, 480,]
+color = true
+width = 1920
+height = 1080
+framerate = 120
+serial = "44120512"
+
+[cam_0.properties]
+"Auto Functions ROI Control" = true
+"Auto Functions ROI Preset" = "Center 50%"
+Brightness = 240
+"Exposure Auto" = true
+"Exposure Auto Lower Limit" = 60
+"Exposure Auto Reference" = 128
+"Exposure Auto Upper Limit" = 33333
+"Exposure Auto Upper Limit Auto" = true
+"Exposure Time (us)" = 333
+GPIn = 0
+GPOut = 0
+Gain = 0
+"Gain Auto" = true
+"Gain Auto Lower Limit" = 0
+"Gain Auto Upper Limit" = 240
+"Highlight Reduction" = false
+"Offset Auto Center" = true
+"Offset X" = 0
+"Offset Y" = 0
+"Override Scanning Mode" = 0
+"Reverse X" = false
+"Reverse Y" = false
+"Strobe Delay" = 0
+"Strobe Duration" = 100
+"Strobe Enable" = false
+"Strobe Exposure" = true
+"Strobe Polarity" = false
+"Trigger Delay (us)" = 31
+"Trigger Global Reset Release" = false
+"Trigger Mode" = false
+"Trigger Polarity" = "Rising Edge"
+"White Balance Temperature Preset" = "Cool White Fluorescent Light"
+Whitebalance = false
+"Whitebalance Auto" = true
+"Whitebalance Auto Preset" = "Any"
+"Whitebalance Blue" = 64
+"Whitebalance Green" = 64
+"Whitebalance Red" = 64
+"Whitebalance Temperature" = 4000

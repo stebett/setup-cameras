@@ -6,14 +6,14 @@ import argparse
 from pathlib import Path
 
 from tiscam.input_helpers import ask_yes_or_no
-from tiscam.camera import Camera, TestCamera
+from tiscam.camera import Camera
 from tiscam.config import Config 
 
 
 parser = argparse.ArgumentParser(__doc__)
 parser.add_argument("-c", "--config_path",
                     help="Path to the state file of the camera",
-                    dest="config_path", default="default")
+                    dest="config_path", default="configs.toml")
 parser.add_argument("-o", "--output",
                     help="Path to the output video folder.",
                     dest="path_video_folder", default=Path("./videos"),
@@ -32,7 +32,7 @@ parser.add_argument("--gst-debug-level",
                     dest="gst_debug_level", default="1")
 parser.add_argument("-i", "--camera-id",
                     help="Identifier of camera",
-                    dest="cam_id", default="-1",
+                    dest="cam_id", default="0",
                     type=lambda x: int(x))
 
 args = parser.parse_args()
@@ -92,19 +92,12 @@ if has_file:
         sys.exit()
 
 # Run with default config if no config had been provided
-# TODO: update default config
-if config_path == "default":
-    raise Exception("You have to provide a configuration")
-else:
-    config_path = Path(config_path).expanduser().absolute()
-    config = Config(config_path, root_logger, cam_id)
+config_path = Path(config_path).expanduser().absolute()
+config = Config(config_path, root_logger, cam_id)
 
 
-if test_mode:
-    c = TestCamera(config, logger=root_logger)
-else:
-    c = Camera(config, path_to_output=path_video_folder,
-               logger=root_logger, gst_debug_level=gst_debug_level)
+c = Camera(config, path_to_output=path_video_folder,
+           logger=root_logger, gst_debug_level=gst_debug_level)
 
 
 # Attach interruption signal to stop_capture and start the recording
