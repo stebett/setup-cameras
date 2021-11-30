@@ -181,8 +181,6 @@ class Camera(TIS):
         "Stop the capture and cleanup."
         self.logger.info("Killing pipeline")
         self.stop_pipeline()
-        self.queue.estimate_framerate()
-        self.queue.save_timestamps()
         self.logger.info("Recording stopped")
 
 
@@ -205,7 +203,9 @@ class Camera(TIS):
             self.queue.check_delay()
             self.queue.go = True
 
-            self.stop_capture()
+            self.logger.info("Closing pipeline")
+            self.stop_pipeline()
+            self.queue.close()
 
     def create_callback(self):
         "Define function to call when a frame is received."
@@ -231,6 +231,7 @@ def add_frame(tis, queue):
     queue.timestamps[queue.counter] = t
     queue.time_of_last_frame = t
     queue.counter += 1
+    queue.chunk_counter += 1
     queue.logger.info(f"Adding frame {queue.counter} to the queue")
     queue.busy = False
 
@@ -256,6 +257,7 @@ class Queue:
         self.video_name = ""
         self.timestamps = {}
         self.counter = 0  # Current frame number (total across videos)
+        self.chunk_counter = 0
         self.relative_zero = 0  #  1st frame number in the current video
         self.frame_loss = 0
         self.go = True
@@ -281,32 +283,42 @@ class Queue:
             else:
                 time.sleep(0.001)
 
+    def reset_relative_zero(self):
+        if self.expected_frames > 0:
+            self.relative_zero = self.expected_frames * len(self.videos)
+            self.logger.info(f"relative zero: {self.relative_zero}")
+
+    def reset_counters(self):
+        if self.expected_frames > 0:
+            self.counter = self.relative_zero
+            self.chunk_counter = 0
+
+    def estimate_loss(self):
+        if self.expected_frames > 0:
+            self.frame_loss = self.expected_frames - self.chunk_counter
+
     def log_frame_number_warning(self):
         "Log a warning with the actual and expected frame numbers."
-        frames_chunk = self.counter - self.relative_zero + self.expected_frames
-        self.frame_loss = self.relative_zero - frames_chunk
-        self.logger.warning(
-            f"Video:                     {self.video_name}")
+        self.logger.warning(f"Video:                     {self.video_name}")
         self.logger.warning(f"Number of frames:          {self.counter}")
-        self.logger.warning(
-            f"Expected number of frames: {self.relative_zero}")
-        self.logger.warning(f"Frames in chunk:           {frames_chunk}")
-        self.logger.warning(
-            f"Expected in chunk:         {self.expected_frames}")
+        self.logger.warning(f"Expected number of frames: {self.relative_zero}")
+        self.logger.warning(f"Frames in chunk:           {self.chunk_counter}")
+        self.logger.warning(f"Expected in chunk:         {self.expected_frames}")
+        self.logger.warning(f"Frame loss:                {self.frame_loss}")
+
+    def close(self):
+        "Run all estimations in the right order, resets the parameters and save the timestamps"
+        self.estimate_framerate()
+        self.estimate_loss()
+        self.save_timestamps()
+        self.reset_relative_zero()
+        self.reset_counters()
+        if self.frame_loss > 0:
+            self.log_frame_number_warning()
+
 
     def new_video(self):
         "Create new video name based on number of first frame."
-        self.relative_zero = self.counter
-        if self.expected_frames > 0:
-            self.relative_zero = self.expected_frames * len(self.videos)
-        self.logger.info(f"relative zero: {self.relative_zero}")
-
-        if self.expected_frames > 0:
-            if self.counter != self.relative_zero:
-                self.log_frame_number_warning()
-
-            self.counter = self.relative_zero
-
         self.video_name = f"{self.path_to_output}/{self.counter :06d}.avi"
         self.videos.append(self.video_name)
 

@@ -1,6 +1,6 @@
 [pwm]
-frequency = 100
-chunk_size = 3000
+frequency = 50
+chunk_size = 300
 chunk_pause = 3000
 
 [arguments]

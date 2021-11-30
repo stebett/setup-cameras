@@ -14,5 +14,4 @@ for i in $(seq 0 $n); do
 	cp $config $output/$config
 done
 
-echo $PID
 wait $PID
