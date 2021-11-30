@@ -17,22 +17,23 @@ parser.add_argument("-c", "--config_path",
                     type=lambda x: Path(x).expanduser().absolute())
 parser.add_argument("-i", "--camera-id",
                     help="Index of camera",
-                    dest="cam_id", default="0",
-                    type=lambda x: int(x))
+                    dest="cam_id", default="0")
 
 args = parser.parse_args()
 config_path = args.config_path
 cam_id = args.cam_id
 
 arguments = read_config(config_path)["arguments"]
-output_path = arguments["output_path"]
+output_parent = Path(arguments["output_parent"]).expanduser().absolute()
 camera_prefix = arguments["camera_prefix"]
 stdout_log_level = arguments["stdout_log_level"]
 file_log_level = arguments["file_log_level"]
 gst_debug_level = arguments["gst_debug_level"]
 overwrite = arguments["force"]
 
-logger = get_logger(output_path, stdout_log_level, file_log_level)
+output_path = output_parent / (camera_prefix + cam_id)
+
+logger = get_logger(stdout_log_level, file_log_level, output_path) 
 if not clean_output_dir(output_path, logger, overwrite):
     sys.exit()
 

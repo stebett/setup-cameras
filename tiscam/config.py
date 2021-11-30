@@ -124,7 +124,7 @@ def get_pwm():
 
 def get_arguments():
     arguments = {}
-    arguments["output_path"] = "~/data/"
+    arguments["output_parent"] = "~/data/"
     arguments["camera_prefix"] = "cam"
     arguments["stdout_log_level"] = "info"
     arguments["file_log_level"] = "debug"

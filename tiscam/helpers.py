@@ -19,7 +19,7 @@ def ask_yes_or_no(message, remaining_attempts=10):
 
 # If files were detected, remove it if the --force option was provided
 # If not, ask the user if we need to overwrite the directory's content.
-def clean_output_dir(path_video_folder, logger, overwrite)
+def clean_output_dir(path_video_folder, logger, overwrite):
     if path_video_folder.exists():
         files_to_remove = []
         for f in path_video_folder.iterdir():
@@ -38,8 +38,9 @@ def clean_output_dir(path_video_folder, logger, overwrite)
                 f.unlink()
         else:
             return False
+    return True
 
-def get_logger(root_level, handler_level, path_video_folder)
+def get_logger(root_level, handler_level, path_video_folder):
     root_numeric_level = getattr(logging, root_level.upper(), 10)
     handler_numeric_level = getattr(logging, handler_level.upper(), 10)
 
