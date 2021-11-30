@@ -187,7 +187,8 @@ def create_config(filename):
     all_confs = {s:get_camera_config(s) for s in serials}
 
     config = {}
-    config["properties"] = get_common_properties(all_confs)
+    # config["properties"] = get_common_properties(all_confs)
+    config["properties"] = None
     config["general"] = get_general()
     config["pwm"] = get_pwm()
 
