@@ -2,8 +2,8 @@
 import sys
 import signal
 import argparse
-from pathlib import Path
 from shutil import copyfile
+from pathlib import Path
 
 from tiscam.helpers import clean_output_dir, get_logger
 from tiscam.camera import Camera
@@ -31,13 +31,15 @@ file_log_level = arguments["file_log_level"]
 gst_debug_level = arguments["gst_debug_level"]
 overwrite = arguments["force"]
 
-output_path = output_parent / (camera_prefix + cam_id)
+output_file =  camera_prefix + cam_id
+output_path = output_parent / output_file
 
 logger = get_logger(stdout_log_level, file_log_level, output_path) 
 if not clean_output_dir(output_path, logger, overwrite):
     sys.exit()
 
-copyfile(config_path, output_path / config_path.name)
+config_copy_path = output_path / config_path.name
+copyfile(config_path, config_copy_path)
 
 def terminate(*args):
     "Stop the capture and clean up."

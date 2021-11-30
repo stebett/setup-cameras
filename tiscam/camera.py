@@ -44,7 +44,7 @@ class TIS:
         else:
             # p += " ! x264enc"
             p += " ! avimux"
-            # p += " ! queue name = queue"
+            p += " ! queue name = queue"
             p += " ! filesink name=fsink"
 
         self.logger.debug(f"Gst pipeline: {p}")
@@ -312,9 +312,9 @@ class Queue:
         self.estimate_loss()
         self.save_timestamps()
         self.reset_relative_zero()
-        self.reset_counters()
         if self.frame_loss > 0:
             self.log_frame_number_warning()
+        self.reset_counters()
 
 
     def new_video(self):
