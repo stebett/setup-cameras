@@ -1,12 +1,12 @@
 [pwm]
 frequency = 100
 chunk_size = 3000
-chunk_pause = 8000
+chunk_pause = 3000
 
 [arguments]
 output_parent = "~/data/"
 camera_prefix = "cam"
-stdout_log_level = "warning"
+stdout_log_level = "info"
 file_log_level = "warning"
 gst_debug_level = 1
 force = true
@@ -56,9 +56,9 @@ Gain = 235
 Whitebalance = false
 "Whitebalance Auto" = true
 "Whitebalance Auto Preset" = "Any"
-"Whitebalance Blue" = 174
-"Whitebalance Green" = 64
-"Whitebalance Red" = 67
+"Whitebalance Blue" = 225
+"Whitebalance Green" = 67
+"Whitebalance Red" = 64
 "Whitebalance Temperature" = 4000
 
 [cam_1.general]
@@ -82,7 +82,7 @@ Brightness = 240
 "Exposure Time (us)" = 8333
 GPIn = 0
 GPOut = 0
-Gain = 202
+Gain = 54
 "Gain Auto" = false
 "Gain Auto Lower Limit" = 0
 "Gain Auto Upper Limit" = 240
@@ -106,9 +106,9 @@ Gain = 202
 Whitebalance = false
 "Whitebalance Auto" = true
 "Whitebalance Auto Preset" = "Any"
-"Whitebalance Blue" = 147
+"Whitebalance Blue" = 255
 "Whitebalance Green" = 64
-"Whitebalance Red" = 77
+"Whitebalance Red" = 70
 "Whitebalance Temperature" = 4000
 
 [cam_2.general]
@@ -132,7 +132,7 @@ Brightness = 240
 "Exposure Time (us)" = 8333
 GPIn = 0
 GPOut = 0
-Gain = 189
+Gain = 240
 "Gain Auto" = false
 "Gain Auto Lower Limit" = 0
 "Gain Auto Upper Limit" = 240
@@ -150,13 +150,13 @@ Gain = 189
 "Strobe Polarity" = false
 "Trigger Delay (us)" = 31
 "Trigger Global Reset Release" = false
-"Trigger Mode" = true
+"Trigger Mode" = false
 "Trigger Polarity" = "Rising Edge"
 "White Balance Temperature Preset" = "Cool White Fluorescent Light"
 Whitebalance = false
 "Whitebalance Auto" = true
 "Whitebalance Auto Preset" = "Any"
-"Whitebalance Blue" = 187
+"Whitebalance Blue" = 98
 "Whitebalance Green" = 64
-"Whitebalance Red" = 67
+"Whitebalance Red" = 66
 "Whitebalance Temperature" = 4000
