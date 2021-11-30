@@ -196,7 +196,7 @@ def create_config(filename):
         config[key] = {}
         config[key]["general"] = get_specific_caps(s)
         config[key]["general"]["serial"] = s
-        config[key]["properties"] = all_confs[s]
+        config[key]["properties"] = all_confs[s]["properties"]
         # config[key]["properties"] = get_specific_properties(all_confs[s], config["properties"])
 
     with open(filename, "w") as f:
