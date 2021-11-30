@@ -35,7 +35,6 @@ parser.add_argument("-i", "--camera-id",
 args = parser.parse_args()
 config_path = args.config_path
 path_video_folder = args.path_video_folder.absolute()
-test_mode = args.test_mode
 overwrite = args.overwrite
 log_level = args.log_level
 cam_id = args.cam_id

@@ -37,7 +37,7 @@ logger = get_logger(stdout_log_level, file_log_level, output_path)
 if not clean_output_dir(output_path, logger, overwrite):
     sys.exit()
 
-copyfile(config_path, output_path / config_path)
+copyfile(config_path, output_path / config_path.name)
 
 def terminate(*args):
     "Stop the capture and clean up."
@@ -48,6 +48,9 @@ signal.signal(signal.SIGINT, terminate)
 
 
 config = Config(config_path, logger, cam_id)
-c = Camera(config, output_path, logger, gst_debug_level)
+c = Camera(config,
+           logger=logger,
+           path_to_output=output_path,
+           gst_debug_level=gst_debug_level)
 
 c.start_capture()
