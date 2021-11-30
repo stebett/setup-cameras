@@ -3,6 +3,12 @@ frequency = 15
 chunk_size = 50
 chunk_pause = 3000
 
+[arguments]
+output_path = "~/data/"
+camera_prefix = "cam"
+log_level = "info"
+gst_debug_level = 1
+
 [cam_0.general]
 accepted_width = [ 1920, 1920, 640, 640,]
 accepted_height = [ 1080, 1080, 480, 480,]
@@ -21,10 +27,10 @@ Brightness = 240
 "Exposure Auto Reference" = 128
 "Exposure Auto Upper Limit" = 33333
 "Exposure Auto Upper Limit Auto" = true
-"Exposure Time (us)" = 333
+"Exposure Time (us)" = 8333
 GPIn = 0
 GPOut = 0
-Gain = 0
+Gain = 148
 "Gain Auto" = true
 "Gain Auto Lower Limit" = 0
 "Gain Auto Upper Limit" = 240
@@ -48,7 +54,7 @@ Gain = 0
 Whitebalance = false
 "Whitebalance Auto" = true
 "Whitebalance Auto Preset" = "Any"
-"Whitebalance Blue" = 64
+"Whitebalance Blue" = 251
 "Whitebalance Green" = 64
-"Whitebalance Red" = 64
+"Whitebalance Red" = 74
 "Whitebalance Temperature" = 4000

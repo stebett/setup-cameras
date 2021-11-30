@@ -3,8 +3,9 @@ import os
 import re
 import toml
 import json
+import logging
 import subprocess
-import tiscam.input_helpers
+import tiscam.helpers
 from pathlib import Path
 
 
@@ -13,10 +14,10 @@ class Config:
 
     def __init__(self, config_path, logger, cam_id):
         "Initialize the object with a configuration path."
-        self.config_path = Path(config_path).expanduser()
+        self.raw_config = read_config(config_path)
+        self.config_path = config_path
         self.logger = logger
         self.cam_id = cam_id
-        self.read_config()
         self.apply_config()
 
         #self.set_real_framerate()
@@ -31,16 +32,6 @@ class Config:
             self.framerate = self.config["pwm"]["frequency"]
         else:
             self.framerate = self.config["general"]["framerate"]
-
-    def read_config(self):
-        "Read the configuration file."
-        try:
-            with self.config_path.open("r") as f:
-                self.raw_config = toml.load(f)
-        except FileNotFoundError:
-            logger.error("Invalid config file. If you want to use the default"
-                          " configuration, run record.py without argument")
-            raise FileNotFoundError("Invalid config file")
 
     def apply_config(self):
         cam = f"cam_{self.cam_id}"
@@ -66,10 +57,20 @@ class Config:
             self.logger.error(f"Exposure Time is too long for your framerate!")
             self.logger.error(f"Selected exposure: {exposure}us -> max framerate possible: {max_fps}Hz")
             self.logger.error(f"Desired framerate: {fps}Hz -> max exposure required: {(max_exposure):.1f}us")
-            ignore = input_helpers.ask_yes_or_no("Do you want to start the recording anyway? ")
+            ignore = helpers.ask_yes_or_no("Do you want to start the recording anyway? ")
             if not ignore:
                 raise Exception("Excecution interrupted by user")
             
+def read_config(path):
+    "Read the configuration file."
+    try:
+        with path.open("r") as f:
+            return toml.load(f)
+    except FileNotFoundError:
+        logging.error("Invalid config file. If you want to use the default"
+                      " configuration, run record.py without argument")
+        raise FileNotFoundError("Invalid config file")
+
 
 def get_serials():
     "Uses tcam commands to retrieve cameras serials"
@@ -121,6 +122,16 @@ def get_pwm():
     pwm["chunk_pause"] = 3000
     return pwm
 
+def get_arguments():
+    arguments = {}
+    arguments["output_path"] = "~/data/"
+    arguments["camera_prefix"] = "cam"
+    arguments["stdout_log_level"] = "info"
+    arguments["file_log_level"] = "debug"
+    arguments["gst_debug_level"] = 1
+    arguments["force"] = True
+    return arguments
+
 def create_config():
     "Create a config file with default parameters from a camera serial."
     serials = get_serials()
@@ -128,6 +139,7 @@ def create_config():
 
     config = {}
     config["pwm"] = get_pwm()
+    config["arguments"] = get_arguments()
 
     for n, s in enumerate(serials):
         cam = f"cam_{n}"

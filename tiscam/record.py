@@ -1,11 +1,11 @@
-"Start a recording from a json parameters file to an output folder."
+"Start a recording from a toml parameters file to an output folder."
 import sys
 import signal
 import logging
 import argparse
 from pathlib import Path
 
-from tiscam.input_helpers import ask_yes_or_no
+from tiscam.helpers import ask_yes_or_no
 from tiscam.camera import Camera
 from tiscam.config import Config 
 
@@ -18,9 +18,6 @@ parser.add_argument("-o", "--output",
                     help="Path to the output video folder.",
                     dest="path_video_folder", default=Path("./videos"),
                     type=lambda x: Path(x).expanduser())
-parser.add_argument("-t", "--test",
-                    help="Start in test mode",
-                    dest="test_mode", action="store_true")
 parser.add_argument("-f", "--force",
                     help="Force overwritting of the output directory content",
                     dest="overwrite", action="store_true")
