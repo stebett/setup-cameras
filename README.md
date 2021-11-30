@@ -8,10 +8,12 @@ Python code for setting up and launching video acquisition using TIS cameras.
 ### Python requirements
 Clone the repository and install the requirements **from a dedicated virtual environment**:
 ```bash
-$ git clone https://github.com/stebett/setup-cameras.git
-$ cd setup-cameras
-$ pip install -r requirements.txt
+$ (virtualenv) git clone https://github.com/stebett/setup-cameras.git
+$ (virtualenv) cd setup-cameras
+$ (virtualenv) pip install .
+$ (virtualenv) python setup.py clean
 ```
+
 This environment must be activated when running the tiscamera software installation.
 
 ### Tiscamera software
@@ -33,9 +35,6 @@ Troubles with the installation of the **gi module** can be solved [using one of 
 ### Pwm software
 Remember to install the [pypwm](https://github.com/rfayat/PWM_Arduino) package
 
-## Installation
-
-Install the package and the dependencies with `(virtualenv) $ python setup.py install clean`
 
 ## Usage
 
@@ -56,6 +55,12 @@ In order to do so **you must have modified the file `/etc/security/limits.conf` 
 
 You can activate the trigger mode from the **params.json**, refer to [pypwm](https://github.com/rfayat/PWM_Arduino) for documentation on usage.
 
+## Troubleshooting
+
+### Installation
+
+If pycairo gives an error, you will probably have to install `python3-dev`.  
+If you find some bug, you can report it through the issue system.
 
 ### TODO
 

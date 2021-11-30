@@ -62,22 +62,23 @@ if __name__ == "__main__":
         timestamps.append(ts)
 
 
-    _, ax = plt.subplots(len(cameras))
+    fig, _ = plt.subplots(len(cameras))
 
     i = 0
     for cam_ts in timestamps:
         total_loss = 0
+        ax = fig.axes[i]
         for ts in cam_ts:
-            ax[i].plot(ts.frames, ts.deltas, label=f"{ts.name} loss: {ts.loss}")
+            ax.plot(ts.frames, ts.deltas, label=f"{ts.name} loss: {ts.loss}")
             total_loss += ts.loss
 
-        ax[i].set_title(f"Camera {ts.cam} loss: {total_loss}")
-        ax[i].set_xlabel("Frame #")
-        ax[i].set_ylabel("Deltas (s)")
-        ax[i].legend()
-        box = ax[i].get_position()
-        ax[i].set_position([box.x0, box.y0, box.width * 0.8, box.height])
-        ax[i].legend(loc='center left', bbox_to_anchor=(1, 0.5))
+        ax.set_title(f"Camera {ts.cam} loss: {total_loss}")
+        ax.set_xlabel("Frame #")
+        ax.set_ylabel("Deltas (s)")
+        ax.legend()
+        box = ax.get_position()
+        ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+        ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
         i += 1
 
