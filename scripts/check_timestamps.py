@@ -45,7 +45,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument("-p", "--path",
                         help="Path to the directory containg the cameras",
-                        dest="path", type=lambda x: Path(x).expanduser().absolute())
+                        dest="path", default="~/data", 
+                        type=lambda x: Path(x).expanduser().absolute())
     parser.add_argument("--cam-prefix",
                         help="Prefix of directories for each cam (ex. [cam]1, [cam]2)",
                         dest="prefix", default="cam")
