@@ -64,8 +64,6 @@ if __name__ == "__main__":
             continue
         timestamps.append(ts)
 
-    print(cameras)
-
     fig, _ = plt.subplots(len(cameras))
 
     i = 0
