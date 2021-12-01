@@ -104,8 +104,7 @@ class TIS:
     def on_new_buffer(self, *args):
         "Set the generic ffunction called when a frame is received"
         try:
-            self.logger.info(f"Bytes in queue: {self._queue.get_property('current-level-bytes')}")
-            self.logger.info(f"Bytes in queue: {self._queue.get_property('current-level-buffers')}")
+            self.logger.debug(f"Buffers in queue: {self._queue.get_property('current-level-buffers')}")
         except Exception:
             pass
 

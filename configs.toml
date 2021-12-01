@@ -1,6 +1,6 @@
 [pwm]
-frequency = 15
-chunk_size = 50
+frequency = 120
+chunk_size = 3000
 chunk_pause = 3000
 
 [arguments]
@@ -9,7 +9,7 @@ camera_prefix = "cam"
 stdout_log_level = "info"
 file_log_level = "debug"
 gst_debug_level = 1
-compression_level = 0
+compression_level = 5
 max_buffers_queue = 30
 force = true
 
