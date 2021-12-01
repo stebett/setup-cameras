@@ -1,13 +1,13 @@
 [pwm]
-frequency = 100
-chunk_size = 3000
+frequency = 30
+chunk_size = 120
 chunk_pause = 3000
 
 [arguments]
 output_parent = "~/data/"
 camera_prefix = "cam"
 stdout_log_level = "info"
-file_log_level = "warning"
+file_log_level = "debug"
 gst_debug_level = 1
 force = true
 
@@ -29,10 +29,10 @@ Brightness = 240
 "Exposure Auto Reference" = 128
 "Exposure Auto Upper Limit" = 33333
 "Exposure Auto Upper Limit Auto" = true
-"Exposure Time (us)" = 8333
+"Exposure Time (us)" = 7000
 GPIn = 0
 GPOut = 0
-Gain = 235
+Gain = 42
 "Gain Auto" = false
 "Gain Auto Lower Limit" = 0
 "Gain Auto Upper Limit" = 240
@@ -42,7 +42,7 @@ Gain = 235
 "Offset Y" = 0
 "Override Scanning Mode" = 0
 "Reverse X" = false
-"Reverse Y" = false
+"Reverse Y" = true
 "Strobe Delay" = 0
 "Strobe Duration" = 100
 "Strobe Enable" = false
@@ -54,11 +54,11 @@ Gain = 235
 "Trigger Polarity" = "Rising Edge"
 "White Balance Temperature Preset" = "Cool White Fluorescent Light"
 Whitebalance = false
-"Whitebalance Auto" = true
+"Whitebalance Auto" = false
 "Whitebalance Auto Preset" = "Any"
-"Whitebalance Blue" = 225
-"Whitebalance Green" = 67
-"Whitebalance Red" = 64
+"Whitebalance Blue" = 171
+"Whitebalance Green" = 64
+"Whitebalance Red" = 88
 "Whitebalance Temperature" = 4000
 
 [cam_1.general]
@@ -73,7 +73,7 @@ serial = "44120513"
 [cam_1.properties]
 "Auto Functions ROI Control" = true
 "Auto Functions ROI Preset" = "Center 50%"
-Brightness = 240
+Brightness = 106
 "Exposure Auto" = false
 "Exposure Auto Lower Limit" = 60
 "Exposure Auto Reference" = 128
@@ -106,9 +106,9 @@ Gain = 54
 Whitebalance = false
 "Whitebalance Auto" = true
 "Whitebalance Auto Preset" = "Any"
-"Whitebalance Blue" = 255
+"Whitebalance Blue" = 181
 "Whitebalance Green" = 64
-"Whitebalance Red" = 70
+"Whitebalance Red" = 86
 "Whitebalance Temperature" = 4000
 
 [cam_2.general]
@@ -124,16 +124,16 @@ serial = "44120535"
 "Auto Functions ROI Control" = true
 "Auto Functions ROI Preset" = "Center 50%"
 Brightness = 240
-"Exposure Auto" = false
+"Exposure Auto" = true
 "Exposure Auto Lower Limit" = 60
 "Exposure Auto Reference" = 128
 "Exposure Auto Upper Limit" = 33333
 "Exposure Auto Upper Limit Auto" = true
-"Exposure Time (us)" = 8333
+"Exposure Time (us)" = 333
 GPIn = 0
 GPOut = 0
-Gain = 240
-"Gain Auto" = false
+Gain = 0
+"Gain Auto" = true
 "Gain Auto Lower Limit" = 0
 "Gain Auto Upper Limit" = 240
 "Highlight Reduction" = false
@@ -156,7 +156,7 @@ Gain = 240
 Whitebalance = false
 "Whitebalance Auto" = true
 "Whitebalance Auto Preset" = "Any"
-"Whitebalance Blue" = 98
+"Whitebalance Blue" = 64
 "Whitebalance Green" = 64
-"Whitebalance Red" = 66
+"Whitebalance Red" = 64
 "Whitebalance Temperature" = 4000
