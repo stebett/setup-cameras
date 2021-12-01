@@ -12,11 +12,10 @@ from pathlib import Path
 class Config:
     "A class to store configuration file and ensure right formatting."
 
-    def __init__(self, config_path, logger, cam_id):
+    def __init__(self, config_path, cam_id):
         "Initialize the object with a configuration path."
         self.raw_config = read_config(config_path)
         self.config_path = config_path
-        self.logger = logger
         self.cam_id = cam_id
         self.apply_config()
 
@@ -54,9 +53,9 @@ class Config:
 
         if fps > max_fps:
             max_exposure = 1e6 / fps
-            self.logger.error(f"Exposure Time is too long for your framerate!")
-            self.logger.error(f"Selected exposure: {exposure}us -> max framerate possible: {max_fps}Hz")
-            self.logger.error(f"Desired framerate: {fps}Hz -> max exposure required: {(max_exposure):.1f}us")
+            logging.error(f"Exposure Time is too long for your framerate!")
+            logging.error(f"Selected exposure: {exposure}us -> max framerate possible: {max_fps}Hz")
+            logging.error(f"Desired framerate: {fps}Hz -> max exposure required: {(max_exposure):.1f}us")
             ignore = helpers.ask_yes_or_no("Do you want to start the recording anyway? ")
             if not ignore:
                 raise Exception("Excecution interrupted by user")

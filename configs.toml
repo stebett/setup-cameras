@@ -9,7 +9,7 @@ camera_prefix = "cam"
 stdout_log_level = "info"
 file_log_level = "debug"
 gst_debug_level = 1
-compression_level = 5
+compression_level = 0
 max_buffers_queue = 30
 force = true
 

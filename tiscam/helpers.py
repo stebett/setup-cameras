@@ -1,5 +1,6 @@
 "Helper functions for parsing user input."
 import logging
+import sys
 
 def ask_yes_or_no(message, remaining_attempts=10):
     "Prompt a message and return True if the user confirms, False else."
@@ -40,20 +41,25 @@ def clean_output_dir(path_video_folder, overwrite):
             return False
     return True
 
-def get_logger(root_level, handler_level, path_video_folder):
-    root_numeric_level = getattr(logging, root_level.upper(), 10)
-    handler_numeric_level = getattr(logging, handler_level.upper(), 10)
+def get_logger(name, stream_level, file_level, path_video_folder):
+    stream_numeric_level = getattr(logging, stream_level.upper(), 10)
+    file_numeric_level = getattr(logging, file_level.upper(), 10)
 
-    root_logger = logging.getLogger()
-    root_logger.setLevel(level=root_numeric_level)
+    root_logger = logging.getLogger(f"cam_{name}")
+    root_logger.setLevel(level=logging.DEBUG)
+    root_logger.propagate = False
 
-    handler = logging.FileHandler(path_video_folder / "record.log", mode="w")
-    handler.setLevel(level=handler_numeric_level)
+    file_formatter = logging.Formatter('%(name)s: %(asctime)s.%(msecs)03d - %(levelname)s - %(message)s',
+        datefmt='%H:%M:%S')
+    file_handler = logging.FileHandler(path_video_folder / "record.log", mode="w")
+    file_handler.setLevel(level=file_numeric_level)
+    file_handler.setFormatter(file_formatter)
+    root_logger.addHandler(file_handler)
 
-    formatter = logging.Formatter(
-        '%(asctime)s.%(msecs)03d - %(levelname)s - %(message)s',
-        datefmt='%H:%M:%S'
-    )
-    handler.setFormatter(formatter)
-    root_logger.addHandler(handler)
+    stream_formatter = logging.Formatter('%(name)s: %(levelname)s - %(message)s')
+    stream_handler = logging.StreamHandler(sys.stdout)
+    stream_handler.setLevel(level=stream_numeric_level)
+    stream_handler.setFormatter(stream_formatter)
+    root_logger.addHandler(stream_handler)
+
     return root_logger
