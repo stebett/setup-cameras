@@ -19,7 +19,7 @@ def ask_yes_or_no(message, remaining_attempts=10):
 
 # If files were detected, remove it if the --force option was provided
 # If not, ask the user if we need to overwrite the directory's content.
-def clean_output_dir(path_video_folder, logger, overwrite):
+def clean_output_dir(path_video_folder, overwrite):
     if path_video_folder.exists():
         files_to_remove = []
         for f in path_video_folder.iterdir():
@@ -28,7 +28,7 @@ def clean_output_dir(path_video_folder, logger, overwrite):
         has_file = len(files_to_remove) > 0
     else:
         path_video_folder.mkdir(parents=True)
-        root_logger.info(f"Created output directory ({path_video_folder})")
+        logging.info(f"Created output directory ({path_video_folder})")
         has_file = False
 
     if has_file:

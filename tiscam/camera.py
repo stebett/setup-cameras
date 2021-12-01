@@ -195,6 +195,7 @@ class Camera(TIS):
     def stop_capture(self):
         "Stop the capture and cleanup."
         self.logger.info("Killing pipeline")
+        self.queue.close()
         self.stop_pipeline()
         self.logger.info("Recording stopped")
 
@@ -218,9 +219,7 @@ class Camera(TIS):
             self.queue.check_delay()
             self.queue.go = True
 
-            self.logger.info("Closing pipeline")
-            self.stop_pipeline()
-            self.queue.close()
+            self.stop_capture()
 
     def create_callback(self):
         "Define function to call when a frame is received."

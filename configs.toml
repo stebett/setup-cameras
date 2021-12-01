@@ -5,7 +5,7 @@ chunk_pause = 3000
 
 [arguments]
 output_parent = "~/data/"
-camera_prefix = "cam"
+camera_prefix = "cam_ciao"
 stdout_log_level = "info"
 file_log_level = "debug"
 gst_debug_level = 1

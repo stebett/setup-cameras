@@ -36,9 +36,9 @@ max_buffers_queue = arguments["max_buffers_queue"]
 output_file =  camera_prefix + cam_id
 output_path = output_parent / output_file
 
-logger = get_logger(stdout_log_level, file_log_level, output_path) 
-if not clean_output_dir(output_path, logger, overwrite):
+if not clean_output_dir(output_path, overwrite):
     sys.exit()
+logger = get_logger(stdout_log_level, file_log_level, output_path) 
 
 config_copy_path = output_path / config_path.name
 copyfile(config_path, config_copy_path)

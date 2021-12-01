@@ -60,8 +60,11 @@ if __name__ == "__main__":
     for cam in cameras:
         pickles = sorted(cam.glob("*.pickle"))
         ts = [Timestamps(p) for p in pickles]
+        if len(ts) == 0:
+            continue
         timestamps.append(ts)
 
+    print(cameras)
 
     fig, _ = plt.subplots(len(cameras))
 
