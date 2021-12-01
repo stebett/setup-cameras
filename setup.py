@@ -18,7 +18,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(name="tiscam",
-        version="0.1",
+        version="0.2",
         author="Stefano Bettani",
         author_email="s.bettani@tuta.io",
         description=__doc__,
