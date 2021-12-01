@@ -30,6 +30,8 @@ stdout_log_level = arguments["stdout_log_level"]
 file_log_level = arguments["file_log_level"]
 gst_debug_level = arguments["gst_debug_level"]
 overwrite = arguments["force"]
+compression_level = arguments["compression_level"]
+max_buffers_queue = arguments["max_buffers_queue"]
 
 output_file =  camera_prefix + cam_id
 output_path = output_parent / output_file
@@ -53,6 +55,8 @@ config = Config(config_path, logger, cam_id)
 c = Camera(config,
            logger=logger,
            path_to_output=output_path,
-           gst_debug_level=gst_debug_level)
+           gst_debug_level=gst_debug_level,
+           compression_level=compression_level,
+           max_buffers_queue=max_buffers_queue)
 
 c.start_capture()

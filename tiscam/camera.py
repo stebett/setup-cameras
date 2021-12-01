@@ -23,6 +23,8 @@ class TIS:
     def __init__(self, gst_debug_level):
         "Constructor of TIS object"
         self.gst_debug_level = gst_debug_level
+        self.compression_level = 0
+        self.max_buffers_queue = 1
         self.logger = None
         Gst.init(["record.py", f"--gst-debug-level={self.gst_debug_level}"])
 
@@ -43,8 +45,7 @@ class TIS:
             p += " ! fpsdisplaysink sink=ximagesink"
         else:
             p += " ! queue name=queue"
-            compression = 0
-            p += f" ! x264enc quantizer={compression} qp-min={compression} qp-max={compression} qp-step={compression} speed-preset=ultrafast tune=zerolatency pass=qual sliced-threads=true"
+            p += f" ! x264enc quantizer={self.compression_level} qp-min={self.compression_level} qp-max={self.compression_level} qp-step={self.compression_level} speed-preset=ultrafast tune=zerolatency pass=qual sliced-threads=true"
             p += " ! avimux"
             p += " ! filesink name=fsink"
 
@@ -71,7 +72,7 @@ class TIS:
         if not self.livedisplay:
             try:
                 self._queue = self.pipeline.get_by_name("queue")
-                self._queue.set_property("max-size-buffers", 2000)
+                self._queue.set_property("max-size-buffers", self.max_buffers_queue)
                 self._queue.set_property("max-size-bytes", 0)
                 self._queue.set_property("max-size-time", 0)
                 self._queue.connect("overrun", self.on_full_queue)
@@ -163,7 +164,7 @@ class Camera(TIS):
     :param path_to_output: directory where videos and logs should be saved
     """
 
-    def __init__(self, config, logger, path_to_output='videos', gst_debug_level=1):
+    def __init__(self, config, logger, path_to_output='videos', gst_debug_level=1, compression_level=0, max_buffers_queue=1):
         "Initialize the Camera object."
         super().__init__(gst_debug_level)
         self.path_to_output = Path(path_to_output)
@@ -172,6 +173,8 @@ class Camera(TIS):
         self.pipeline = None
         self.queue = None
         self.livedisplay = False
+        self.compression_level = compression_level
+        self.max_buffers_queue = max_buffers_queue
 
     def capture(self):
         "Start capturing videos and handle keyboardinterrupt."

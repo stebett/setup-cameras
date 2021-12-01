@@ -1,6 +1,6 @@
 [pwm]
-frequency = 100
-chunk_size = 3000
+frequency = 15
+chunk_size = 50
 chunk_pause = 3000
 
 [arguments]
@@ -9,88 +9,40 @@ camera_prefix = "cam"
 stdout_log_level = "info"
 file_log_level = "debug"
 gst_debug_level = 1
+compression_level = 0
+max_buffers_queue = 30
 force = true
 
 [cam_0.general]
 accepted_width = [ 1920, 1920, 640, 640,]
 accepted_height = [ 1080, 1080, 480, 480,]
 color = true
-width = 640
-height = 480
-framerate = 120
-serial = "44120512"
-
-[cam_0.properties]
-"Auto Functions ROI Control" = false
-"Auto Functions ROI Preset" = "Center 50%"
-Brightness = 240
-"Exposure Auto" = false
-"Exposure Auto Lower Limit" = 60
-"Exposure Auto Reference" = 128
-"Exposure Auto Upper Limit" = 33333
-"Exposure Auto Upper Limit Auto" = true
-"Exposure Time (us)" = 7000
-GPIn = 0
-GPOut = 0
-Gain = 50
-"Gain Auto" = false
-"Gain Auto Lower Limit" = 0
-"Gain Auto Upper Limit" = 240
-"Highlight Reduction" = false
-"Offset Auto Center" = true
-"Offset X" = 640
-"Offset Y" = 300
-"Override Scanning Mode" = 1
-"Reverse X" = false
-"Reverse Y" = true
-"Strobe Delay" = 0
-"Strobe Duration" = 1
-"Strobe Enable" = false
-"Strobe Exposure" = false
-"Strobe Polarity" = false
-"Trigger Delay (us)" = 31
-"Trigger Global Reset Release" = false
-"Trigger Mode" = true
-"Trigger Polarity" = "Falling Edge"
-"White Balance Temperature Preset" = "Cool White Fluorescent Light"
-Whitebalance = false
-"Whitebalance Auto" = false
-"Whitebalance Auto Preset" = "Any"
-"Whitebalance Blue" = 171
-"Whitebalance Green" = 64
-"Whitebalance Red" = 88
-"Whitebalance Temperature" = 4000
-
-[cam_1.general]
-accepted_width = [ 1920, 1920, 640, 640,]
-accepted_height = [ 1080, 1080, 480, 480,]
-color = true
 width = 1920
 height = 1080
 framerate = 120
-serial = "44120513"
+serial = "44120535"
 
-[cam_1.properties]
+[cam_0.properties]
 "Auto Functions ROI Control" = true
 "Auto Functions ROI Preset" = "Center 50%"
 Brightness = 240
-"Exposure Auto" = false
+"Exposure Auto" = true
 "Exposure Auto Lower Limit" = 60
 "Exposure Auto Reference" = 128
 "Exposure Auto Upper Limit" = 33333
 "Exposure Auto Upper Limit Auto" = true
-"Exposure Time (us)" = 7000
+"Exposure Time (us)" = 333
 GPIn = 0
 GPOut = 0
-Gain = 50
-"Gain Auto" = false
+Gain = 0
+"Gain Auto" = true
 "Gain Auto Lower Limit" = 0
 "Gain Auto Upper Limit" = 240
 "Highlight Reduction" = false
 "Offset Auto Center" = true
-"Offset X" = 640
-"Offset Y" = 300
-"Override Scanning Mode" = 1
+"Offset X" = 0
+"Offset Y" = 0
+"Override Scanning Mode" = 0
 "Reverse X" = false
 "Reverse Y" = false
 "Strobe Delay" = 0
@@ -100,63 +52,13 @@ Gain = 50
 "Strobe Polarity" = false
 "Trigger Delay (us)" = 31
 "Trigger Global Reset Release" = false
-"Trigger Mode" = true
-"Trigger Polarity" = "Falling Edge"
+"Trigger Mode" = false
+"Trigger Polarity" = "Rising Edge"
 "White Balance Temperature Preset" = "Cool White Fluorescent Light"
 Whitebalance = false
 "Whitebalance Auto" = true
 "Whitebalance Auto Preset" = "Any"
-"Whitebalance Blue" = 246
+"Whitebalance Blue" = 64
 "Whitebalance Green" = 64
-"Whitebalance Red" = 83
-"Whitebalance Temperature" = 4000
-
-[cam_2.general]
-accepted_width = [ 1920, 1920, 640, 640,]
-accepted_height = [ 1080, 1080, 480, 480,]
-color = true
-width = 1920
-height = 1080
-framerate = 120
-serial = "44120535"
-
-[cam_2.properties]
-"Auto Functions ROI Control" = true
-"Auto Functions ROI Preset" = "Center 50%"
-Brightness = 240
-"Exposure Auto" = false
-"Exposure Auto Lower Limit" = 60
-"Exposure Auto Reference" = 128
-"Exposure Auto Upper Limit" = 33333
-"Exposure Auto Upper Limit Auto" = true
-"Exposure Time (us)" = 7000
-GPIn = 0
-GPOut = 0
-Gain = 50
-"Gain Auto" = false
-"Gain Auto Lower Limit" = 0
-"Gain Auto Upper Limit" = 240
-"Highlight Reduction" = false
-"Offset Auto Center" = true
-"Offset X" = 640
-"Offset Y" = 300
-"Override Scanning Mode" = 1
-"Reverse X" = false
-"Reverse Y" = false
-"Strobe Delay" = 0
-"Strobe Duration" = 1
-"Strobe Enable" = false
-"Strobe Exposure" = false
-"Strobe Polarity" = false
-"Trigger Delay (us)" = 31
-"Trigger Global Reset Release" = false
-"Trigger Mode" = true
-"Trigger Polarity" = "Falling Edge"
-"White Balance Temperature Preset" = "Cool White Fluorescent Light"
-Whitebalance = false
-"Whitebalance Auto" = false
-"Whitebalance Auto Preset" = "Any"
-"Whitebalance Blue" = 232
-"Whitebalance Green" = 64
-"Whitebalance Red" = 88
+"Whitebalance Red" = 64
 "Whitebalance Temperature" = 4000

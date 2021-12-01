@@ -129,6 +129,8 @@ def get_arguments():
     arguments["stdout_log_level"] = "info"
     arguments["file_log_level"] = "debug"
     arguments["gst_debug_level"] = 1
+    arguments["compression_level"] = 0
+    arguments["max_buffers_queue"] = 30
     arguments["force"] = True
     return arguments
 
