@@ -1,17 +1,15 @@
 #!/usr/bin/env bash
 
 config=configs.toml
-output_root=~/data/cam
 
 n=$(($(tcam-ctrl -l | wc -l) - 1))
 
 PID=5
 for i in $(seq 0 $n); do
 	output=$output_root$i
-	python -m tiscam.record -c $config -o $output -f -i $i &
+	python -m tiscam.simple-record -c $config -i $i &
 	PID=$!
 	echo $PID
-	cp $config $output/$config
 done
 
 wait $PID

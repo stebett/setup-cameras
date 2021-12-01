@@ -1,108 +1,65 @@
 "Start a recording from a toml parameters file to an output folder."
 import sys
 import signal
-import logging
 import argparse
+from shutil import copyfile
 from pathlib import Path
 
-from tiscam.helpers import ask_yes_or_no
+from tiscam.helpers import clean_output_dir, get_logger
 from tiscam.camera import Camera
-from tiscam.config import Config 
+from tiscam.config import Config, read_config
 
 
 parser = argparse.ArgumentParser(__doc__)
 parser.add_argument("-c", "--config_path",
                     help="Path to the state file of the camera",
-                    dest="config_path", default="configs.toml")
-parser.add_argument("-o", "--output",
-                    help="Path to the output video folder.",
-                    dest="path_video_folder", default=Path("./videos"),
-                    type=lambda x: Path(x).expanduser())
-parser.add_argument("-f", "--force",
-                    help="Force overwritting of the output directory content",
-                    dest="overwrite", action="store_true")
-parser.add_argument("-l", "--log",
-                    help="Set log level, possible values are debug | info | warning | error",
-                    dest="log_level", default="info")
-parser.add_argument("--gst-debug-level",
-                    help="Gstreamer debug level, values go from 1 to 5",
-                    dest="gst_debug_level", default="1")
+                    dest="config_path", default="configs.toml",
+                    type=lambda x: Path(x).expanduser().absolute())
 parser.add_argument("-i", "--camera-id",
-                    help="Identifier of camera",
-                    dest="cam_id", default="0",
-                    type=lambda x: int(x))
+                    help="Index of camera",
+                    dest="cam_id", default="0")
+parser.add_argument("-o", "--output-dir",
+                    help="Output directory where to save videos",
+                    dest="output_parent", default=False)
 
 args = parser.parse_args()
 config_path = args.config_path
-path_video_folder = args.path_video_folder.absolute()
-overwrite = args.overwrite
-log_level = args.log_level
 cam_id = args.cam_id
-gst_debug_level = args.gst_debug_level
 
+arguments = read_config(config_path)["arguments"]
+camera_prefix = arguments["camera_prefix"]
+stdout_log_level = arguments["stdout_log_level"]
+file_log_level = arguments["file_log_level"]
+gst_debug_level = arguments["gst_debug_level"]
+overwrite = arguments["force"]
+compression_level = arguments["compression_level"]
+max_buffers_queue = arguments["max_buffers_queue"]
 
-# Logging
-if log_level == "debug":
-    level = logging.DEBUG
-elif log_level == "info":
-    level = logging.INFO
-elif log_level == "warning":
-    level = logging.WARNING
-elif log_level == "error":
-    level = logging.ERROR
-else:
-    raise Exception("record: invalid log level!\nTry '--help' for more information.")
+output_parent = args.output_parent or arguments["output_parent"]
+output_file =  camera_prefix + cam_id
+output_path = Path(output_parent).expanduser().absolute() / output_file
 
-root_logger = logging.getLogger()
-root_logger.setLevel(level=level)
+if not clean_output_dir(output_path, overwrite):
+    sys.exit()
+logger = get_logger(cam_id, stdout_log_level, file_log_level, output_path) 
 
-# List the avi and pickle files in the folder
-if path_video_folder.exists():
-    files_to_remove = []
-    for f in path_video_folder.iterdir():
-        if f.suffix in [".avi", ".pickle"]:
-            files_to_remove.append(f)
-    has_file = len(files_to_remove) > 0
-else:
-    path_video_folder.mkdir(parents=True)
-    root_logger.info(f"Created output directory ({path_video_folder})")
-    has_file = False
+config_copy_path = output_path / config_path.name
+copyfile(config_path, config_copy_path)
 
-handler = logging.FileHandler(path_video_folder / "record.log", mode="w")
-handler.setLevel(level=logging.DEBUG)
-formatter = logging.Formatter(
-    '%(asctime)s.%(msecs)03d - %(levelname)s - %(message)s',
-    datefmt='%H:%M:%S'
-)
-handler.setFormatter(formatter)
-root_logger.addHandler(handler)
-
-# If files were detected, remove it if the --force option was provided
-# If not, ask the user if we need to overwrite the directory's content.
-if has_file:
-    message = f"Content detected in {path_video_folder}, do you wish to overwrite ? [Y/n]\n"  # noqa E501
-    if overwrite or ask_yes_or_no(message):
-        for f in files_to_remove:
-            f.unlink()
-    else:
-        sys.exit()
-
-# Run with default config if no config had been provided
-config_path = Path(config_path).expanduser().absolute()
-config = Config(config_path, root_logger, cam_id)
-
-
-c = Camera(config, path_to_output=path_video_folder,
-           logger=root_logger, gst_debug_level=gst_debug_level)
-
-
-# Attach interruption signal to stop_capture and start the recording
-def cleanup(*args):
+def terminate(*args):
     "Stop the capture and clean up."
     global c
     c.stop_capture()
     sys.exit()
+signal.signal(signal.SIGINT, terminate)
 
 
-signal.signal(signal.SIGINT, cleanup)
+config = Config(config_path, cam_id)
+c = Camera(config,
+           logger=logger,
+           path_to_output=output_path,
+           gst_debug_level=gst_debug_level,
+           compression_level=compression_level,
+           max_buffers_queue=max_buffers_queue)
+
 c.start_capture()
