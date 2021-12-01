@@ -42,9 +42,9 @@ class TIS:
             p += " ! video/x-raw,width=640,height=360"
             p += " ! fpsdisplaysink sink=ximagesink"
         else:
-            p += " ! x264enc quantizer=0 qp-min=0 qp-max=0 qp-step=0"
-            p += " ! avimux"
             p += " ! queue name=queue"
+            p += " ! x264enc quantizer=6 qp-min=6 qp-max=6 qp-step=6 speed-preset=ultrafast tune=zerolatency pass=qual sliced-threads=true"
+            p += " ! avimux"
             p += " ! filesink name=fsink"
 
         self.logger.debug(f"Gst pipeline: {p}")
@@ -70,18 +70,23 @@ class TIS:
         if not self.livedisplay:
             try:
                 self._queue = self.pipeline.get_by_name("queue")
-                self._queue.set_property("max-size-buffers", 0)
-                self._queue.set_property("max-size-bytes", int(1.5e9))
+                self._queue.set_property("max-size-buffers", 90)
+                self._queue.set_property("max-size-bytes", 0)
                 self._queue.set_property("max-size-time", 0)
+                self._queue.connect("overrun", self.on_full_queue)
 
-            except Exception:
-                self.logger.warning("No queue was found")
+            except Exception as e:
+                self.logger.warning(f"No queue was found: {e}")
             
             self.filesink = self.pipeline.get_by_name("fsink")
             self.filesink.set_property("location", video_path)
 
             self.filesink = self.pipeline.get_by_name("fsink")
             self.filesink.set_property("location", video_path)
+
+    def on_full_queue(self, *args):
+        self.logger.warning("Queue is full")
+        return False
 
     def stop_pipeline(self):
         "Stops the pipeline"
@@ -96,6 +101,12 @@ class TIS:
 
     def on_new_buffer(self, *args):
         "Set the generic ffunction called when a frame is received"
+        try:
+            self.logger.info(f"Bytes in queue: {self._queue.get_property('current-level-bytes')}")
+            self.logger.info(f"Bytes in queue: {self._queue.get_property('current-level-buffers')}")
+        except Exception:
+            pass
+
         self.image_callback(self, *self.image_callback_data);
         return False
 

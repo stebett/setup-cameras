@@ -1,7 +1,7 @@
 [pwm]
 frequency = 30
-chunk_size = 120
-chunk_pause = 3000
+chunk_size = 500
+chunk_pause = 5000
 
 [arguments]
 output_parent = "~/data/"
@@ -40,7 +40,7 @@ Gain = 42
 "Offset Auto Center" = true
 "Offset X" = 0
 "Offset Y" = 0
-"Override Scanning Mode" = 0
+"Override Scanning Mode" = 1
 "Reverse X" = false
 "Reverse Y" = true
 "Strobe Delay" = 0

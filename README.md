@@ -64,11 +64,13 @@ If you find some bug, you can report it through the issue system.
 
 ### TODO
 
-- [ ] Configuration put union in properties and diff in specific conf
+- [ ] log the queue
+- [ ] debug custom directory
 - [ ] Automatically test with different parameters and save frame loss data
 - [ ] Options for MJPEG + AVI and H.264/H.265 + MP4
 - [ ] don't save empty videos
 - [ ] check that all metatadata is written on videos
+- [x] Configuration put union in properties and diff in specific conf
 - [x] Implement non-dropping queue (?)
 - [x] create_configs with automatic serial code
 - [x] don't save empty videos
@@ -87,3 +89,9 @@ If you find some bug, you can report it through the issue system.
 - [x] Argument to set log output to file
 - [x] Exposure time auto check
 - [x] single config file
+
+### DEV
+
+Gstreamer compression with ok quality
+
+	p += " ! x264enc quantizer=6 qp-min=6 qp-max=6 qp-step=6 speed-preset=ultrafast tune=zerolatency pass=qual sliced-threads=true"
