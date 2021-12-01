@@ -262,7 +262,7 @@ class Queue:
     def __init__(self, path_to_output, chunk_pause, expected_frames, logger):
         "Initialize the queue object."
         # TODO: Find a better way to define timeout_delay
-        self.timeout_delay = chunk_pause / 1000 - 1
+        self.timeout_delay = (chunk_pause / 1000) / 2
         self.expected_frames = expected_frames
         self.path_to_output = path_to_output
         self.logger = logger
