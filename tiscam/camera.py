@@ -196,7 +196,6 @@ class Camera(TIS):
         self.logger.info("Killing pipeline")
         self.queue.close()
         self.stop_pipeline()
-        self.logger.info("Recording stopped")
 
 
     def loop(self):
@@ -225,6 +224,7 @@ class Camera(TIS):
         self.queue = Queue(self.path_to_output,
                            self.config.pwm['chunk_pause'],
                            self.config.pwm['chunk_size'],
+                           self.config.properties['Trigger Mode'],
                            self.logger)
         self.set_image_callback(add_frame, self.queue)
 
@@ -258,12 +258,13 @@ class Queue:
 
     """
 
-    def __init__(self, path_to_output, chunk_pause, expected_frames, logger):
+    def __init__(self, path_to_output, chunk_pause, expected_frames, trigger_mode, logger):
         "Initialize the queue object."
         # TODO: Find a better way to define timeout_delay
+        self.path_to_output = path_to_output
         self.timeout_delay = (chunk_pause / 1000) / 2
         self.expected_frames = expected_frames
-        self.path_to_output = path_to_output
+        self.trigger_mode = trigger_mode
         self.logger = logger
 
         self.videos = []
@@ -297,18 +298,15 @@ class Queue:
                 time.sleep(0.001)
 
     def reset_relative_zero(self):
-        if self.expected_frames > 0:
-            self.relative_zero = self.expected_frames * len(self.videos)
-            self.logger.info(f"relative zero: {self.relative_zero}")
+        self.relative_zero = self.expected_frames * len(self.videos)
+        self.logger.info(f"relative zero: {self.relative_zero}")
 
     def reset_counters(self):
-        if self.expected_frames > 0:
-            self.counter = self.relative_zero
-            self.chunk_counter = 0
+        self.counter = self.relative_zero
+        self.chunk_counter = 0
 
     def estimate_loss(self):
-        if self.expected_frames > 0:
-            self.frame_loss = self.expected_frames - self.chunk_counter
+        self.frame_loss = self.expected_frames - self.chunk_counter
 
     def log_frame_number_warning(self):
         "Log a warning with the actual and expected frame numbers."
@@ -321,13 +319,17 @@ class Queue:
 
     def close(self):
         "Run all estimations in the right order, resets the parameters and save the timestamps"
-        self.estimate_framerate()
-        self.estimate_loss()
+        if self.expected_frames & self.trigger_mode > 0:
+            self.estimate_framerate()
+            self.estimate_loss()
+
         self.save_timestamps()
-        self.reset_relative_zero()
-        if self.frame_loss > 0:
-            self.log_frame_number_warning()
-        self.reset_counters()
+
+        if self.expected_frames & self.trigger_mode > 0:
+            self.reset_relative_zero()
+            if self.frame_loss > 0:
+                self.log_frame_number_warning()
+            self.reset_counters()
 
 
     def new_video(self):

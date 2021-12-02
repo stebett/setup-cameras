@@ -7,7 +7,7 @@ n=$(($(tcam-ctrl -l | wc -l) - 1))
 PID=5
 for i in $(seq 0 $n); do
 	output=$output_root$i
-	python -m tiscam.simple-record -c $config -i $i &
+	python -m tiscam.record -c $config -i $i &
 	PID=$!
 	echo $PID
 done

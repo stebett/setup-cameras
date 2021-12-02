@@ -1,6 +1,6 @@
 [pwm]
-frequency = 120
-chunk_size = 3000
+frequency = 15
+chunk_size = 50
 chunk_pause = 3000
 
 [arguments]
@@ -20,7 +20,7 @@ color = true
 width = 1920
 height = 1080
 framerate = 120
-serial = "44120535"
+serial = "44120512"
 
 [cam_0.properties]
 "Auto Functions ROI Control" = true
