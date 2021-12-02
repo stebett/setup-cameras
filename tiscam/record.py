@@ -15,33 +15,36 @@ parser.add_argument("-c", "--config_path",
                     help="Path to the state file of the camera",
                     dest="config_path", default="configs.toml",
                     type=lambda x: Path(x).expanduser().absolute())
-parser.add_argument("-i", "--camera-id",
-                    help="Index of camera",
-                    dest="cam_id", default="0")
+parser.add_argument("-s", "--serial",
+                    help="Serial of camera",
+                    dest="serial", default=False)
 parser.add_argument("-o", "--output-dir",
                     help="Output directory where to save videos",
                     dest="output_parent", default=False)
 
 args = parser.parse_args()
 config_path = args.config_path
-cam_id = args.cam_id
+serial = args.serial
 
-arguments = read_config(config_path)["arguments"]
-camera_prefix = arguments["camera_prefix"]
-stdout_log_level = arguments["stdout_log_level"]
-file_log_level = arguments["file_log_level"]
-gst_debug_level = arguments["gst_debug_level"]
-overwrite = arguments["force"]
-compression_level = arguments["compression_level"]
-max_buffers_queue = arguments["max_buffers_queue"]
+arguments = read_config(config_path)["tiscam"]
 
-output_parent = args.output_parent or arguments["output_parent"]
-output_file =  camera_prefix + cam_id
+camera_prefix = arguments["path"]["prefix"]
+overwrite = arguments["path"]["overwrite"]
+
+stream_log_level = arguments["logging"]["stream_level"]
+gst_debug_level = arguments["logging"]["gst_level"]
+file_log_level = arguments["logging"]["file_level"]
+
+compression_level = arguments["pipeline"]["compression_level"]
+max_buffers_queue = arguments["pipeline"]["max_buffers_queue"]
+
+output_parent = args.output_parent or arguments["path"]["output_folder"]
+output_file =  camera_prefix + serial
 output_path = Path(output_parent).expanduser().absolute() / output_file
 
 if not clean_output_dir(output_path, overwrite):
     sys.exit()
-logger = get_logger(cam_id, stdout_log_level, file_log_level, output_path) 
+logger = get_logger(serial, stream_log_level, file_log_level, output_path) 
 
 config_copy_path = output_path / config_path.name
 copyfile(config_path, config_copy_path)
@@ -54,7 +57,7 @@ def terminate(*args):
 signal.signal(signal.SIGINT, terminate)
 
 
-config = Config(config_path, cam_id)
+config = Config(config_path, serial)
 c = Camera(config,
            logger=logger,
            path_to_output=output_path,

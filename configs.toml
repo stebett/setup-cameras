@@ -1,64 +1,102 @@
+[experiment]
+date = "2-12-21"
+animal = "test"
+block = 1
+
+[experiment.path]
+output_folder = "~/bigdata"
+
 [pwm]
 frequency = 15
 chunk_size = 50
 chunk_pause = 3000
 
-[arguments]
-output_parent = "~/data/"
-camera_prefix = "cam_mov"
-stdout_log_level = "info"
-file_log_level = "debug"
-gst_debug_level = 1
-compression_level = 0
+[tiscam.path]
+output_folder = "~/data/"
+prefix = "cam"
+overwrite = true
+
+[tiscam.logging]
+stream_level = "info"
+file_level = "debug"
+gst_level = 1
+
+[tiscam.pipeline]
 max_buffers_queue = 30
-force = true
+compression_level = 0
 
-[cam_0.general]
-accepted_width = [ 1920, 1920, 640, 640,]
-accepted_height = [ 1080, 1080, 480, 480,]
-color = true
-width = 1920
-height = 1080
-framerate = 120
-serial = "44120512"
-
-[cam_0.properties]
+[tiscam.properties.common]
+"Trigger Delay (us)" = 31
 "Auto Functions ROI Control" = true
-"Auto Functions ROI Preset" = "Center 50%"
-Brightness = 240
-"Exposure Auto" = true
-"Exposure Auto Lower Limit" = 60
-"Exposure Auto Reference" = 128
+"Trigger Global Reset Release" = false
+"Reverse Y" = false
+"Whitebalance Temperature" = 4000
+"Whitebalance Green" = 64
+"Offset Y" = 0
+"Highlight Reduction" = false
 "Exposure Auto Upper Limit" = 33333
-"Exposure Auto Upper Limit Auto" = true
-"Exposure Time (us)" = 333
-GPIn = 0
-GPOut = 0
-Gain = 0
-"Gain Auto" = true
+"Strobe Delay" = 0
+"Reverse X" = false
 "Gain Auto Lower Limit" = 0
 "Gain Auto Upper Limit" = 240
-"Highlight Reduction" = false
-"Offset Auto Center" = true
-"Offset X" = 0
-"Offset Y" = 0
+"Exposure Auto" = true
+"Trigger Polarity" = "Rising Edge"
+"Exposure Auto Lower Limit" = 60
+"Exposure Auto Upper Limit Auto" = true
+Brightness = 240
+"Trigger Mode" = false
 "Override Scanning Mode" = 0
-"Reverse X" = false
-"Reverse Y" = false
-"Strobe Delay" = 0
-"Strobe Duration" = 100
+"Exposure Auto Reference" = 128
 "Strobe Enable" = false
 "Strobe Exposure" = true
-"Strobe Polarity" = false
-"Trigger Delay (us)" = 31
-"Trigger Global Reset Release" = false
-"Trigger Mode" = false
-"Trigger Polarity" = "Rising Edge"
 "White Balance Temperature Preset" = "Cool White Fluorescent Light"
-Whitebalance = false
-"Whitebalance Auto" = true
 "Whitebalance Auto Preset" = "Any"
+"Gain Auto" = true
+GPOut = 0
+"Strobe Duration" = 100
+"Offset X" = 0
+"Whitebalance Auto" = true
+"Offset Auto Center" = true
+"Strobe Polarity" = false
+"Auto Functions ROI Preset" = "Center 50%"
+GPIn = 0
+Whitebalance = false
+
+[tiscam.properties.44120512]
+"Exposure Time (us)" = 8333
+Gain = 94
+"Whitebalance Blue" = 226
+"Whitebalance Red" = 77
+
+[tiscam.properties.44120513]
+"Exposure Time (us)" = 333
+Gain = 0
 "Whitebalance Blue" = 64
-"Whitebalance Green" = 64
 "Whitebalance Red" = 64
-"Whitebalance Temperature" = 4000
+
+[tiscam.properties.44120535]
+"Exposure Time (us)" = 333
+Gain = 0
+"Whitebalance Blue" = 64
+"Whitebalance Red" = 64
+
+[tiscam.caps.common]
+framerate = 120
+height = 1080
+color = true
+width = 1920
+
+[tiscam.caps.44120512]
+accepted_width = [ 1920, 1920, 640, 640,]
+accepted_height = [ 1080, 1080, 480, 480,]
+serial = "44120512"
+
+[tiscam.caps.44120513]
+accepted_width = [ 1920, 1920, 640, 640,]
+accepted_height = [ 1080, 1080, 480, 480,]
+serial = "44120513"
+
+[tiscam.caps.44120535]
+accepted_width = [ 1920, 1920, 640, 640,]
+accepted_height = [ 1080, 1080, 480, 480,]
+serial = "44120535"

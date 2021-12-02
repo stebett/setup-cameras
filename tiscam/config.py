@@ -7,16 +7,17 @@ import logging
 import subprocess
 import tiscam.helpers
 from pathlib import Path
+from collections.abc import Hashable
 
 
 class Config:
     "A class to store configuration file and ensure right formatting."
 
-    def __init__(self, config_path, cam_id):
+    def __init__(self, config_path, serial):
         "Initialize the object with a configuration path."
         self.raw_config = read_config(config_path)
         self.config_path = config_path
-        self.cam_id = cam_id
+        self.serial = serial
         self.apply_config()
 
         #self.set_real_framerate()
@@ -30,15 +31,21 @@ class Config:
         if self.config["properties"]["Trigger Mode"]:
             self.framerate = self.config["pwm"]["frequency"]
         else:
-            self.framerate = self.config["general"]["framerate"]
+            self.framerate = self.config["caps"]["framerate"]
 
     def apply_config(self):
-        cam = f"cam_{self.cam_id}"
         self.pwm = self.raw_config["pwm"]
-        self.general = self.raw_config[cam]["general"]
-        self.properties = self.raw_config[cam]["properties"]
+        self.caps = {}
+        self.properties = {}
+        if self.serial:
+            self.caps.update(self.raw_config["tiscam"]["caps"][self.serial])
+            self.properties.update(self.raw_config["tiscam"]["properties"][self.serial])
+        if self.raw_config["tiscam"]["caps"].get("common"):
+            self.caps.update(self.raw_config["tiscam"]["caps"]["common"])
+            self.properties.update(self.raw_config["tiscam"]["properties"]["common"])
+
         self.config = {"pwm": self.pwm,
-                       "general": self.general,
+                       "caps": self.caps,
                        "properties": self.properties}
 
     def check_exposure_time(self):
@@ -47,7 +54,7 @@ class Config:
         if self.properties["Trigger Mode"]:
             fps = int(self.pwm["frequency"])
         else:
-            fps = int(self.general["framerate"])
+            fps = int(self.caps["framerate"])
 
         max_fps = 1e6 / exposure
 
@@ -92,66 +99,119 @@ def get_caps(serial):
     os.system(f"tcam-ctrl --caps {serial} > {serial}_caps.txt")
     all_caps = open(f"{serial}_caps.txt").read().split('\n')[1:-1]
 
-    caps_dict = {"accepted_width":[], "accepted_height":[]}
+    caps = {"accepted_width":[], "accepted_height":[]}
 
     for single_caps in all_caps:
-        caps = single_caps.split(',')
-        width = caps[2].split('=')[1]
-        height = caps[3].split('=')[1]
+        elements = single_caps.split(',')
+        width = elements[2].split('=')[1]
+        height = elements[3].split('=')[1]
 
-        caps_dict["accepted_width"].append(int(width))
-        caps_dict["accepted_height"].append(int(height))
-        caps_dict["color"] = True if ("rggb" in caps[1]) else False
+        caps["accepted_width"].append(int(width))
+        caps["accepted_height"].append(int(height))
+        caps["color"] = True if ("rggb" in elements[1]) else False
 
-    caps_dict["accepted_width"] = sorted(caps_dict["accepted_width"], reverse=True)
-    caps_dict["accepted_height"] = sorted(caps_dict["accepted_height"], reverse=True)
-    caps_dict["width"] = max(caps_dict["accepted_width"])
-    caps_dict["height"] = max(caps_dict["accepted_height"])
-    caps_dict["framerate"] = 120
-    caps_dict["serial"] = serial
+    caps["accepted_width"] = sorted(caps["accepted_width"], reverse=True)
+    caps["accepted_height"] = sorted(caps["accepted_height"], reverse=True)
+    caps["width"] = max(caps["accepted_width"])
+    caps["height"] = max(caps["accepted_height"])
+    caps["serial"] = serial
     os.system(f"rm {serial}_caps.txt")
-    return caps_dict
+    return caps
 
 
 def get_pwm():
-    "Return pwm parameters"
+    "Return standard pwm parameters"
     pwm = {}
     pwm["frequency"] = 15
     pwm["chunk_size"] = 50
     pwm["chunk_pause"] = 3000
     return pwm
 
-def get_arguments():
-    arguments = {}
-    arguments["output_parent"] = "~/data/"
-    arguments["camera_prefix"] = "cam"
-    arguments["stdout_log_level"] = "info"
-    arguments["file_log_level"] = "debug"
-    arguments["gst_debug_level"] = 1
-    arguments["compression_level"] = 0
-    arguments["max_buffers_queue"] = 30
-    arguments["force"] = True
-    return arguments
+def get_path():
+    "Return standard path parameters for cameras"
+    path = {}
+    path["output_folder"] = "~/data/"
+    path["prefix"] = "cam"
+    path["overwrite"] = True
+    return path
+
+def get_logging():
+    "Return standard logging parameters for cameras"
+    logging = {}
+    logging["stream_level"] = "info"
+    logging["file_level"] = "debug"
+    logging["gst_level"] = 1
+    return logging
+
+def get_pipeline():
+    "Return standard pipeline parameters for cameras"
+    pipeline = {}
+    pipeline["max_buffers_queue"] = 30
+    pipeline["compression_level"] = 0
+    return pipeline
+
 
 def create_config():
     "Create a config file with default parameters from a camera serial."
     serials = get_serials()
-    all_confs = {s:get_camera_config(s) for s in serials}
 
     config = {}
-    config["pwm"] = get_pwm()
-    config["arguments"] = get_arguments()
+    config["properties"] = {"common": {}}
+    config["caps"] = {"common": {"framerate" : 120}}
 
-    for n, s in enumerate(serials):
-        cam = f"cam_{n}"
-        config[cam] = {}
-        config[cam]["general"] = get_caps(s)
-        config[cam]["properties"] = all_confs[s]["properties"]
+    config["path"] = get_path()
+    config["logging"] = get_logging()
+    config["pipeline"] = get_pipeline()
+
+    for s in serials:
+        config["caps"][s] = get_caps(s)
+        config["properties"][s] = get_camera_config(s)["properties"]
+
+    common_caps = common_elements([config["caps"][s] for s in serials])
+    common_properties = common_elements([config["properties"][s] for s in serials])
+
+    for k in common_caps:
+        _cap = set([config["caps"][s].pop(k) for s in serials])
+        config["caps"]["common"][k] = _cap.pop()
+
+    for k in common_properties:
+        _property = set([config["properties"][s].pop(k) for s in serials])
+        config["properties"]["common"][k] = _property.pop()
+
     return config
 
-def write_config(filename):
+def common_elements(dicts):
+    "Find equal key/value pairs between dictionaries and return corresponding keys"
+    keys = [set(d.keys()) for d in dicts]
+    common_keys = set.intersection(*keys)
+
+    equal_pairs = set()
+    for k in common_keys:
+        value_by_dict = set()
+        for d in dicts: 
+            if isinstance(d[k], Hashable):
+                value_by_dict.add(d[k])
+        if len(value_by_dict) == 1:
+            equal_pairs.add(k)
+
+    return equal_pairs
+
+def update_config(filename):
+    config = read_config(filename)
+    config["tiscam"] =  create_config()
+
+    with open(filename, "w") as f:
+        toml.dump(config, f)
+
+    
+
+def write_new_config(filename):
     "Create and write the config file"
-    config = create_config()
+    config = {}
+    pwm_config = get_pwm()
+    tiscam_config = create_config()
+    config.update({"pwm": pwm_config, "tiscam": tiscam_config})
+
     with open(filename, "w") as f:
         toml.dump(config, f)
 
@@ -165,5 +225,9 @@ if __name__ == "__main__":
                         type=lambda x: Path(x).expanduser().absolute())
 
     args = parser.parse_args()
-    filename = str(args.filename)
-    write_config(filename)
+    filename = args.filename
+
+    if os.path.isfile(filename):
+        update_config(filename)
+    else:
+        write_new_config(filename)

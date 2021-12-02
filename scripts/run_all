@@ -2,12 +2,11 @@
 
 config=configs.toml
 
-n=$(($(tcam-ctrl -l | wc -l) - 1))
+serials=$(tcam-ctrl -l | awk '{print $5}')
 
 PID=5
-for i in $(seq 0 $n); do
-	output=$output_root$i
-	python -m tiscam.record -c $config -i $i &
+for serial in $serials; do
+	python -m tiscam.record -c $config -s $serial &
 	PID=$!
 	echo $PID
 done

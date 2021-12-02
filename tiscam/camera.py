@@ -33,7 +33,7 @@ class TIS:
         p = "tcambin name=source ! identity name=id"
         # WARNING: Do not change position of identity plugin
 
-        if self.config.general["color"]:
+        if self.config.caps["color"]:
             p += " ! capsfilter name=bayercaps"
             p += " ! bayer2rgb ! videoconvert"
 
@@ -55,14 +55,14 @@ class TIS:
     def init_pipeline(self, video_path):
         "Initializes the Gstreamer pipeline"
         self.source = self.pipeline.get_by_name("source")
-        self.source.set_property("serial", self.config.general["serial"])
-        self.logger.debug(f"Serial: {self.config.general['serial']}")
+        self.source.set_property("serial", self.config.caps["serial"])
+        self.logger.debug(f"Serial: {self.config.caps['serial']}")
         self.logger.debug(self.config.config)
 
         self.identity = self.pipeline.get_by_name("id")
         self.identity.connect("handoff", self.on_new_buffer)
 
-        if self.config.general["color"] == "true":
+        if self.config.caps["color"] == "true":
             self.bayerfilter = self.pipeline.get_by_name("bayercaps")
             self.bayerfilter.set_property("caps", self.get_caps(bayer=True))
 
@@ -117,8 +117,8 @@ class TIS:
         else:
             fmt = "video/x-raw,format=BGRx,"
 
-        fmt += f"width={self.config.general['width']},"
-        fmt += f"height={self.config.general['height']},"
+        fmt += f"width={self.config.caps['width']},"
+        fmt += f"height={self.config.caps['height']},"
         fmt += f"framerate={self.config.framerate}/1"
                    # Maximum accepted framerate, set it high
 
