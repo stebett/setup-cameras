@@ -46,7 +46,7 @@ class TIS:
         else:
             p += " ! queue name=queue"
             p += f" ! x264enc quantizer={self.compression_level} qp-min={self.compression_level} qp-max={self.compression_level} qp-step={self.compression_level} speed-preset=ultrafast tune=zerolatency pass=qual sliced-threads=true"
-            p += " ! avimux"
+            p += " ! matroskamux"
             p += " ! filesink name=fsink"
 
         self.logger.debug(f"Gst pipeline: {p}")
@@ -92,8 +92,6 @@ class TIS:
 
     def stop_pipeline(self):
         "Stops the pipeline"
-        self.pipeline.set_state(Gst.State.PAUSED)
-        self.pipeline.set_state(Gst.State.READY)
         self.pipeline.set_state(Gst.State.NULL)
 
     def set_image_callback(self, function, *data):
@@ -334,7 +332,7 @@ class Queue:
 
     def new_video(self):
         "Create new video name based on number of first frame."
-        self.video_name = f"{self.path_to_output}/{self.counter :06d}.avi"
+        self.video_name = f"{self.path_to_output}/{self.counter :06d}.mkv"
         self.videos.append(self.video_name)
 
     def estimate_framerate(self):
