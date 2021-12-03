@@ -39,7 +39,7 @@ compression_level = arguments["pipeline"]["compression_level"]
 max_buffers_queue = arguments["pipeline"]["max_buffers_queue"]
 
 output_parent = args.output_parent or arguments["path"]["output_folder"]
-output_file =  camera_prefix + serial
+output_file =  f"{camera_prefix}_{serial}"
 output_path = Path(output_parent).expanduser().absolute() / output_file
 
 if not clean_output_dir(output_path, overwrite):

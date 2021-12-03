@@ -130,7 +130,7 @@ def get_pwm():
 def get_path():
     "Return standard path parameters for cameras"
     path = {}
-    path["output_folder"] = "~/data/"
+    path["output_folder"] = "~/data/ssd/"
     path["prefix"] = "cam"
     path["overwrite"] = True
     return path
@@ -156,6 +156,7 @@ def create_config():
     serials = get_serials()
 
     config = {}
+    config["serials"] = serials
     config["properties"] = {"common": {}}
     config["caps"] = {"common": {"framerate" : 120}}
 
