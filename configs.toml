@@ -1,20 +1,13 @@
-[experiment]
-date = "2-12-21"
-animal = "test"
-block = 1
-
 [pwm]
 frequency = 15
 chunk_size = 50
 chunk_pause = 3000
 
-[experiment.path]
-output_folder = "~/data/hdd_"
-suffixes = [ 0, 1, 2, 3,]
-overwrite = false
+[tiscam]
+serials = [ "02020172", "02020176", "45810316", "49020380", "49020382",]
 
 [tiscam.path]
-output_folder = "~/data/ssd"
+output_folder = "~/data/"
 prefix = "cam"
 overwrite = true
 
@@ -28,69 +21,108 @@ max_buffers_queue = 30
 compression_level = 0
 
 [tiscam.properties.common]
-"Override Scanning Mode" = 1
-"Strobe Polarity" = false
-"Offset X" = 0
-"White Balance Temperature Preset" = "Cool White Fluorescent Light"
-"Trigger Global Reset Release" = false
-"Strobe Delay" = 0
-"Gain Auto Upper Limit" = 240
-"Whitebalance Temperature" = 4000
-"Trigger Mode" = false
-"Auto Functions ROI Control" = true
-"Highlight Reduction" = false
-"Reverse X" = false
-"Auto Functions ROI Preset" = "Center 50%"
-"Whitebalance Green" = 64
-"Gain Auto Lower Limit" = 0
-"Offset Auto Center" = true
-GPIn = 0
-"Strobe Enable" = false
-"Exposure Auto Reference" = 128
-"Exposure Auto Upper Limit" = 33333
-"Trigger Delay (us)" = 31
-"Exposure Auto Upper Limit Auto" = true
-"Trigger Polarity" = "Rising Edge"
-Whitebalance = false
-"Exposure Auto Lower Limit" = 60
-"Whitebalance Auto Preset" = "Any"
-"Reverse Y" = false
-GPOut = 0
-"Offset Y" = 0
-Brightness = 180
 "Exposure Auto" = false
-"Exposure Time (us)" = 8333
-Gain = 50
+"Strobe Exposure" = true
+"Highlight Reduction" = false
+"Override Scanning Mode" = 0
+"Strobe Duration" = 100
+"Auto Functions ROI Preset" = "Center 50%"
+GPOut = 0
+"Reverse X" = false
+"Trigger Global Reset Release" = false
+"Offset X" = 0
+"Exposure Auto Lower Limit" = 1
+"Gain Auto Lower Limit" = 0
+"Reverse Y" = false
+"Trigger Delay (us)" = 31
+"Auto Functions ROI Control" = true
+"Exposure Auto Upper Limit" = 33333
 "Gain Auto" = false
-"Strobe Duration" = 1
-"Strobe Exposure" = false
-"Whitebalance Auto" = false
-"Whitebalance Blue" = 250
-"Whitebalance Red" = 78
+"Trigger Mode" = true
+"Offset Auto Center" = true
+"Offset Y" = 0
+"Trigger Exposure Mode" = "Frame Start"
+GPIn = 0
+"Gain Auto Upper Limit" = 480
+"Strobe Enable" = false
+"Exposure Auto Upper Limit Auto" = true
+Brightness = 0
+"Strobe Delay" = 0
+"Strobe Polarity" = false
 
-[tiscam.properties.44120512]
+[tiscam.properties.02020172]
+"Exposure Auto Reference" = 100
+"Exposure Time (us)" = 15000
+Gain = 4
+"IMX Low-Latency Mode" = false
+"Trigger Polarity" = "Falling Edge"
 
-[tiscam.properties.44120513]
+[tiscam.properties.02020176]
+"Exposure Auto Reference" = 100
+"Exposure Time (us)" = 15000
+Gain = 34
+"IMX Low-Latency Mode" = false
+"Trigger Polarity" = "Falling Edge"
 
-[tiscam.properties.44120535]
+[tiscam.properties.45810316]
+"Exposure Auto Reference" = 128
+"Exposure Time (us)" = 10000
+Gain = 0
+"Trigger Polarity" = "Rising Edge"
+"White Balance Temperature Preset" = "Cool White Fluorescent Light"
+Whitebalance = false
+"Whitebalance Auto" = true
+"Whitebalance Auto Preset" = "Any"
+"Whitebalance Blue" = 64
+"Whitebalance Green" = 64
+"Whitebalance Red" = 64
+"Whitebalance Temperature" = 4000
+
+[tiscam.properties.49020380]
+"Exposure Auto Reference" = 100
+"Exposure Time (us)" = 15001
+Gain = 38
+"IMX Low-Latency Mode" = false
+"Trigger Polarity" = "Falling Edge"
+
+[tiscam.properties.49020382]
+"Exposure Auto Reference" = 100
+"Exposure Time (us)" = 15000
+Gain = 0
+"IMX Low-Latency Mode" = false
+"Trigger Polarity" = "Falling Edge"
 
 [tiscam.caps.common]
 framerate = 120
-color = true
-width = 1920
 height = 1080
+width = 1440
 
-[tiscam.caps.44120512]
-accepted_width = [ 1920, 1920, 640, 640,]
+[tiscam.caps.02020172]
+accepted_width = [ 1440, 1440, 640, 640,]
 accepted_height = [ 1080, 1080, 480, 480,]
-serial = "44120512"
+color = false
+serial = "02020172"
 
-[tiscam.caps.44120513]
-accepted_width = [ 1920, 1920, 640, 640,]
+[tiscam.caps.02020176]
+accepted_width = [ 1440, 1440, 640, 640,]
 accepted_height = [ 1080, 1080, 480, 480,]
-serial = "44120513"
+color = false
+serial = "02020176"
 
-[tiscam.caps.44120535]
-accepted_width = [ 1920, 1920, 640, 640,]
+[tiscam.caps.45810316]
+accepted_width = [ 1440, 1440, 640, 640,]
 accepted_height = [ 1080, 1080, 480, 480,]
-serial = "44120535"
+color = true
+serial = "45810316"
+
+[tiscam.caps.49020380]
+accepted_width = [ 1440, 1440, 640, 640,]
+accepted_height = [ 1080, 1080, 480, 480,]
+color = false
+serial = "49020380"
+
+[tiscam.caps.49020382]
+accepted_width = [ 1440, 1440, 640, 640,]
+accepted_height = [ 1080, 1080, 480, 480,]
+color = false
+serial = "49020382"

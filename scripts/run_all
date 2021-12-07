@@ -4,7 +4,6 @@ config=configs.toml
 
 serials=$(tcam-ctrl -l | awk '{print $5}')
 
-PID=5
 for serial in $serials; do
 	python -m tiscam.record -c $config -s $serial &
 	PID=$!
