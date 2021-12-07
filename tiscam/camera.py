@@ -318,12 +318,12 @@ class Queue:
     def close(self):
         "Run all estimations in the right order, resets the parameters and save the timestamps"
         self.estimate_framerate()
-        if self.expected_frames & self.trigger_mode > 0:
+        if (self.expected_frames > 0) & self.trigger_mode:
             self.estimate_loss()
 
         self.save_timestamps()
 
-        if self.expected_frames & self.trigger_mode > 0:
+        if (self.expected_frames > 0) & self.trigger_mode:
             self.reset_relative_zero()
             if self.frame_loss > 0:
                 self.log_frame_number_warning()

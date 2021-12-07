@@ -24,7 +24,7 @@ def clean_output_dir(path_video_folder, overwrite):
     if path_video_folder.exists():
         files_to_remove = []
         for f in path_video_folder.iterdir():
-            if f.suffix in [".mp4", ".avi", ".pickle"]:
+            if f.suffix in [".mp4", ".avi", ".pickle", "mkv"]:
                 files_to_remove.append(f)
         has_file = len(files_to_remove) > 0
     else:

@@ -1,6 +1,6 @@
 [pwm]
-frequency = 15
-chunk_size = 50
+frequency = 30
+chunk_size = 3000
 chunk_pause = 3000
 
 [tiscam]
@@ -24,7 +24,7 @@ compression_level = 0
 "Exposure Auto" = false
 "Strobe Exposure" = true
 "Highlight Reduction" = false
-"Override Scanning Mode" = 0
+"Override Scanning Mode" = 1
 "Strobe Duration" = 100
 "Auto Functions ROI Preset" = "Center 50%"
 GPOut = 0
