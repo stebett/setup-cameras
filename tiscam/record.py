@@ -44,7 +44,7 @@ output_path = Path(output_parent).expanduser().absolute() / output_file
 
 if not clean_output_dir(output_path, overwrite):
     sys.exit()
-logger = get_logger(serial, stream_log_level, file_log_level, output_path) 
+logger = get_logger(f"cam_{serial}", stream_log_level, file_log_level, output_path / f"cam_{serial}.log") 
 
 config_copy_path = output_path / config_path.name
 copyfile(config_path, config_copy_path)

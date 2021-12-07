@@ -41,7 +41,7 @@ def clean_output_dir(path_video_folder, overwrite):
             return False
     return True
 
-def get_logger(name, stream_level, file_level, path_video_folder):
+def get_logger(name, stream_level, file_level, output_path):
     stream_numeric_level = getattr(logging, stream_level.upper(), 10)
     file_numeric_level = getattr(logging, file_level.upper(), 10)
 
@@ -51,7 +51,7 @@ def get_logger(name, stream_level, file_level, path_video_folder):
 
     file_formatter = logging.Formatter('%(name)s: %(asctime)s.%(msecs)03d - %(levelname)s - %(message)s',
         datefmt='%H:%M:%S')
-    file_handler = logging.FileHandler(path_video_folder / "record.log", mode="w")
+    file_handler = logging.FileHandler(output_path, mode="w")
     file_handler.setLevel(level=file_numeric_level)
     file_handler.setFormatter(file_formatter)
     root_logger.addHandler(file_handler)
