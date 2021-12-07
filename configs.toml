@@ -1,6 +1,6 @@
 [pwm]
 frequency = 30
-chunk_size = 3000
+chunk_size = 100
 chunk_pause = 3000
 
 [tiscam]
