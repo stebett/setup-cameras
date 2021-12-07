@@ -1,19 +1,19 @@
 [pwm]
 frequency = 30
-chunk_size = 100
-chunk_pause = 3000
+chunk_size = 1800
+chunk_pause = 1000
 
 [tiscam]
 serials = [ "02020172", "02020176", "45810316", "49020380", "49020382",]
 
 [tiscam.path]
-output_folder = "~/data/"
+output_folder = "~/data/less_cam"
 prefix = "cam"
 overwrite = true
 
 [tiscam.logging]
-stream_level = "info"
-file_level = "debug"
+stream_level = "warning"
+file_level = "warning"
 gst_level = 1
 
 [tiscam.pipeline]
@@ -52,14 +52,14 @@ Brightness = 0
 
 [tiscam.properties.02020172]
 "Exposure Auto Reference" = 100
-"Exposure Time (us)" = 15000
+"Exposure Time (us)" = 18000
 Gain = 4
 "IMX Low-Latency Mode" = false
 "Trigger Polarity" = "Falling Edge"
 
 [tiscam.properties.02020176]
 "Exposure Auto Reference" = 100
-"Exposure Time (us)" = 15000
+"Exposure Time (us)" = 17000
 Gain = 34
 "IMX Low-Latency Mode" = false
 "Trigger Polarity" = "Falling Edge"
@@ -80,7 +80,7 @@ Whitebalance = false
 
 [tiscam.properties.49020380]
 "Exposure Auto Reference" = 100
-"Exposure Time (us)" = 15001
+"Exposure Time (us)" = 16000
 Gain = 38
 "IMX Low-Latency Mode" = false
 "Trigger Polarity" = "Falling Edge"
