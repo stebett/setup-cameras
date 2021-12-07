@@ -45,11 +45,11 @@ def get_logger(name, stream_level, file_level, output_path):
     stream_numeric_level = getattr(logging, stream_level.upper(), 10)
     file_numeric_level = getattr(logging, file_level.upper(), 10)
 
-    root_logger = logging.getLogger(f"cam_{name}")
+    root_logger = logging.getLogger(name)
     root_logger.setLevel(level=logging.DEBUG)
     root_logger.propagate = False
 
-    file_formatter = logging.Formatter('%(name)s: %(asctime)s.%(msecs)03d - %(levelname)s - %(message)s',
+    file_formatter = logging.Formatter('%(asctime)s.%(msecs)03d - %(name)s - %(levelname)s - %(message)s',
         datefmt='%H:%M:%S')
     file_handler = logging.FileHandler(output_path, mode="w")
     file_handler.setLevel(level=file_numeric_level)
