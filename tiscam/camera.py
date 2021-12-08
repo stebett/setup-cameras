@@ -293,7 +293,7 @@ class Queue:
                 self.logger.info("Timeout delay exceeded")
                 self.go = False
             else:
-                time.sleep(0.001)
+                time.sleep(1e-6)
 
     def reset_relative_zero(self):
         self.relative_zero = self.expected_frames * len(self.videos)

@@ -1,7 +1,7 @@
 [pwm]
 frequency = 30
-chunk_size = 1000
-chunk_pause = 3000
+chunk_size = 1800
+chunk_pause = 1000
 
 [tiscam]
 serials = [ "02020172", "02020176", "45810316", "49020380", "49020382",]
