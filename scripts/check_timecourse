@@ -53,8 +53,10 @@ class Timestamps:
         trigger = config["tiscam"]["properties"]["common"]["Trigger Mode"]
         frequency = config["pwm"]["frequency"] if trigger else config["tiscam"]["caps"]["common"]["framerate"]
         chunk_size = config["pwm"]["chunk_size"] if trigger else len(self.dict) -1
-        self.expected_interframe_delay = 1 / frequency
-        self.expected_duration = chunk_size / frequency
+        # self.expected_interframe_delay = 1 / frequency
+        # self.expected_duration = chunk_size / frequency
+        self.expected_interframe_delay = 1 / self.framerate
+        self.expected_duration = chunk_size / self.framerate
         self.expected_pause_length = config["pwm"]["chunk_pause"] / 1000 if trigger else 0
         
         t = 0
@@ -68,6 +70,7 @@ class Timestamps:
         with open(self.path, 'rb') as handle:
             self.dict = pickle.load(handle)
             self.loss = self.dict.pop("loss")
+            self.framerate = self.dict.pop("framerate")
 
 
 if __name__ == "__main__":

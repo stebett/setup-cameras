@@ -340,6 +340,7 @@ class Queue:
             t0 = sorted(self.timestamps.values())[0]
             t1 = sorted(self.timestamps.values())[-1]
             estimate = len(self.timestamps) / (t1 - t0)
+            self.timestamps["framerate"] = estimate
 
             self.logger.info(
                 f"Estimated framerate for the last video: {estimate:.2f}Hz")

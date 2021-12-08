@@ -1,19 +1,19 @@
 [pwm]
 frequency = 30
 chunk_size = 1800
-chunk_pause = 1000
+chunk_pause = 3000
 
 [tiscam]
-serials = [ "02020172", "02020176", "45810316", "49020380", "49020382",]
+serials = [ "02020172", "02020176", "45810316",]
 
 [tiscam.path]
-output_folder = "~/data/less_cam"
+output_folder = "~/data/ssd/"
 prefix = "cam"
 overwrite = true
 
 [tiscam.logging]
-stream_level = "warning"
-file_level = "warning"
+stream_level = "info"
+file_level = "debug"
 gst_level = 1
 
 [tiscam.pipeline]
@@ -21,54 +21,58 @@ max_buffers_queue = 30
 compression_level = 0
 
 [tiscam.properties.common]
-"Exposure Auto" = false
-"Strobe Exposure" = true
-"Highlight Reduction" = false
-"Override Scanning Mode" = 1
-"Strobe Duration" = 100
-"Auto Functions ROI Preset" = "Center 50%"
-GPOut = 0
-"Reverse X" = false
-"Trigger Global Reset Release" = false
-"Offset X" = 0
-"Exposure Auto Lower Limit" = 1
-"Gain Auto Lower Limit" = 0
-"Reverse Y" = false
-"Trigger Delay (us)" = 31
 "Auto Functions ROI Control" = true
-"Exposure Auto Upper Limit" = 33333
-"Gain Auto" = false
-"Trigger Mode" = true
-"Offset Auto Center" = true
-"Offset Y" = 0
-"Trigger Exposure Mode" = "Frame Start"
-GPIn = 0
-"Gain Auto Upper Limit" = 480
-"Strobe Enable" = false
-"Exposure Auto Upper Limit Auto" = true
-Brightness = 0
+"Reverse X" = false
 "Strobe Delay" = 0
+"Trigger Global Reset Release" = false
+"Exposure Auto" = false
+"Exposure Auto Upper Limit" = 33333
+"Override Scanning Mode" = 0
+"Strobe Exposure" = true
+"Trigger Mode" = true
+"Gain Auto Upper Limit" = 480
+"Strobe Duration" = 100
+"Trigger Delay (us)" = 31
 "Strobe Polarity" = false
+"Offset Auto Center" = true
+"Trigger Exposure Mode" = "Frame Start"
+"Trigger Polarity" = "Rising Edge"
+"Gain Auto Lower Limit" = 0
+"Offset X" = 0
+"Highlight Reduction" = false
+GPOut = 0
+"Gain Auto" = false
+"Auto Functions ROI Preset" = "Center 50%"
+"Exposure Auto Lower Limit" = 1
+"Reverse Y" = false
+"Offset Y" = 0
+"Strobe Enable" = false
 
 [tiscam.properties.02020172]
+Brightness = 469
 "Exposure Auto Reference" = 100
-"Exposure Time (us)" = 18000
-Gain = 4
+"Exposure Auto Upper Limit Auto" = true
+"Exposure Time (us)" = 12954
+GPIn = 0
+Gain = 25
 "IMX Low-Latency Mode" = false
-"Trigger Polarity" = "Falling Edge"
 
 [tiscam.properties.02020176]
+Brightness = 0
 "Exposure Auto Reference" = 100
-"Exposure Time (us)" = 17000
-Gain = 34
+"Exposure Auto Upper Limit Auto" = true
+"Exposure Time (us)" = 10905
+GPIn = 1
+Gain = 59
 "IMX Low-Latency Mode" = false
-"Trigger Polarity" = "Falling Edge"
 
 [tiscam.properties.45810316]
-"Exposure Auto Reference" = 128
-"Exposure Time (us)" = 10000
-Gain = 0
-"Trigger Polarity" = "Rising Edge"
+Brightness = 240
+"Exposure Auto Reference" = 84
+"Exposure Auto Upper Limit Auto" = false
+"Exposure Time (us)" = 12954
+GPIn = 0
+Gain = 179
 "White Balance Temperature Preset" = "Cool White Fluorescent Light"
 Whitebalance = false
 "Whitebalance Auto" = true
@@ -78,24 +82,10 @@ Whitebalance = false
 "Whitebalance Red" = 64
 "Whitebalance Temperature" = 4000
 
-[tiscam.properties.49020380]
-"Exposure Auto Reference" = 100
-"Exposure Time (us)" = 16000
-Gain = 38
-"IMX Low-Latency Mode" = false
-"Trigger Polarity" = "Falling Edge"
-
-[tiscam.properties.49020382]
-"Exposure Auto Reference" = 100
-"Exposure Time (us)" = 15000
-Gain = 0
-"IMX Low-Latency Mode" = false
-"Trigger Polarity" = "Falling Edge"
-
 [tiscam.caps.common]
 framerate = 120
-height = 1080
 width = 1440
+height = 1080
 
 [tiscam.caps.02020172]
 accepted_width = [ 1440, 1440, 640, 640,]
@@ -114,15 +104,3 @@ accepted_width = [ 1440, 1440, 640, 640,]
 accepted_height = [ 1080, 1080, 480, 480,]
 color = true
 serial = "45810316"
-
-[tiscam.caps.49020380]
-accepted_width = [ 1440, 1440, 640, 640,]
-accepted_height = [ 1080, 1080, 480, 480,]
-color = false
-serial = "49020380"
-
-[tiscam.caps.49020382]
-accepted_width = [ 1440, 1440, 640, 640,]
-accepted_height = [ 1080, 1080, 480, 480,]
-color = false
-serial = "49020382"
