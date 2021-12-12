@@ -332,7 +332,7 @@ class Queue:
 
     def new_video(self):
         "Create new video name based on number of first frame."
-        self.video_name = f"{self.path_to_output}/{self.counter :06d}.mkv"
+        self.video_name = f"{self.path_to_output}/{self.counter :06d}.avi"
         self.videos.append(self.video_name)
 
     def estimate_framerate(self):
