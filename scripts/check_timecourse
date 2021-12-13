@@ -24,13 +24,6 @@ class Timestamps:
         self.get_delays()
         self.process()
 
-    def plot(self):
-        _, ax = plt.subplots()
-        ax.plot(self.frames, self.times)
-        ax.set_xlabel("Frames")
-        ax.set_ylabel("Time")
-        ax.legend(self.path.stem)
-        return ax
 
     def process(self):
         self.t0 = sorted(self.dict.values())[0]
@@ -51,10 +44,8 @@ class Timestamps:
 
     def get_delays(self):
         trigger = config["tiscam"]["properties"]["common"]["Trigger Mode"]
-        frequency = config["pwm"]["frequency"] if trigger else config["tiscam"]["caps"]["common"]["framerate"]
         chunk_size = config["pwm"]["chunk_size"] if trigger else len(self.dict) -1
-        # self.expected_interframe_delay = 1 / frequency
-        # self.expected_duration = chunk_size / frequency
+        self.framerate = config["pwm"]["frequency"] if trigger else config["tiscam"]["caps"]["common"]["framerate"]
         self.expected_interframe_delay = 1 / self.framerate
         self.expected_duration = chunk_size / self.framerate
         self.expected_pause_length = config["pwm"]["chunk_pause"] / 1000 if trigger else 0
@@ -70,7 +61,7 @@ class Timestamps:
         with open(self.path, 'rb') as handle:
             self.dict = pickle.load(handle)
             self.loss = self.dict.pop("loss")
-            self.framerate = self.dict.pop("framerate")
+            # self.framerate = self.dict.pop("framerate")
 
 
 if __name__ == "__main__":
@@ -103,12 +94,10 @@ if __name__ == "__main__":
     config = read_config(args.config_path)
     ignore_last = args.ignore_last
 
-
-
     camera_all = sorted(path.glob(f"{prefix}*"))
 
     def plot_deviation(camera_all, ignore_last):
-        fig, _ = plt.subplots(len(camera_all)*2)
+        fig, _ = plt.subplots(len(camera_all), 2)
 
         i = 0
         for camera in camera_all:
@@ -116,13 +105,15 @@ if __name__ == "__main__":
             ax.set_title(f"Camera {camera}")
             ax.set_xlabel("Frame #")
             ax.set_ylabel("Delta (s)")
+            
 
             ax2 = fig.axes[i+1]
-            ax2.set_title(f"Camera {camera}")
-            ax2.set_xlabel("Frame #")
-            ax2.set_ylabel("Delta (s)")
+            ax2.axis("off")
 
-            total_loss = 0
+            loss_all = []
+            pause_excess_all = []
+            excess_duration_all = []
+            excess_frames_all = []
             chunk_all = get_all_chunks(camera)
             if ignore_last:
                 chunk_all.pop()
@@ -132,21 +123,25 @@ if __name__ == "__main__":
                 x_axis = timestamps.index
                 y_axis = timestamps.deviation
 
-                total_loss += timestamps.loss
-                ax.plot(x_axis, y_axis, label=f"Loss: {timestamps.loss} - " +
-                                              f"Excess: {timestamps.excess_duration :.2f} ({timestamps.excess_duration / timestamps.expected_interframe_delay :.2f} frames) - " +
-                                              f"Pause excess: {timestamps.t0 - last_t - timestamps.expected_pause_length :.2f}")
+                ax.plot(x_axis, y_axis)
                 ax.hlines(timestamps.expected_interframe_delay, x_axis[0], x_axis[-1], color='r', linewidth=0.2)
                 ax2.plot(x_axis, np.cumsum(y_axis))
+
+                loss_all.append(timestamps.loss)
+                excess_duration_all.append(round(timestamps.excess_duration, 3))
+                excess_frames_all.append(round(timestamps.excess_duration / timestamps.expected_interframe_delay, 3))
+                pause_excess_all.append(round(timestamps.t0 - last_t - timestamps.expected_pause_length, 3))
                 last_t = timestamps.tn
-            box = ax.get_position()
-            ax.set_position([box.x0, box.y0, box.width * 0.7, box.height])
-            ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+            ax2.table(cellText=[loss_all, pause_excess_all, excess_duration_all, excess_frames_all],
+                      rowLabels=["Loss", "Pause excess", "Excess duration", "Excess Frames"],
+                      colLabels=[chunk_path.stem for chunk_path in chunk_all],
+                      loc='top')
+
             i+=2
 
 
 
-        plt.subplots_adjust(hspace = 0.7, right=0.57, left=0.075)
+        # plt.subplots_adjust(hspace = 0.7, right=0.57, left=0.075)
         plt.show()
 
     plot_deviation(camera_all, ignore_last)

@@ -1,0 +1,130 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/ginko/setup-cameras/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	/e52cf4a7/
+Camera	tiscam/camera.py	/^class Camera(TIS):$/;"	c
+CleanCommand	setup.py	/^class CleanCommand(Command):$/;"	c
+Config	tiscam/config.py	/^class Config:$/;"	c
+Queue	tiscam/camera.py	/^class Queue:$/;"	c
+TIS	tiscam/camera.py	/^class TIS:$/;"	c
+Timestamps	scripts/check_timecourse	/^class Timestamps:$/;"	c
+Timestamps	scripts/check_timestamps	/^class Timestamps:$/;"	c
+_	scripts/check_timestamps	/^    fig, _ = plt.subplots(len(cameras))$/;"	v
+__init__	scripts/check_timecourse	/^    def __init__(self, path, config):$/;"	m	class:Timestamps
+__init__	scripts/check_timestamps	/^    def __init__(self, path):$/;"	m	class:Timestamps
+__init__	tiscam/camera.py	/^    def __init__(self, config, logger, path_to_output='videos', gst_debug_level=1, compression_l/;"	m	class:Camera
+__init__	tiscam/camera.py	/^    def __init__(self, gst_debug_level):$/;"	m	class:TIS
+__init__	tiscam/camera.py	/^    def __init__(self, path_to_output, chunk_pause, expected_frames, trigger_mode, logger):$/;"	m	class:Queue
+__init__	tiscam/config.py	/^    def __init__(self, config_path, serial):$/;"	m	class:Config
+add_frame	tiscam/camera.py	/^def add_frame(tis, queue):$/;"	f
+apply_config	tiscam/config.py	/^    def apply_config(self):$/;"	m	class:Config
+apply_properties	tiscam/camera.py	/^    def apply_properties(self):$/;"	m	class:Camera
+args	scripts/check_timecourse	/^    args = parser.parse_args()$/;"	v
+args	scripts/check_timestamps	/^    args = parser.parse_args()$/;"	v
+args	tiscam/config.py	/^    args = parser.parse_args()$/;"	v
+args	tiscam/record.py	/^args = parser.parse_args()$/;"	v
+arguments	tiscam/record.py	/^arguments = read_config(config_path)["tiscam"]$/;"	v
+ask_yes_or_no	tiscam/helpers.py	/^def ask_yes_or_no(message, remaining_attempts=10):$/;"	f
+ax	scripts/check_timestamps	/^        ax = fig.axes[i]$/;"	v
+box	scripts/check_timestamps	/^        box = ax.get_position()$/;"	v
+c	tiscam/record.py	/^c = Camera(config,$/;"	v
+camera_all	scripts/check_timecourse	/^    camera_all = sorted(path.glob(f"{prefix}*"))$/;"	v
+camera_prefix	tiscam/record.py	/^camera_prefix = arguments["path"]["prefix"]$/;"	v
+cameras	scripts/check_timestamps	/^    cameras = sorted(path.glob(f"{prefix}*"))$/;"	v
+capture	tiscam/camera.py	/^    def capture(self):$/;"	m	class:Camera
+check_delay	tiscam/camera.py	/^    def check_delay(self):$/;"	m	class:Queue
+check_exposure_time	tiscam/config.py	/^    def check_exposure_time(self):$/;"	m	class:Config
+clean_output_dir	tiscam/helpers.py	/^def clean_output_dir(path_video_folder, overwrite):$/;"	f
+close	tiscam/camera.py	/^    def close(self):$/;"	m	class:Queue
+common_elements	tiscam/config.py	/^def common_elements(dicts):$/;"	f
+compression_level	tiscam/record.py	/^compression_level = arguments["pipeline"]["compression_level"]$/;"	v
+config	scripts/check_timecourse	/^    config = read_config(args.config_path)$/;"	v
+config	tiscam/record.py	/^config = Config(config_path, serial)$/;"	v
+config_copy_path	tiscam/record.py	/^config_copy_path = output_path \/ config_path.name$/;"	v
+config_path	tiscam/record.py	/^config_path = args.config_path$/;"	v
+create_callback	tiscam/camera.py	/^    def create_callback(self):$/;"	m	class:Camera
+create_config	tiscam/config.py	/^def create_config():$/;"	f
+create_pipeline	tiscam/camera.py	/^    def create_pipeline(self):$/;"	m	class:TIS
+estimate_framerate	tiscam/camera.py	/^    def estimate_framerate(self):$/;"	m	class:Queue
+estimate_loss	tiscam/camera.py	/^    def estimate_loss(self):$/;"	m	class:Queue
+extract	scripts/check_timestamps	/^    def extract(self):$/;"	m	class:Timestamps
+fig	scripts/check_timestamps	/^    fig, _ = plt.subplots(len(cameras))$/;"	v
+file_log_level	tiscam/record.py	/^file_log_level = arguments["logging"]["file_level"]$/;"	v
+filename	tiscam/config.py	/^    filename = args.filename$/;"	v
+finalize_options	setup.py	/^    def finalize_options(self):$/;"	m	class:CleanCommand
+get_all_chunks	scripts/check_timecourse	/^    def get_all_chunks(cam):$/;"	f
+get_camera_config	tiscam/config.py	/^def get_camera_config(serial):$/;"	f
+get_caps	tiscam/camera.py	/^    def get_caps(self, bayer=False):$/;"	m	class:TIS
+get_caps	tiscam/config.py	/^def get_caps(serial):$/;"	f
+get_delays	scripts/check_timecourse	/^    def get_delays(self):$/;"	m	class:Timestamps
+get_logger	tiscam/helpers.py	/^def get_logger(name, stream_level, file_level, output_path):$/;"	f
+get_logging	tiscam/config.py	/^def get_logging():$/;"	f
+get_path	tiscam/config.py	/^def get_path():$/;"	f
+get_pipeline	tiscam/config.py	/^def get_pipeline():$/;"	f
+get_pwm	tiscam/config.py	/^def get_pwm():$/;"	f
+get_serials	tiscam/config.py	/^def get_serials():$/;"	f
+gst_debug_level	tiscam/record.py	/^gst_debug_level = arguments["logging"]["gst_level"]$/;"	v
+i	scripts/check_timestamps	/^    i = 0$/;"	v
+ignore_last	scripts/check_timecourse	/^    ignore_last = args.ignore_last$/;"	v
+init_pipeline	tiscam/camera.py	/^    def init_pipeline(self, video_path):$/;"	m	class:TIS
+initialize_options	setup.py	/^    def initialize_options(self):$/;"	m	class:CleanCommand
+load	scripts/check_timecourse	/^    def load(self):$/;"	m	class:Timestamps
+load	scripts/check_timestamps	/^    def load(self):$/;"	m	class:Timestamps
+log_frame_number_warning	tiscam/camera.py	/^    def log_frame_number_warning(self):$/;"	m	class:Queue
+logger	tiscam/record.py	/^logger = get_logger(f"cam_{serial}", stream_log_level, file_log_level, output_path \/ f"cam_{ser/;"	v
+loop	tiscam/camera.py	/^    def loop(self):$/;"	m	class:Camera
+max_buffers_queue	tiscam/record.py	/^max_buffers_queue = arguments["pipeline"]["max_buffers_queue"]$/;"	v
+new_video	tiscam/camera.py	/^    def new_video(self):$/;"	m	class:Queue
+np	scripts/check_timecourse	/^import numpy as np$/;"	I	nameref:module:numpy
+on_full_queue	tiscam/camera.py	/^    def on_full_queue(self, *args):$/;"	m	class:TIS
+on_new_buffer	tiscam/camera.py	/^    def on_new_buffer(self, *args):$/;"	m	class:TIS
+output_file	tiscam/record.py	/^output_file =  f"{camera_prefix}_{serial}"$/;"	v
+output_parent	tiscam/record.py	/^output_parent = args.output_parent or arguments["path"]["output_folder"]$/;"	v
+output_path	tiscam/record.py	/^output_path = Path(output_parent).expanduser().absolute() \/ output_file$/;"	v
+overwrite	tiscam/record.py	/^overwrite = arguments["path"]["overwrite"]$/;"	v
+parser	scripts/check_timecourse	/^    parser = argparse.ArgumentParser(__doc__)$/;"	v
+parser	scripts/check_timestamps	/^    parser = argparse.ArgumentParser(__doc__)$/;"	v
+parser	tiscam/config.py	/^    parser = argparse.ArgumentParser(__doc__)$/;"	v
+parser	tiscam/record.py	/^parser = argparse.ArgumentParser(__doc__)$/;"	v
+path	scripts/check_timecourse	/^    path = args.path$/;"	v
+path	scripts/check_timestamps	/^    path = args.path$/;"	v
+pickles	scripts/check_timestamps	/^        pickles = sorted(cam.glob("*.pickle"))$/;"	v
+plot	scripts/check_timecourse	/^    def plot(self):$/;"	m	class:Timestamps
+plot	scripts/check_timestamps	/^    def plot(self):$/;"	m	class:Timestamps
+plot_deviation	scripts/check_timecourse	/^    def plot_deviation(camera_all, ignore_last):$/;"	f
+plt	scripts/check_timecourse	/^import matplotlib.pyplot as plt$/;"	I	nameref:module:matplotlib.pyplot
+plt	scripts/check_timestamps	/^import matplotlib.pyplot as plt$/;"	I	nameref:module:matplotlib.pyplot
+prefix	scripts/check_timecourse	/^    prefix = args.prefix$/;"	v
+prefix	scripts/check_timestamps	/^    prefix = args.prefix$/;"	v
+process	scripts/check_timecourse	/^    def process(self):$/;"	m	class:Timestamps
+read	setup.py	/^def read(fname):$/;"	f
+read_config	tiscam/config.py	/^def read_config(path):$/;"	f
+reset_counters	tiscam/camera.py	/^    def reset_counters(self):$/;"	m	class:Queue
+reset_relative_zero	tiscam/camera.py	/^    def reset_relative_zero(self):$/;"	m	class:Queue
+run	setup.py	/^    def run(self):$/;"	m	class:CleanCommand
+save_timestamps	tiscam/camera.py	/^    def save_timestamps(self):$/;"	m	class:Queue
+serial	tiscam/record.py	/^serial = args.serial$/;"	v
+set_fake_framerate	tiscam/config.py	/^    def set_fake_framerate(self):$/;"	m	class:Config
+set_image_callback	tiscam/camera.py	/^    def set_image_callback(self, function, *data):$/;"	m	class:TIS
+set_property	tiscam/camera.py	/^    def set_property(self, property_name, value):$/;"	m	class:TIS
+set_real_framerate	tiscam/config.py	/^    def set_real_framerate(self):$/;"	m	class:Config
+start_capture	tiscam/camera.py	/^    def start_capture(self):$/;"	m	class:Camera
+stop_capture	tiscam/camera.py	/^    def stop_capture(self):$/;"	m	class:Camera
+stop_pipeline	tiscam/camera.py	/^    def stop_pipeline(self):$/;"	m	class:TIS
+stream_log_level	tiscam/record.py	/^stream_log_level = arguments["logging"]["stream_level"]$/;"	v
+terminate	tiscam/record.py	/^def terminate(*args):$/;"	f
+timeout_is_exceeded	tiscam/camera.py	/^    def timeout_is_exceeded(self):$/;"	m	class:Queue
+timestamps	scripts/check_timestamps	/^    timestamps = []$/;"	v
+total_loss	scripts/check_timestamps	/^        total_loss = 0$/;"	v
+ts	scripts/check_timestamps	/^        ts = [Timestamps(p) for p in pickles]$/;"	v
+update_config	tiscam/config.py	/^def update_config(filename):$/;"	f
+user_options	setup.py	/^    user_options = []$/;"	v	class:CleanCommand
+video_started	tiscam/camera.py	/^    def video_started(self):$/;"	m	class:Queue
+write_new_config	tiscam/config.py	/^def write_new_config(filename):$/;"	f
