@@ -1,10 +1,10 @@
 [pwm]
-frequency = 30
-chunk_size = 1800
-chunk_pause = 3000
+frequency = 100
+chunk_size = 500
+chunk_pause = 100
 
 [tiscam]
-serials = [ "02020172", "02020176", "45810316",]
+serials = [ "44120512", "44120513", "44120535",]
 
 [tiscam.path]
 output_folder = "~/data/ssd/"
@@ -12,7 +12,7 @@ prefix = "cam"
 overwrite = true
 
 [tiscam.logging]
-stream_level = "info"
+stream_level = "warning"
 file_level = "debug"
 gst_level = 1
 
@@ -21,86 +21,67 @@ max_buffers_queue = 30
 compression_level = 0
 
 [tiscam.properties.common]
-"Auto Functions ROI Control" = true
-"Reverse X" = false
-"Strobe Delay" = 0
-"Trigger Global Reset Release" = false
-"Exposure Auto" = false
-"Exposure Auto Upper Limit" = 33333
-"Override Scanning Mode" = 0
-"Strobe Exposure" = true
-"Trigger Mode" = true
-"Gain Auto Upper Limit" = 480
-"Strobe Duration" = 100
-"Trigger Delay (us)" = 31
-"Strobe Polarity" = false
-"Offset Auto Center" = true
-"Trigger Exposure Mode" = "Frame Start"
-"Trigger Polarity" = "Rising Edge"
-"Gain Auto Lower Limit" = 0
-"Offset X" = 0
-"Highlight Reduction" = false
-GPOut = 0
-"Gain Auto" = false
 "Auto Functions ROI Preset" = "Center 50%"
-"Exposure Auto Lower Limit" = 1
-"Reverse Y" = false
-"Offset Y" = 0
-"Strobe Enable" = false
-
-[tiscam.properties.02020172]
-Brightness = 469
-"Exposure Auto Reference" = 100
-"Exposure Auto Upper Limit Auto" = true
-"Exposure Time (us)" = 12954
-GPIn = 0
-Gain = 25
-"IMX Low-Latency Mode" = false
-
-[tiscam.properties.02020176]
-Brightness = 0
-"Exposure Auto Reference" = 100
-"Exposure Auto Upper Limit Auto" = true
-"Exposure Time (us)" = 10905
-GPIn = 1
-Gain = 59
-"IMX Low-Latency Mode" = false
-
-[tiscam.properties.45810316]
+"Exposure Auto Lower Limit" = 60
 Brightness = 240
-"Exposure Auto Reference" = 84
-"Exposure Auto Upper Limit Auto" = false
-"Exposure Time (us)" = 12954
-GPIn = 0
-Gain = 179
-"White Balance Temperature Preset" = "Cool White Fluorescent Light"
-Whitebalance = false
-"Whitebalance Auto" = true
-"Whitebalance Auto Preset" = "Any"
-"Whitebalance Blue" = 64
+Gain = 50
 "Whitebalance Green" = 64
-"Whitebalance Red" = 64
+"Trigger Delay (us)" = 31
+"Strobe Delay" = 0
+"Exposure Auto" = false
+"Trigger Mode" = true
+"Exposure Auto Upper Limit" = 33333
 "Whitebalance Temperature" = 4000
+"Reverse X" = false
+GPIn = 0
+"Override Scanning Mode" = 0
+"Strobe Enable" = false
+"Gain Auto" = false
+"White Balance Temperature Preset" = "Cool White Fluorescent Light"
+"Whitebalance Blue" = 255
+"Whitebalance Red" = 73
+"Highlight Reduction" = false
+"Gain Auto Upper Limit" = 240
+"Strobe Exposure" = true
+"Exposure Time (us)" = 7000
+"Gain Auto Lower Limit" = 0
+"Reverse Y" = false
+"Offset Auto Center" = true
+"Offset Y" = 0
+"Exposure Auto Reference" = 128
+"Trigger Polarity" = "Rising Edge"
+"Auto Functions ROI Control" = true
+"Strobe Polarity" = false
+"Trigger Global Reset Release" = false
+GPOut = 0
+"Whitebalance Auto" = true
+"Offset X" = 0
+"Exposure Auto Upper Limit Auto" = true
+"Strobe Duration" = 100
+"Whitebalance Auto Preset" = "Any"
+Whitebalance = false
+
+[tiscam.properties.44120512]
+[tiscam.properties.44120513]
+[tiscam.properties.44120535]
 
 [tiscam.caps.common]
 framerate = 120
-width = 1440
 height = 1080
-
-[tiscam.caps.02020172]
-accepted_width = [ 1440, 1440, 640, 640,]
-accepted_height = [ 1080, 1080, 480, 480,]
-color = false
-serial = "02020172"
-
-[tiscam.caps.02020176]
-accepted_width = [ 1440, 1440, 640, 640,]
-accepted_height = [ 1080, 1080, 480, 480,]
-color = false
-serial = "02020176"
-
-[tiscam.caps.45810316]
-accepted_width = [ 1440, 1440, 640, 640,]
-accepted_height = [ 1080, 1080, 480, 480,]
+width = 1920
 color = true
-serial = "45810316"
+
+[tiscam.caps.44120512]
+accepted_width = [ 1920, 1920, 640, 640,]
+accepted_height = [ 1080, 1080, 480, 480,]
+serial = "44120512"
+
+[tiscam.caps.44120513]
+accepted_width = [ 1920, 1920, 640, 640,]
+accepted_height = [ 1080, 1080, 480, 480,]
+serial = "44120513"
+
+[tiscam.caps.44120535]
+accepted_width = [ 1920, 1920, 640, 640,]
+accepted_height = [ 1080, 1080, 480, 480,]
+serial = "44120535"

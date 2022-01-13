@@ -70,7 +70,10 @@ class Timestamps:
         with open(self.path, 'rb') as handle:
             self.dict = pickle.load(handle)
             self.loss = self.dict.pop("loss")
+        try:
             self.framerate = self.dict.pop("framerate")
+        except Exception:
+            print("no framerate in " + self.name)
 
 
 if __name__ == "__main__":

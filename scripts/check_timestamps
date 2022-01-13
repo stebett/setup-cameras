@@ -29,6 +29,10 @@ class Timestamps:
 
     def extract(self):
         self.loss = self.dict.pop("loss")
+        try:
+            self.framerate = self.dict.pop("framerate")
+        except Exception:
+            print("no framerate in " + self.name)
         self.frames = sorted(self.dict.keys())
         self.times = sorted(self.dict.values())
         self.deltas = [self.times[i] - self.times[i-1] for i in range(1, len(self.times))]
