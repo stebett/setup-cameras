@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# python -m tiscam.record -c $1 -s 44120512 &
+# python -m tiscam.record -c $1 -s 44120513 &
+# python -m tiscam.record -c $1 -s 44120535 &
+
+python smart-server/check-storage.py -c $1 &
+check_storage_pid=$!
+sleep 0.3
+kill -10 $check_storage_pid
+
+python smart-server/cue.py -c $1 &
+sleep 0.1
+python smart-server/pumps.py -c $1 &
+sleep 0.1
+python smart-server/pwm-manager.py -c $1 &
+sleep 0.1
+python smart-server/video-mover.py -c $1 &
+sleep 0.1
+
+# python -m pypwm.run --toml $1 &
+# python -m zaber.server -c $1 & #TODO move zaber to servers
+
+python smart-server/check-pids.py -c $1 &
+PID=$!
+sleep 0.1
+
+
+
+wait $PID

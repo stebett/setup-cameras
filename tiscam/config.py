@@ -130,7 +130,7 @@ def get_pwm():
 def get_path():
     "Return standard path parameters for cameras"
     path = {}
-    path["output_folder"] = "~/data/ssd/"
+    path["output_folder"] = "~/phd/data/ssd/"
     path["prefix"] = "cam"
     path["overwrite"] = True
     return path

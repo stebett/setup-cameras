@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+"Pump one drop of water"
+
+import time
+import argparse 
+from pathlib import Path
+import RPi.GPIO as GPIO
+from experiment.helpers import read_config
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+
+parser = argparse.ArgumentParser(__doc__)
+parser.add_argument("-c", "--config-path",
+        help="Config path",
+        dest="config_path", default="configs.toml", type=lambda x: Path(x).expanduser().absolute())
+parser.add_argument("-n", help="Times to repeat", default=1, dest="times", type=lambda x: int(x))
+parser.add_argument("-i", help="Interval between repeatitions", default=0.1, dest="interval", type=lambda x: float(x))
+        
+args = parser.parse_args()
+config_path = args.config_path
+times = args.times
+interval = args.interval
+
+configs = read_config(config_path)
+
+pump_pin = int(configs["experiment"]["pins"]["pump"])
+GPIO.setup(pump_pin, GPIO.OUT)
+GPIO.output(pump_pin, False)
+
+for t in range(times):
+    GPIO.output(pump_pin, True)
+    time.sleep(0.05)
+    GPIO.output(pump_pin, False)
+    time.sleep(interval)

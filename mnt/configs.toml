@@ -1,0 +1,99 @@
+[pwm]
+meta = "Parameters fed to pypwm. Time is in ms"
+frequency = 100
+chunk_size = 3000
+chunk_pause = 1000
+
+[actuator]
+meta = "Parameters for the actuator process. Array contains absolute position in mm [0, 101]. Time is in seconds"
+below = [ 100, 100, 100, 100,]
+above = [ 10, 20, 30, 40,]
+
+[tiscam]
+serials = [ "44120512",]
+
+[tiscam.path]
+output_folder = "~/data/phd/ssd/"
+prefix = "cam"
+overwrite = true
+
+[tiscam.logging]
+stream_level = "info"
+file_level = "debug"
+gst_level = 1
+
+[tiscam.pipeline]
+max_buffers_queue = 30
+compression_level = 0
+
+[experiment.schedule]
+pwm_on = 0
+cue_on = 0.1
+cue_off = 0.5
+pump = 0.6
+pwm_off = 1
+move_actuator = 1.1
+
+[experiment.pins]
+pwm = 21
+cue = 16
+pump = 18
+
+[experiment.logging]
+meta = "Logging parameters for all the processes in the experiment (excluding tiscam)"
+stream_level = "debug"
+file_level = "debug"
+
+[tiscam.properties.common]
+Gain = 70
+"Trigger Mode" = true
+"Gain Auto Lower Limit" = 0
+"Trigger Global Reset Release" = false
+"Whitebalance Blue" = 218
+"Exposure Auto" = false
+"Strobe Exposure" = true
+"Exposure Auto Upper Limit" = 33333
+Whitebalance = false
+"Strobe Duration" = 100
+"Offset X" = 0
+"White Balance Temperature Preset" = "Cool White Fluorescent Light"
+"Whitebalance Auto Preset" = "Any"
+"Auto Functions ROI Control" = true
+"Reverse X" = false
+"Whitebalance Red" = 77
+"Exposure Auto Lower Limit" = 60
+"Strobe Enable" = false
+"Trigger Polarity" = "Rising Edge"
+"Strobe Delay" = 0
+"Gain Auto" = false
+"Offset Auto Center" = true
+"Strobe Polarity" = false
+"Exposure Auto Upper Limit Auto" = true
+Brightness = 240
+GPIn = 0
+GPOut = 0
+"Highlight Reduction" = false
+"Whitebalance Auto" = false
+"Gain Auto Upper Limit" = 240
+"Reverse Y" = false
+"Whitebalance Temperature" = 4000
+"Exposure Time (us)" = 7000
+"Exposure Auto Reference" = 128
+"Auto Functions ROI Preset" = "Center 50%"
+"Override Scanning Mode" = 1
+"Trigger Delay (us)" = 31
+"Whitebalance Green" = 64
+"Offset Y" = 0
+
+[tiscam.properties.44120512]
+
+[tiscam.caps.common]
+framerate = 120
+width = 1920
+serial = "44120512"
+height = 1080
+color = true
+
+[tiscam.caps.44120512]
+accepted_width = [ 1920, 1920, 640, 640,]
+accepted_height = [ 1080, 1080, 480, 480,]
