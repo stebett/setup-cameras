@@ -18,9 +18,9 @@ parser.add_argument("-c", "--config_path",
 parser.add_argument("-s", "--serial",
                     help="Serial of camera",
                     dest="serial", default=False)
-parser.add_argument("-o", "--output-dir",
+parser.add_argument("-o", "--output-folder",
                     help="Output directory where to save videos",
-                    dest="output_parent", default=False)
+                    dest="output_folder", default=False)
 
 args = parser.parse_args()
 config_path = args.config_path
@@ -38,9 +38,9 @@ file_log_level = arguments["logging"]["file_level"]
 compression_level = arguments["pipeline"]["compression_level"]
 max_buffers_queue = arguments["pipeline"]["max_buffers_queue"]
 
-output_parent = args.output_parent or arguments["path"]["output_folder"]
-output_file =  f"{camera_prefix}_{serial}"
-output_path = Path(output_parent).expanduser().absolute() / output_file
+output_parent = args.output_folder or arguments["path"]["output_folder"]
+output_dir =  f"{camera_prefix}_{serial}"
+output_path = Path(output_parent).expanduser().absolute() / output_dir
 
 if not clean_output_dir(output_path, overwrite):
     sys.exit()

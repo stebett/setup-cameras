@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-python experiment/default-config.py -o $1
-python -m tiscam.config -o $1

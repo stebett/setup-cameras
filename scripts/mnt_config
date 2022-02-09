@@ -1,1 +1,2 @@
+mkdir -p mnt 
 sshfs bettani@rpi:/home/bettani/experiment/ mnt -o allow_other,nonempty
