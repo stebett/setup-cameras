@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-config="mnt/configs.toml"
+config="mnt/config.toml"
 
 serials=$(tcam-ctrl -l | awk '{print $5}')
 

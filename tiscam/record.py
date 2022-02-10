@@ -13,7 +13,7 @@ from tiscam.config import Config, read_config
 parser = argparse.ArgumentParser(__doc__)
 parser.add_argument("-c", "--config_path",
                     help="Path to the state file of the camera",
-                    dest="config_path", default="configs.toml",
+                    dest="config_path", default="config.toml",
                     type=lambda x: Path(x).expanduser().absolute())
 parser.add_argument("-s", "--serial",
                     help="Serial of camera",

@@ -222,7 +222,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument("-o", "--output",
                         help="Path where to write the config file",
-                        dest="filename", default="configs.toml",
+                        dest="filename", default="config.toml",
                         type=lambda x: Path(x).expanduser().absolute())
 
     args = parser.parse_args()

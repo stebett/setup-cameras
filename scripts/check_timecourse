@@ -90,7 +90,7 @@ if __name__ == "__main__":
                         type=lambda x: Path(x).expanduser().absolute())
     parser.add_argument("-c", "--config",
                         help="Path to config.toml",
-                        dest="config_path", default="mnt/configs.toml", 
+                        dest="config_path", default="mnt/config.toml", 
                         type=lambda x: Path(x).expanduser().absolute())
     parser.add_argument("--cam-prefix",
                         help="Prefix of directories for each cam (ex. [cam]1, [cam]2)",
