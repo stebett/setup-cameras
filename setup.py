@@ -30,7 +30,7 @@ setup(name="tiscam",
             "vext",
             "vext.gi"],
         packages=["tiscam"],
-        scripts=["scripts/check_timecourse", "scripts/run_all"],
+        scripts=["scripts/check_timecourse", "scripts/start_cameras"],
         long_description=read('README.md'),
         cmdclass={ 'clean': CleanCommand }
         )

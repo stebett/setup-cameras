@@ -23,7 +23,8 @@ args = parser.parse_args()
 config_path = args.config_path
 serial = args.serial
 
-config = read_config(config_path)["tiscam"]
+experiment_config = read_config(config_path)
+config = experiment_config["tiscam"]
 
 camera_prefix = config["path"]["prefix"]
 overwrite = config["path"]["overwrite"]
@@ -35,10 +36,10 @@ file_log_level = config["logging"]["file_level"]
 compression_level = config["pipeline"]["compression_level"]
 max_buffers_queue = config["pipeline"]["max_buffers_queue"]
 
-session = Path(config["experiment"]["path"]).expanduser().absolute()
-block = config["experiment"]["block"]
+session = Path(experiment_config["experiment"]["session"]).expanduser().absolute()
+block = experiment_config["experiment"]["block"]
 cam =  f"{camera_prefix}_{serial}"
-output_path = output_parent / block / "video" / cam
+output_path = session / block / "video" / cam
 
 if not clean_output_dir(output_path, overwrite):
     sys.exit()

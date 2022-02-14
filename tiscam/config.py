@@ -130,7 +130,6 @@ def get_pwm():
 def get_path():
     "Return standard path parameters for cameras"
     path = {}
-    path["output_folder"] = "~/phd/data/ssd/"
     path["prefix"] = "cam"
     path["overwrite"] = False
     return path
@@ -138,7 +137,7 @@ def get_path():
 def get_logging():
     "Return standard logging parameters for cameras"
     logging = {}
-    logging["stream_level"] = "info"
+    logging["stream_level"] = "warning"
     logging["file_level"] = "debug"
     logging["gst_level"] = 1
     return logging
