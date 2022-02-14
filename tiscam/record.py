@@ -18,29 +18,27 @@ parser.add_argument("-c", "--config_path",
 parser.add_argument("-s", "--serial",
                     help="Serial of camera",
                     dest="serial", default=False)
-parser.add_argument("-o", "--output-folder",
-                    help="Output directory where to save videos",
-                    dest="output_folder", default=False)
 
 args = parser.parse_args()
 config_path = args.config_path
 serial = args.serial
 
-arguments = read_config(config_path)["tiscam"]
+config = read_config(config_path)["tiscam"]
 
-camera_prefix = arguments["path"]["prefix"]
-overwrite = arguments["path"]["overwrite"]
+camera_prefix = config["path"]["prefix"]
+overwrite = config["path"]["overwrite"]
 
-stream_log_level = arguments["logging"]["stream_level"]
-gst_debug_level = arguments["logging"]["gst_level"]
-file_log_level = arguments["logging"]["file_level"]
+stream_log_level = config["logging"]["stream_level"]
+gst_debug_level = config["logging"]["gst_level"]
+file_log_level = config["logging"]["file_level"]
 
-compression_level = arguments["pipeline"]["compression_level"]
-max_buffers_queue = arguments["pipeline"]["max_buffers_queue"]
+compression_level = config["pipeline"]["compression_level"]
+max_buffers_queue = config["pipeline"]["max_buffers_queue"]
 
-output_parent = args.output_folder or arguments["path"]["output_folder"]
-output_dir =  f"{camera_prefix}_{serial}"
-output_path = Path(output_parent).expanduser().absolute() / output_dir
+session = Path(config["experiment"]["path"]).expanduser().absolute()
+block = config["experiment"]["block"]
+cam =  f"{camera_prefix}_{serial}"
+output_path = output_parent / block / "video" / cam
 
 if not clean_output_dir(output_path, overwrite):
     sys.exit()
@@ -57,8 +55,8 @@ def terminate(*args):
 signal.signal(signal.SIGINT, terminate)
 
 
-config = Config(config_path, serial)
-c = Camera(config,
+camera_config = Config(config_path, serial)
+c = Camera(camera_config,
            logger=logger,
            path_to_output=output_path,
            gst_debug_level=gst_debug_level,

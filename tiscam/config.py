@@ -132,7 +132,7 @@ def get_path():
     path = {}
     path["output_folder"] = "~/phd/data/ssd/"
     path["prefix"] = "cam"
-    path["overwrite"] = True
+    path["overwrite"] = False
     return path
 
 def get_logging():
