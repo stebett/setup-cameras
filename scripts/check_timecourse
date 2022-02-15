@@ -98,19 +98,28 @@ if __name__ == "__main__":
     parser.add_argument("-i", "--ignore-last",
                         help="Whether to ignore the last pickle file",
                         dest="ignore_last", action="store_true")
+    parser.add_argument("-s", "--save",
+                        help="Save picture instead of showing",
+                        dest="savepic", action="store_true")
 
 
     args = parser.parse_args()
-    path = args.path
     prefix = args.prefix
+    savepic = args.savepic
     config = read_config(args.config_path)
     ignore_last = args.ignore_last
 
-
+    try:
+        session = Path(config["experiment"]["session"]).expanduser().absolute()
+        block = config["experiment"]["block"]
+        path = session / block / "video"
+    except:
+        print("Couldn't find path in config, using the one from arguments")
+        path = args.path
 
     camera_all = sorted(path.glob(f"{prefix}*"))
 
-    def plot_deviation(camera_all, ignore_last):
+    def plot_deviation(camera_all, ignore_last, savepic):
         fig, _ = plt.subplots(len(camera_all)*2)
 
         i = 0
@@ -150,6 +159,9 @@ if __name__ == "__main__":
 
 
         plt.subplots_adjust(hspace = 0.7, right=0.57, left=0.075)
-        plt.show()
+        if savepic:
+            plt.savefig(path / "timecourse")
+        else:
+            plt.show()
 
-    plot_deviation(camera_all, ignore_last)
+    plot_deviation(camera_all, ignore_last, savepic)
