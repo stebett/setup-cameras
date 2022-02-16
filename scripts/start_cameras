@@ -2,12 +2,10 @@
 
 config="~/phd/api/setup/config.toml"
 
-serials=$(tcam-ctrl -l | awk '{print $5}')
+python -m tiscam.record -c $config -s 44120512 &
+PID12=$!
+python -m tiscam.record -c $config -s 44120513 &
+PID13=$!
 
-for serial in $serials; do
-	python -m tiscam.record -c $config -s $serial &
-	PID=$!
-done
-
-trap "kill $PID" EXIT
-wait $PID
+trap "kill $PID12 && kill $PID13" EXIT
+wait $PID12

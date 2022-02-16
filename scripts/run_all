@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+config="~/phd/api/setup/config.toml"
+
+serials=$(tcam-ctrl -l | awk '{print $5}')
+
+for serial in $serials; do
+	python -m tiscam.record -c $config -s $serial &
+	PID=$!
+done
+
+trap "kill $PID" EXIT
+wait $PID

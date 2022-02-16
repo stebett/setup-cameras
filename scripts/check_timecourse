@@ -24,13 +24,6 @@ class Timestamps:
         self.get_delays()
         self.process()
 
-    def plot(self):
-        _, ax = plt.subplots()
-        ax.plot(self.frames, self.times)
-        ax.set_xlabel("Frames")
-        ax.set_ylabel("Time")
-        ax.legend(self.path.stem)
-        return ax
 
     def process(self):
         self.t0 = sorted(self.dict.values())[0]
@@ -53,10 +46,10 @@ class Timestamps:
         trigger = config["tiscam"]["properties"]["common"]["Trigger Mode"]
         frequency = config["pwm"]["frequency"] if trigger else config["tiscam"]["caps"]["common"]["framerate"]
         chunk_size = config["pwm"]["chunk_size"] if trigger else len(self.dict) -1
-        # self.expected_interframe_delay = 1 / frequency
-        # self.expected_duration = chunk_size / frequency
-        self.expected_interframe_delay = 1 / self.framerate
-        self.expected_duration = chunk_size / self.framerate
+        self.expected_interframe_delay = 1 / frequency
+        self.expected_duration = chunk_size / frequency
+        # self.expected_interframe_delay = 1 / self.framerate
+        # self.expected_duration = chunk_size / self.framerate
         self.expected_pause_length = config["pwm"]["chunk_pause"] / 1000 if trigger else 0
         
         t = 0
@@ -120,7 +113,7 @@ if __name__ == "__main__":
     camera_all = sorted(path.glob(f"{prefix}*"))
 
     def plot_deviation(camera_all, ignore_last, savepic):
-        fig, _ = plt.subplots(len(camera_all)*2)
+        fig, _ = plt.subplots(len(camera_all)*2, figsize=(11, 19), dpi=100)
 
         i = 0
         for camera in camera_all:
@@ -145,9 +138,7 @@ if __name__ == "__main__":
                 y_axis = timestamps.deviation
 
                 total_loss += timestamps.loss
-                ax.plot(x_axis, y_axis, label=f"Loss: {timestamps.loss} - " +
-                                              f"Excess: {timestamps.excess_duration :.2f} ({timestamps.excess_duration / timestamps.expected_interframe_delay :.2f} frames) - " +
-                                              f"Pause excess: {timestamps.t0 - last_t - timestamps.expected_pause_length :.2f}")
+                ax.plot(x_axis, y_axis, label=f"Loss: {timestamps.loss}")
                 ax.hlines(timestamps.expected_interframe_delay, x_axis[0], x_axis[-1], color='r', linewidth=0.2)
                 ax2.plot(x_axis, np.cumsum(y_axis))
                 last_t = timestamps.tn
