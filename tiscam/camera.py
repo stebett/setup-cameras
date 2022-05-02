@@ -201,15 +201,15 @@ class Camera(TIS):
         self.queue.livedisplay = False
         while True:
             self.queue.new_video()
-            self.logger.info(f"New video: {self.queue.video_name}")
+            self.logger.info(f"Video {len(self.queue.videos)}: {self.queue.video_name}")
 
             self.create_pipeline()
             self.init_pipeline(video_path=self.queue.video_name)
             self.apply_properties()
-            self.logger.info("Created new pipeline")
+            self.logger.debug("Created new pipeline")
 
             self.pipeline.set_state(Gst.State.PLAYING)
-            self.logger.info("Started pipeline")
+            self.logger.debug("Started pipeline")
 
             self.queue.time_of_last_frame = time.time()
             self.queue.check_delay()
@@ -243,7 +243,7 @@ def add_frame(tis, queue):
     queue.time_of_last_frame = t
     queue.counter += 1
     queue.chunk_counter += 1
-    queue.logger.info(f"Adding frame {queue.counter} to the queue")
+    queue.logger.debug(f"Adding frame {queue.counter} to the queue")
     queue.busy = False
 
 
@@ -290,14 +290,14 @@ class Queue:
         "Interrupts video when timeout_delay is exceeded."
         while self.go:
             if self.video_started and self.timeout_is_exceeded:
-                self.logger.info("Timeout delay exceeded")
+                self.logger.debug("Timeout delay exceeded")
                 self.go = False
             else:
                 time.sleep(1e-6)
 
     def reset_relative_zero(self):
         self.relative_zero = self.expected_frames * len(self.videos)
-        self.logger.info(f"relative zero: {self.relative_zero}")
+        self.logger.debug(f"relative zero: {self.relative_zero}")
 
     def reset_counters(self):
         self.counter = self.relative_zero
@@ -342,7 +342,7 @@ class Queue:
             estimate = len(self.timestamps) / (t1 - t0)
             self.timestamps["framerate"] = estimate
 
-            self.logger.info(
+            self.logger.debug(
                 f"Estimated framerate for the last video: {estimate:.2f}Hz")
 
     def save_timestamps(self):
@@ -352,5 +352,5 @@ class Queue:
             with open(f'{self.video_name[:-4]}.pickle', 'wb') as handle:
                 pickle.dump(self.timestamps, handle,
                             protocol=pickle.HIGHEST_PROTOCOL)
-            self.logger.info("Timestamps saved")
+            self.logger.debug("Timestamps saved")
             self.timestamps = {}

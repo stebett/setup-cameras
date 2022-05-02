@@ -137,7 +137,7 @@ def get_path():
 def get_logging():
     "Return standard logging parameters for cameras"
     logging = {}
-    logging["stream_level"] = "warning"
+    logging["stream_level"] = "info"
     logging["file_level"] = "debug"
     logging["gst_level"] = 1
     return logging

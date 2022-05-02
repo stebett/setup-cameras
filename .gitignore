@@ -11,3 +11,6 @@ tiscam.egg-info/
 prova*
 build*
 mnt/
+.conf_12.json
+.conf_13.json
+

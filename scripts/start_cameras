@@ -7,5 +7,9 @@ PID12=$!
 python -m tiscam.record -c $config -s 44120513 &
 PID13=$!
 
-trap "kill $PID12 && kill $PID13" EXIT
-wait $PID12
+trap "echo 'Killing camera processes'; kill -2 $PID12 && kill -2 $PID13 && exit 1" EXIT
+while [ -d /proc/$PID12 -a -d /proc/$PID13 ]; do
+	sleep 1
+done
+echo 'One or more camera processes has stopped'
+exit 1
