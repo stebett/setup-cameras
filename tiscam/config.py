@@ -13,10 +13,9 @@ from collections.abc import Hashable
 class Config:
     "A class to store configuration file and ensure right formatting."
 
-    def __init__(self, config_path, serial):
+    def __init__(self, config, serial):
         "Initialize the object with a configuration path."
-        self.raw_config = read_config(config_path)
-        self.config_path = config_path
+        self.raw_config = config
         self.serial = serial
         self.apply_config()
 
