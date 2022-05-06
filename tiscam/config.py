@@ -87,16 +87,19 @@ def get_serials():
 
 def get_camera_config(serial):
     "Uses tcam commands to retrieve cameras configurations given the serial"
-    os.system(f"mkdir -p ~/.cache/tiscam")
-    os.system(f"tcam-ctrl --save {serial} > ~/.cache/tiscam/{serial}_conf.json")
-    with open(f"{serial}_conf.json", "r") as f:
-            conf = json.load(f)
-    return conf
+    tmp_path = Path("~/.cache/tiscam").expanduser().absolute()
+    tmp_path.mkdir(parents=True, exist_ok=True)
+    filename = f"{serial}_conf.json"
+    os.system(f"tcam-ctrl --save {serial} > {tmp_path / filename}")
+    with (tmp_path / filename).open("r") as f:
+            return json.load(f)
 
 def upload_camera_config(serial):
     "Uses tcam commands to retrieve cameras configurations given the serial"
+    tmp_path = Path("~/.cache/tiscam").expanduser().absolute()
+    filename = f"{serial}_conf.json"
     try:
-        os.system(f"tcam-ctrl --load {serial} ~/.cache/tiscam/{serial}_conf.json")
+        os.system(f"tcam-ctrl --load {serial} {tmp_path / filename}")
     except FileNotFoundError as error:
         logging.error(f"File not found: {error}")
 
