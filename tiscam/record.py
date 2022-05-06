@@ -33,18 +33,8 @@ def record(experiment_config, serial):
         sys.exit()
     logger = get_logger(f"cam_{serial}", stream_log_level, file_log_level, output_path / f"cam_{serial}.log") 
 
-    config_copy_path = output_path / config_path.name
-    copyfile(config_path, config_copy_path)
 
-    def terminate(*args):
-        "Stop the capture and clean up."
-        global c
-        c.stop_capture()
-        sys.exit()
-    signal.signal(signal.SIGINT, terminate)
-
-
-    camera_config = Config(read_config(config_path), serial)
+    camera_config = Config(experiment_config, serial)
     c = Camera(camera_config,
                logger=logger,
                path_to_output=output_path,
@@ -69,3 +59,23 @@ if __name__ == "__main__":
     config_path = args.config_path
     experiment_config = read_config(config_path)
     serial = args.serial
+
+    config_copy_path = output_path / config_path.name
+    copyfile(config_path, config_copy_path)
+
+    def terminate(*args):
+        "Stop the capture and clean up."
+        global c
+        c.stop_capture()
+        sys.exit()
+    signal.signal(signal.SIGINT, terminate)
+
+    camera_config = Config(experiment_config, serial)
+    c = Camera(camera_config,
+               logger=logger,
+               path_to_output=output_path,
+               gst_debug_level=gst_debug_level,
+               compression_level=compression_level,
+               max_buffers_queue=max_buffers_queue)
+
+    c.start_capture()
