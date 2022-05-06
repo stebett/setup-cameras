@@ -87,11 +87,19 @@ def get_serials():
 
 def get_camera_config(serial):
     "Uses tcam commands to retrieve cameras configurations given the serial"
-    os.system(f"tcam-ctrl --save {serial} > {serial}_conf.json")
+    os.system(f"mkdir -p ~/.cache/tiscam")
+    os.system(f"tcam-ctrl --save {serial} > ~/.cache/tiscam/{serial}_conf.json")
     with open(f"{serial}_conf.json", "r") as f:
             conf = json.load(f)
-    os.system(f"rm {serial}_conf.json")
     return conf
+
+def upload_camera_config(serial):
+    "Uses tcam commands to retrieve cameras configurations given the serial"
+    try:
+        os.system(f"tcam-ctrl --load {serial} ~/.cache/tiscam/{serial}_conf.json")
+    except FileNotFoundError as error:
+        logging.error(f"File not found: {error}")
+
 
 def get_caps(serial):
     "Uses tcam commands to retrieve cameras caps given the serial"
@@ -152,6 +160,8 @@ def get_pipeline():
 def create_config():
     "Create a config file with default parameters from a camera serial."
     serials = get_serials()
+    for serial in serials:
+        upload_camera_config(serial)
 
     config = {}
     config["serials"] = serials
