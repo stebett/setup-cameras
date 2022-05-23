@@ -103,6 +103,15 @@ def upload_camera_config(serial):
     except FileNotFoundError as error:
         logging.error(f"File not found: {error}")
 
+def configure_cameras():
+    "Uses tcam commands to retrieve cameras configurations given the serial"
+    serial_all = get_serials()
+    tmp_path = Path("~/.cache/tiscam").expanduser().absolute()
+    os.system(f"tcam-capture")
+
+    for serial in serial_all:
+        filename = f"{serial}_conf.json"
+        os.system(f"tcam-ctrl --save {serial} > {tmp_path / filename}")
 
 def get_caps(serial):
     "Uses tcam commands to retrieve cameras caps given the serial"
