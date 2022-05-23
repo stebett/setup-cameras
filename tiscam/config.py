@@ -62,7 +62,7 @@ class Config:
             logging.error(f"Exposure Time is too long for your framerate!")
             logging.error(f"Selected exposure: {exposure}us -> max framerate possible: {max_fps}Hz")
             logging.error(f"Desired framerate: {fps}Hz -> max exposure required: {(max_exposure):.1f}us")
-            ignore = helpers.ask_yes_or_no("Do you want to start the recording anyway? ")
+            ignore = tiscam.helpers.ask_yes_or_no("Do you want to start the recording anyway? ")
             if not ignore:
                 raise Exception("Excecution interrupted by user")
             
