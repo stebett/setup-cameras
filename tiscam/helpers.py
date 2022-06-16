@@ -62,7 +62,7 @@ def get_logger(name, stream_level, file_level, output_path):
     file_handler.setFormatter(file_formatter)
     root_logger.addHandler(file_handler)
 
-    stream_formatter = logging.Formatter('%(name)s: %(levelname)s - %(message)s')
+    stream_formatter = logging.Formatter('%(asctime)s: [%(levelname)s/%(name)s] %(message)s')
     stream_handler = logging.StreamHandler(sys.stdout)
     stream_handler.setLevel(level=stream_numeric_level)
     stream_handler.setFormatter(stream_formatter)
