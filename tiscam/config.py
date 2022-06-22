@@ -110,6 +110,7 @@ def configure_cameras():
     os.system(f"tcam-capture")
 
     for serial in serial_all:
+        os.system(f"tcam-ctrl --load {serial} {tmp_path / filename}")
         filename = f"{serial}_conf.json"
         os.system(f"tcam-ctrl --save {serial} > {tmp_path / filename}")
 
