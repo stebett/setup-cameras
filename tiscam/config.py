@@ -166,7 +166,7 @@ def get_pipeline():
     "Return standard pipeline parameters for cameras"
     pipeline = {}
     pipeline["max_buffers_queue"] = 30
-    pipeline["compression_level"] = 0
+    pipeline["compression_level"] = -1
     return pipeline
 
 

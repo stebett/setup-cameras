@@ -45,7 +45,8 @@ class TIS:
             p += " ! fpsdisplaysink sink=ximagesink"
         else:
             p += " ! queue name=queue"
-            p += f" ! x264enc quantizer={self.compression_level} qp-min={self.compression_level} qp-max={self.compression_level} qp-step={self.compression_level} speed-preset=ultrafast tune=zerolatency pass=qual sliced-threads=true"
+            if self.compression_level >= 0:
+                p += f" ! x264enc quantizer={self.compression_level} qp-min={self.compression_level} qp-max={self.compression_level} qp-step={self.compression_level} speed-preset=ultrafast tune=zerolatency pass=qual sliced-threads=true"
             p += " ! matroskamux"
             p += " ! filesink name=fsink"
 
